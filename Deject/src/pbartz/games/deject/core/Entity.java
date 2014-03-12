@@ -1,0 +1,165 @@
+package pbartz.games.deject.core;
+
+import java.util.BitSet;
+
+import pbartz.games.deject.signals.Signal;
+import pbartz.games.deject.utils.Array;
+import pbartz.games.deject.utils.ObjectMap;
+import pbartz.games.deject.utils.ObjectMap.Keys;
+
+/**
+ * Entities are simple containers. They can hold components that give them "data". The component's data
+ * is then in return process by systems.
+ * 
+ * An entity can only hold one instance of a component type. So you can't add two PositionComponents to the
+ * same entity. Sorry.
+ * 
+ * @author Stefan Bachmann
+ */
+public class Entity {
+	private static int nextIndex;
+	
+	/** Unique entity index for fast retrieval */
+	private int index;
+	
+	/** The hashmap that holds all the components hashed via their class type */
+	private ObjectMap<Class<? extends Component>, Component> components;
+	/** A bitset describing all the components in this entity. For quick matching. */
+	private BitSet componentBits;
+	/** A bitset describing all the systems this entity was matched with. */
+	private BitSet familyBits;
+	/** A flag that can be used to bit mask this entity. Up to the user to manage. */
+	public int flags;
+	
+	/** Will dispatch an event when a component is added. */
+	public Signal<Entity> componentAdded;
+	/** Will dispatch an event when a component is removed. */
+	public Signal<Entity> componentRemoved;
+	
+	private int timeToAppear = 0;
+	
+	public Array<Component> delayedComponents;
+	
+	/**
+	 * Creates an empty Entity.
+	 */
+	public Entity(){
+		components = new ObjectMap<Class<? extends Component>, Component>();
+		delayedComponents = new Array<Component>();
+		componentBits = new BitSet();
+		familyBits = new BitSet();
+		flags = 0;
+		
+		index = nextIndex++;
+		
+		componentAdded = new Signal<Entity>();
+		componentRemoved = new Signal<Entity>();
+	}
+	
+	/**
+	 * Add a component to this Entity. If a component of the same type already exists, it'll be replaced.
+	 * @param component The component to add
+	 * @return The entity for easy chaining
+	 */
+	public Entity add(Component component){
+		components.put(component.getClass(), component);
+		
+		componentBits.set(ComponentType.getIndexFor(component.getClass()));
+		
+		componentAdded.dispatch(this);
+		return this;
+	}
+	
+	public Entity add(Component component, float delay){
+		component.setTimeToAppear((int)(delay * 1000));
+		delayedComponents.add(component);
+		return this;
+	}
+	
+	/**
+	 * Removes the component of the specified type. Since there is only ever one component of one type, we
+	 * don't need an instance reference.
+	 * @param componentType The Component to remove
+	 * @return The removed component, or null if the Entity did no contain such a component
+	 */
+	public Component remove(Class<? extends Component> componentType){
+		Component removeComponent = components.get(componentType, null);
+		
+		if(removeComponent != null){
+			components.remove(componentType);
+
+			componentBits.clear(ComponentType.getIndexFor(componentType));
+			
+			componentRemoved.dispatch(this);
+			
+			components.remove(componentType);
+		}
+		
+		return removeComponent;
+	}
+	
+	/**
+	 * Removes all the entity components
+	 */
+	public void removeAll() {
+		Keys<Class<? extends Component>> keys = components.keys();
+		
+		while (keys.hasNext()) {
+			remove(keys.next());
+			keys = components.keys();
+		}
+	}
+	
+	/**
+	 * Quick and dirty component retrieval
+	 * @param componentType The Component class to retrieve
+	 * @return The Component
+	 */
+	public <T extends Component> T getComponent(Class<T> componentType){
+		return componentType.cast(components.get(componentType));
+	}
+	
+	/**
+	 * Quick way of checking whether an entity has a component or not
+	 * @param componentType The Component class to check
+	 * @return True if the entity has a Component of that class, False if it doesn't 
+	 */
+	public boolean hasComponent(Class<? extends Component> componentType) {
+		return componentBits.get(ComponentType.getIndexFor(componentType));
+	}
+	
+	/**
+	 * Returns this Entity's component bits, describing all the components it contains
+	 */
+	public BitSet getComponentBits(){
+		return componentBits;
+	}
+	
+	/**
+	 * Returns this Entity's family bits, describing all the systems it currently is being processed with
+	 */
+	public BitSet getFamilyBits(){
+		return familyBits;
+	}
+	
+	/**
+	 * Returns this entity's unique index
+	 */
+	public int getIndex(){
+		return index;
+	}
+
+	public int getTimeToAppear() {
+		return timeToAppear;
+	}
+
+	public void setTimeToAppear(int timeToAppear) {
+		this.timeToAppear = timeToAppear;
+	}
+	
+	public boolean isTimeToAppear(int diff) {
+		timeToAppear = Math.max(0, timeToAppear - diff);
+		return timeToAppear == 0 ? true : false;
+	}
+	
+}

@@ -1,0 +1,180 @@
+{
+	"levels": [		
+		{
+			"number": 1,
+			"duration": 30.0,
+			"speed_multiplier": 1,
+			"creeps": [
+				{
+					"type": "golden",
+					"chance": 30
+				},				
+				{
+					"type": "red",
+					"chance": 50
+				},
+				{
+					"type": "green",
+					"chance": 100
+				}
+				
+			],
+			
+			"items": [
+				{
+					"type": "heart_small",
+					"chance": 5
+				},
+				{
+					"type": "coin_small",
+					"chance": 5
+				}
+			]
+		},
+		{
+			"number": 2,
+			"duration": 30.0,
+			"speed_multiplier": 1.1,
+			"creeps": [
+				
+				{
+					"type": "red",
+					"chance": 30
+				},
+				
+				{
+					"type": "green",
+					"chance": 100
+				}
+				
+			],
+			
+			"items": [
+				{
+					"type": "heart_small",
+					"chance": 5
+				},
+				{
+					"type": "coin_small",
+					"chance": 5
+				}
+			]
+		}
+	],
+	
+	"creeps_default_properties": {
+	
+		"speed_up": 0.5f,
+		"speed_waiting": 1.0,
+		"speed_down": 1.0,
+		"min_hit": 1
+	},
+	
+	"creeps": [
+		
+		{
+			"type": "green",
+			"life": 1,
+			"image": "creep1",
+			"speed_waiting": 2.0,
+			"score": 1,			
+			"items": [
+				{
+					"type": "heart_small",
+					"chance": 50
+				},
+				{
+					"type": "coin_small",
+					"chance": 70
+				}
+			]
+		},
+		
+		{
+			"type": "red",
+			"life": 2,
+			"speed_waiting": 3.0,
+			"image": "creep2",
+			"score": 2,
+			"items": [
+				{
+					"type": "heart_small",
+					"chance": 5
+				},
+				{
+					"type": "coin_small",
+					"chance": 50
+				}
+			]
+		},
+		
+		{
+			"type": "golden",
+			"life": 1,
+			"image": "creep3",
+			"speed_waiting": 4f,
+			"score": 3,
+			"items": [
+				{
+					"type": "heart_small",
+					"chance": 5
+				},
+				{
+					"type": "coin_big",
+					"chance": 100
+				}
+			],
+			"components": "shield",
+			"shield_interval": 1f,
+			"shield_duration": 1.5f
+		},
+		
+		{
+			"type": "spike",
+			"life": 2,
+			"image": "hammer3",
+			"score": 4,
+			"min_hit": 2,
+			"items": [
+				{
+					"type": "heart_small",
+					"chance": 100
+				}
+			]
+		}	
+			
+	],
+	
+	"items_default_properties": {
+		
+		gold: 0,
+		score: 0,
+		life: 0
+	
+	}, 
+	
+	
+	"items": [
+	
+		{
+			"type": "coin_small",
+			"image": "coin_gold",
+			"gold": 1
+		},
+		
+		{
+			"type": "coin_big",
+			"image": "coin_gold_big",
+			"gold": 3
+		},
+		
+		{
+			"type": "heart_small",
+			"image": "heart_small_cell",
+			"life": 1
+		}
+		
+	]
+	
+	
+}

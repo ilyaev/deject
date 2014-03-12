@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Deject</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="dummy_string">Dummy String</string>
+    <string name="dummy_string2">Dummy String2</string>
+    <string name="tet">test</string>
+
+</resources>
