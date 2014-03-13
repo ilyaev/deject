@@ -22,6 +22,7 @@ import pbartz.games.deject.systems.ItemSystem;
 import pbartz.games.deject.systems.RectInterpolationSystem;
 import pbartz.games.deject.systems.RotateInterpolationSystem;
 import pbartz.games.deject.systems.ScoreSystem;
+import pbartz.games.deject.systems.ScreenOverlaySystem;
 import pbartz.games.deject.systems.TouchSystem;
 import pbartz.games.deject.systems.ZoomInterpolationSystem;
 import pbartz.games.deject.systems.renderer.DimensionRenderingSystem;
@@ -43,6 +44,7 @@ public class GameScene extends BasicScene {
 	public void initScene() {
 		
 		if (isInited()) {
+			EntityFactory.createFadeIn(engine, surface);
 			return;
 		}
 		
@@ -70,6 +72,7 @@ public class GameScene extends BasicScene {
 		
 		// rendering
 		engine.addSystem(new DimensionRenderingSystem(this.surface));
+		engine.addSystem(new ScreenOverlaySystem(this.surface));
 
 		// Configuration file parse
 		GameConfig.loadConfig(surface);		
@@ -89,6 +92,8 @@ public class GameScene extends BasicScene {
 		initListeners();
 		
 		setInited(true);
+		
+		EntityFactory.createFadeIn(engine, surface);
 
 	}
 	
@@ -156,7 +161,8 @@ public class GameScene extends BasicScene {
 	
 	public void update(Canvas canvas, float timeDiff) {
 		//canvas.drawARGB(255, 110, 74, 112);
-		canvas.drawARGB(255, 212, 212, 212);
+		//canvas.drawARGB(255, 212, 212, 212);
+		canvas.drawARGB(255, 0, 0, 0);
 		engine.update(timeDiff);
 		drawDebug(canvas);
 	}
@@ -169,6 +175,12 @@ public class GameScene extends BasicScene {
 		
 //		canvas.drawText("DIP_W: " + Float.toString(surface.widthDp), 0, 80, whitePaint);
 //		canvas.drawText("DIP_H: " + Float.toString(surface.heightDp), 0, 120, whitePaint);
+	}
+
+	@Override
+	public void transitOut(BasicScene tScene) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

@@ -10,6 +10,8 @@ public abstract class BasicScene {
 	protected PooledEngine engine = null;
 	protected DejectSurface surface = null;
 	
+	protected BasicScene nextScene = null;
+	
 	public MotionEvent touchEvent = null;
 	public int touchEventType = -1;
 	
@@ -33,5 +35,7 @@ public abstract class BasicScene {
 	}
 	
 	public abstract void completeScene();
+
+	public abstract void transitOut(BasicScene tScene);
 	
 }

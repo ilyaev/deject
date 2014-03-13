@@ -20,10 +20,12 @@ import pbartz.games.deject.systems.ItemSystem;
 import pbartz.games.deject.systems.RectInterpolationSystem;
 import pbartz.games.deject.systems.RotateInterpolationSystem;
 import pbartz.games.deject.systems.ScoreSystem;
+import pbartz.games.deject.systems.ScreenOverlaySystem;
 import pbartz.games.deject.systems.TouchSystem;
 import pbartz.games.deject.systems.ZoomInterpolationSystem;
 import pbartz.games.deject.systems.renderer.DimensionRenderingSystem;
 import android.graphics.Canvas;
+import android.util.Log;
 
 public class StartScene extends BasicScene {
 
@@ -55,6 +57,8 @@ public class StartScene extends BasicScene {
 		
 		// rendering
 		engine.addSystem(new DimensionRenderingSystem(this.surface));
+		engine.addSystem(new ScreenOverlaySystem(this.surface));
+		
 
 		// pre load asset images
 		BitmapLibrary.loadAssets(surface);
@@ -88,8 +92,29 @@ public class StartScene extends BasicScene {
 			
 		});
 		
+		engine.getSystem(ExpireSystem.class).entityExpired.add(new Listener<Entity>() {
+			
+			public void receive(Signal<Entity> signal, Entity entity) {
+				entityExpired(entity);
+			}
+
+		});
 	}
 	
+	protected void entityExpired(Entity entity) {
+		if (entity.getComponent(TagComponent.class) != null) {
+			
+			String tag = entity.getComponent(TagComponent.class).getTag();
+			
+			if (tag == "fade_in") {
+				
+				surface.setScene(nextScene);
+				
+			}
+			
+		}
+	}
+
 	protected void entityTouchedDown(Entity entity) {		
 		entity.getComponent(PositionComponent.class).y += surface.dp2px(1);
 	}
@@ -115,6 +140,12 @@ public class StartScene extends BasicScene {
 	@Override
 	public void completeScene() {
 		
+	}
+
+	@Override
+	public void transitOut(BasicScene tScene) {
+		nextScene = tScene;		
+		EntityFactory.createFadeOut(engine, surface);		
 	}
 
 }

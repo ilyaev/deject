@@ -18,6 +18,7 @@ import pbartz.games.deject.components.PositionInterpolationComponent;
 import pbartz.games.deject.components.RotateComponent;
 import pbartz.games.deject.components.RotateInterpolationComponent;
 import pbartz.games.deject.components.ScoreComponent;
+import pbartz.games.deject.components.ScreenOverlayComponent;
 import pbartz.games.deject.components.TagComponent;
 import pbartz.games.deject.components.TextComponent;
 import pbartz.games.deject.components.TouchComponent;
@@ -478,9 +479,7 @@ public class EntityFactory {
 
 	public static void createStartScreen(Engine engine, DejectSurface surface) {
 		
-		
-		
-		// leaderboard button
+		// leader board button
 
 		
 		Entity btnScore = new Entity();
@@ -505,14 +504,6 @@ public class EntityFactory {
 			0.7f,
 			Interpolation.EASE_OUT
 		));
-		
-//		btnScore.add(new PositionInterpolationComponent(
-//			new PositionComponent(surface.dp2px(surface.widthDp / 2 + surface.widthDp / 4), surface.dp2px(surface.heightDp / 2)),
-//			surface.dp2px(surface.widthDp / 2 + surface.widthDp / 4),
-//			surface.dp2px(surface.heightDp / 2 + surface.heightDp / 10),
-//			0.7f,
-//			Interpolation.EASE_OUT
-//		), 0.7f);
 		
 		engine.addEntity(btnScore, 0.7f);
 		
@@ -549,15 +540,58 @@ public class EntityFactory {
 			Interpolation.EASE_OUT
 		), 0.7f);
 		
-//				btnPlay.add(new PositionInterpolationComponent(
-//						new PositionComponent(surface.dp2px(surface.widthDp / 2 - surface.widthDp / 4), surface.dp2px(surface.heightDp / 2)), 
-//						surface.dp2px(surface.widthDp / 2 - surface.widthDp / 4),
-//						surface.dp2px(surface.heightDp / 2 + surface.heightDp / 10),
-//						0.7f,
-//						Interpolation.EASE_OUT
-//					), 1.4f);
 		
 		engine.addEntity(btnPlay);
+		
+	}
+
+
+
+	public static void createFadeOut(PooledEngine engine, DejectSurface surface) {
+		
+		Entity entity = new Entity();
+		
+		entity.add(new ScreenOverlayComponent());
+		
+		entity.add(new ColorComponent(0, 0, 0, 0));
+		
+		entity.add(new ColorInterpolationComponent(				
+			entity.getComponent(ColorComponent.class).getPaint(),
+			createPaint(255, 0, 0, 0),
+			1f,
+			Interpolation.EASE_OUT			
+		));	
+		
+		engine.addEntity(entity);
+		
+		Entity exp = new Entity();
+		
+		exp.add(new ExpireComponent(1.02f));
+		exp.add(new TagComponent("fade_in"));
+		
+		engine.addEntity(exp);
+		
+	}
+	
+	public static void createFadeIn(PooledEngine engine, DejectSurface surface) {
+		
+		Entity entity = new Entity();
+		
+		entity.add(new ScreenOverlayComponent());
+		
+		entity.add(new ColorComponent(255, 0, 0, 0));
+		
+		entity.add(new ColorInterpolationComponent(				
+			entity.getComponent(ColorComponent.class).getPaint(),
+			createPaint(0, 0, 0, 0),
+			1f,
+			Interpolation.EASE_IN				
+		));
+		
+		entity.add(new ExpireComponent(1.02f));
+		entity.add(new TagComponent("fade_out"));
+		
+		engine.addEntity(entity);
 		
 	}
 

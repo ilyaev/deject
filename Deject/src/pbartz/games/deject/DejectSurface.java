@@ -152,6 +152,16 @@ public class DejectSurface extends SurfaceView implements Runnable {
 		this.canvas = canvas;
 		scene.update(canvas, timeDiff);
 	}
+	
+	public void transitScene(BasicScene tScene) {
+		
+		if (scene != null) {
+			
+			scene.transitOut(tScene);
+			
+		}
+		
+	}
 
 	public void setScene(BasicScene nScene) {
 		
@@ -186,7 +196,7 @@ public class DejectSurface extends SurfaceView implements Runnable {
 			gameScene = new GameScene(this);
 		}
 		
-		setScene(gameScene);
+		transitScene(gameScene);
 	}
 
 }

@@ -70,4 +70,10 @@ public class TestScene extends BasicScene {
 		
 	}
 
+	@Override
+	public void transitOut(BasicScene tScene) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
