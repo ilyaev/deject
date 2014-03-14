@@ -8,6 +8,7 @@ import pbartz.games.deject.DejectSurface;
 import pbartz.games.deject.EntityFactory;
 import pbartz.games.deject.components.AIComponent;
 import pbartz.games.deject.components.CreepComponent;
+import pbartz.games.deject.components.LevelInfoComponent;
 import pbartz.games.deject.components.PositionComponent;
 import pbartz.games.deject.components.PositionInterpolationComponent;
 import pbartz.games.deject.components.RectInterpolationComponent;
@@ -26,6 +27,8 @@ public class AISystem extends IteratingSystem {
 	
 	ScoreComponent score = null;
 	LevelConfig level = null;
+	
+	public Entity levelInfo = null;
 	
 	Entity progressBar = null;
 	
@@ -47,7 +50,15 @@ public class AISystem extends IteratingSystem {
 		
 		ai = entity.getComponent(AIComponent.class);
 		
-		if (ai.getState() == AIComponent.STATE_STARTING) {
+		if (ai.getState() == AIComponent.STATE_NOT_INITED && levelInfo == null) {
+			
+			levelInfo = EntityFactory.spawnLevelInfoPanel(engine, surface, score.getLevel());			
+			
+		} else if (ai.getState() == AIComponent.STATE_LEVEL_COMPLETED && levelInfo == null) {
+			
+			levelInfo = EntityFactory.spawnLevelInfoPanel(engine, surface, score.getLevel());
+			
+		} else if (ai.getState() == AIComponent.STATE_STARTING) {
 			
 			ai.setState(AIComponent.STATE_WORKING);		
 			
@@ -163,6 +174,11 @@ public class AISystem extends IteratingSystem {
 	
 	public void setProgressBarEntity(Entity pbar) {
 		this.progressBar = pbar;
+	}
+
+	public void startLevel() {
+		levelInfo.getComponent(LevelInfoComponent.class).setState(LevelInfoComponent.STATE_GO_DOWN);
+		ai.setState(AIComponent.STATE_STARTING);		
 	}
 
 }

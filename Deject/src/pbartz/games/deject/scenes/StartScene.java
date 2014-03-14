@@ -106,7 +106,7 @@ public class StartScene extends BasicScene {
 			
 			String tag = entity.getComponent(TagComponent.class).getTag();
 			
-			if (tag == "fade_in") {
+			if (tag == "fade_out") {
 				
 				surface.setScene(nextScene);
 				

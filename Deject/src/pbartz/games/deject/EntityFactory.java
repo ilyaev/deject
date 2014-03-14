@@ -13,6 +13,7 @@ import pbartz.games.deject.components.CreepComponent;
 import pbartz.games.deject.components.CreepShieldComponent;
 import pbartz.games.deject.components.ExpireComponent;
 import pbartz.games.deject.components.ItemComponent;
+import pbartz.games.deject.components.LevelInfoComponent;
 import pbartz.games.deject.components.PositionComponent;
 import pbartz.games.deject.components.PositionInterpolationComponent;
 import pbartz.games.deject.components.RotateComponent;
@@ -50,6 +51,11 @@ public class EntityFactory {
 	public static float pbarX = 0f;
 	public static float pbarY = 0f;
 	
+	public static float levelPanelX = 0f;
+	public static float levelPanelY = 0f;
+	public static float levelPanelWidth = 0f;
+	public static float levelPanelHeight = 0f;
+	
 	static float lifeOffsetX;
 	static float lifeHeight;
 	private static float lifeWidth;
@@ -68,6 +74,13 @@ public class EntityFactory {
 		lifeOffsetX = infoPanelHeight + 1;
 		lifeHeight = (infoPanelHeight / 2) - 1;
 		lifeWidth = lifeHeight;
+		
+		levelPanelX = surface.widthDp / 2;
+		levelPanelY = surface.heightDp / 2 + surface.heightDp / 4;
+		
+		levelPanelWidth = (surface.widthDp / 100) * 90;
+		levelPanelHeight = levelPanelWidth / 1.5f;
+		
 		
 	}
 	
@@ -363,7 +376,7 @@ public class EntityFactory {
 		Entity entity = new Entity();
 		AIComponent ai = new AIComponent();
 		
-		ai.setState(AIComponent.STATE_STARTING);
+		ai.setState(AIComponent.STATE_NOT_INITED);
 		
 		Random r = new Random();
 		ai.setTimer(r.nextFloat() * 2);
@@ -558,16 +571,18 @@ public class EntityFactory {
 		entity.add(new ColorInterpolationComponent(				
 			entity.getComponent(ColorComponent.class).getPaint(),
 			createPaint(255, 0, 0, 0),
-			1f,
+			0.5f,
 			Interpolation.EASE_OUT			
 		));	
+		
+		entity.add(new ExpireComponent(0.8f));
 		
 		engine.addEntity(entity);
 		
 		Entity exp = new Entity();
 		
-		exp.add(new ExpireComponent(1.02f));
-		exp.add(new TagComponent("fade_in"));
+		exp.add(new ExpireComponent(0.5f));
+		exp.add(new TagComponent("fade_out"));
 		
 		engine.addEntity(exp);
 		
@@ -584,17 +599,45 @@ public class EntityFactory {
 		entity.add(new ColorInterpolationComponent(				
 			entity.getComponent(ColorComponent.class).getPaint(),
 			createPaint(0, 0, 0, 0),
-			1f,
+			0.5f,
 			Interpolation.EASE_IN				
 		));
 		
-		entity.add(new ExpireComponent(1.02f));
-		entity.add(new TagComponent("fade_out"));
+		entity.add(new ExpireComponent(0.5f));
+		entity.add(new TagComponent("fade_in"));
 		
 		engine.addEntity(entity);
 		
 	}
 
-	
+
+
+	public static Entity spawnLevelInfoPanel(Engine engine,	DejectSurface surface, int level) {
+		Entity entity = new Entity();
+		
+		entity.add(new PositionComponent(
+			surface.dp2px(levelPanelX),
+			surface.dp2px(levelPanelY + levelPanelHeight)
+		));
+		
+		entity.add(new RectDimensionComponent(
+			surface.dp2px(levelPanelWidth),
+			surface.dp2px(levelPanelHeight)
+		));
+		
+		entity.add(new ColorComponent(255, 255, 0, 0));
+		
+		entity.add(new LevelInfoComponent(level));
+		
+		entity.add(new TouchComponent());
+		entity.add(new TagComponent("levelInfo"));
+		
+		entity.add(new BitmapComponent(BitmapLibrary.getBitmap("level1")));
+		
+		engine.addEntity(entity);		
+		
+		return entity;
+	}
+
 	
 }

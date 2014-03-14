@@ -7,6 +7,7 @@ import pbartz.games.deject.BitmapLibrary;
 import pbartz.games.deject.DejectSurface;
 import pbartz.games.deject.EntityFactory;
 import pbartz.games.deject.components.AIComponent;
+import pbartz.games.deject.components.TagComponent;
 import pbartz.games.deject.config.GameConfig;
 import pbartz.games.deject.config.LevelConfig;
 import pbartz.games.deject.core.Entity;
@@ -19,6 +20,7 @@ import pbartz.games.deject.systems.CreepSystem;
 import pbartz.games.deject.systems.ExpireSystem;
 import pbartz.games.deject.systems.InterpolationSystem;
 import pbartz.games.deject.systems.ItemSystem;
+import pbartz.games.deject.systems.LevelInfoSystem;
 import pbartz.games.deject.systems.RectInterpolationSystem;
 import pbartz.games.deject.systems.RotateInterpolationSystem;
 import pbartz.games.deject.systems.ScoreSystem;
@@ -59,6 +61,9 @@ public class GameScene extends BasicScene {
 		engine.addSystem(new CreepSystem());
 		engine.addSystem(new CreepShieldSystem());
 		engine.addSystem(new ItemSystem(this.surface));
+		
+		// Miscellaneous
+		engine.addSystem(new LevelInfoSystem(this.surface));
 		
 		// interpolation
 		engine.addSystem(new InterpolationSystem());
@@ -140,7 +145,8 @@ public class GameScene extends BasicScene {
 	
 	private void levelCompletedSignal(LevelConfig level) {
 		// ToDo: Level completed
-		//engine.getSystem(AISystem.class).getAi().setState(AIComponent.STATE_LEVEL_COMPLETED);
+		
+		engine.getSystem(AISystem.class).getAi().setState(AIComponent.STATE_LEVEL_COMPLETED);
 		
 	}
 
@@ -155,7 +161,13 @@ public class GameScene extends BasicScene {
 	}	
 
 	protected void entityTouchedDown(Entity entity) {		
+		String tag = entity.getComponent(TagComponent.class).getTag();
 		
+		if (tag == "levelInfo") {
+			
+			engine.getSystem(AISystem.class).startLevel();
+			
+		}
 	}
 	
 	

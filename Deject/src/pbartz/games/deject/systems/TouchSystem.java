@@ -3,6 +3,7 @@ package pbartz.games.deject.systems;
 import android.view.MotionEvent;
 import pbartz.games.deject.DejectSurface;
 import pbartz.games.deject.EntityFactory;
+import pbartz.games.deject.components.AIComponent;
 import pbartz.games.deject.components.PositionComponent;
 import pbartz.games.deject.components.TagComponent;
 import pbartz.games.deject.components.TouchComponent;
@@ -57,7 +58,11 @@ public class TouchSystem extends IteratingSystem {
 				position = 0;
 			}
 			
-			if (position > 0) {			
+			if (position > 0) {
+				
+				if (engine.getSystem(AISystem.class).getAi().getState() != AIComponent.STATE_WORKING) {
+					return;
+				}
 				
 				Entity creep = engine.getSystem(AISystem.class).
 						getCreeps().get(position);
