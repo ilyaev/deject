@@ -40,7 +40,7 @@ public class EntityFactory {
 	static float controlPanelHeightPart = 2.8f;
 	static float infoPanelHeightPart = 10f;
 	static float controlPanelHeight = 0f;
-	static float infoPanelHeight = 0f;
+	public static float infoPanelHeight = 0f;
 	static float creepHeight = 0f;
 	static float creepWidth = 0f;
 	static float creepRealHeight;
@@ -633,6 +633,8 @@ public class EntityFactory {
 		entity.add(new TagComponent("levelInfo"));
 		
 		entity.add(new BitmapComponent(BitmapLibrary.getBitmap("level1")));
+		
+		entity.setOrder(1);
 		
 		engine.addEntity(entity);		
 		

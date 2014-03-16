@@ -2,6 +2,8 @@ package pbartz.games.deject.core;
 
 import java.util.Comparator;
 
+import android.util.Log;
+
 import pbartz.games.deject.signals.Listener;
 import pbartz.games.deject.signals.Signal;
 import pbartz.games.deject.utils.Array;
@@ -25,6 +27,7 @@ import pbartz.games.deject.utils.ObjectMap.Entry;
  */
 public class Engine {
 	private static SystemComparator comparator = new SystemComparator();
+	public static EntityComparator entityComparator = new EntityComparator();
 	
 	/** An unordered array that holds all entities in the Engine */
 	private Array<Entity> entities;
@@ -239,6 +242,13 @@ public class Engine {
 		@Override
 		public int compare(EntitySystem a, EntitySystem b) {
 			return a.priority > b.priority ? 1 : (a.priority == b.priority) ? 0 : -1;
+		}
+	}
+	
+	public static class EntityComparator implements Comparator<Entity>{
+		@Override
+		public int compare(Entity a, Entity b) {
+			return a.order > b.order ? 1 : (a.order == b.order) ? 0 : -1;
 		}
 	}
 	

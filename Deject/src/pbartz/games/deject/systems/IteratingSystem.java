@@ -43,7 +43,10 @@ public abstract class IteratingSystem extends EntitySystem {
 	@Override
 	public void addedToEngine(Engine engine) {
 		entities = engine.getEntitiesFor(family);
-		this.engine = engine;
+		
+		if (this.engine == null) {
+			this.engine = engine;
+		}
 	}
 
 	@Override
@@ -53,6 +56,7 @@ public abstract class IteratingSystem extends EntitySystem {
 
 	@Override
 	public void update(float deltaTime) {
+
 		Keys keys = entities.keys();
 		
 		while(keys.hasNext){

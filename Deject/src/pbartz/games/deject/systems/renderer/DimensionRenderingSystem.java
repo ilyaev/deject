@@ -13,8 +13,9 @@ import pbartz.games.deject.components.dimension.RectDimensionComponent;
 import pbartz.games.deject.core.Entity;
 import pbartz.games.deject.core.Family;
 import pbartz.games.deject.systems.IteratingSystem;
+import pbartz.games.deject.systems.OrderedIteratingSystem;
 
-public class DimensionRenderingSystem extends IteratingSystem {
+public class DimensionRenderingSystem extends OrderedIteratingSystem {
 
 	public Canvas canvas = null;
 	

@@ -2,7 +2,7 @@
 	"levels": [		
 		{
 			"number": 1,
-			"duration": 30.0,
+			"duration": 5.0,
 			"speed_multiplier": 1,
 			"creeps": [
 				{

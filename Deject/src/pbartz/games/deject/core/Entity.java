@@ -40,6 +40,8 @@ public class Entity {
 	
 	public Array<Component> delayedComponents;
 	
+	public int order = 0;
+	
 	/**
 	 * Creates an empty Entity.
 	 */
@@ -161,5 +163,15 @@ public class Entity {
 		timeToAppear = Math.max(0, timeToAppear - diff);
 		return timeToAppear == 0 ? true : false;
 	}
+
+	public int getOrder() {
+		return order;
+	}
+
+	public void setOrder(int order) {
+		this.order = order;
+	}
+	
+	
 	
 }
