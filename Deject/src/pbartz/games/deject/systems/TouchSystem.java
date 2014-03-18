@@ -4,6 +4,7 @@ import android.view.MotionEvent;
 import pbartz.games.deject.DejectSurface;
 import pbartz.games.deject.EntityFactory;
 import pbartz.games.deject.components.AIComponent;
+import pbartz.games.deject.components.CreepComponent;
 import pbartz.games.deject.components.PositionComponent;
 import pbartz.games.deject.components.TagComponent;
 import pbartz.games.deject.components.TouchComponent;
@@ -82,6 +83,8 @@ public class TouchSystem extends IteratingSystem {
 				} else {					
 					
 					engine.getSystem(CreepSystem.class).creepMissed(creep);
+					EntityFactory.spawnHammerMiss(engine, surface, position);
+					
 				}			
 				
 			}	

@@ -1,6 +1,5 @@
 package pbartz.games.deject.systems;
 
-import android.util.Log;
 import pbartz.games.deject.core.Engine;
 import pbartz.games.deject.core.Entity;
 import pbartz.games.deject.core.EntitySystem;

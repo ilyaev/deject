@@ -7,6 +7,7 @@ import pbartz.games.deject.BitmapLibrary;
 import pbartz.games.deject.DejectSurface;
 import pbartz.games.deject.EntityFactory;
 import pbartz.games.deject.components.AIComponent;
+import pbartz.games.deject.components.LevelInfoComponent;
 import pbartz.games.deject.components.TagComponent;
 import pbartz.games.deject.config.GameConfig;
 import pbartz.games.deject.config.LevelConfig;
@@ -165,7 +166,9 @@ public class GameScene extends BasicScene {
 		
 		if (tag == "levelInfo") {
 			
-			engine.getSystem(AISystem.class).startLevel();
+			if (entity.getComponent(LevelInfoComponent.class).getState() == LevelInfoComponent.STATE_WAITING) {
+				engine.getSystem(AISystem.class).startLevel();
+			}
 			
 		}
 	}

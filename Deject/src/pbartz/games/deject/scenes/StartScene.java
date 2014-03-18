@@ -5,27 +5,19 @@ import pbartz.games.deject.DejectSurface;
 import pbartz.games.deject.EntityFactory;
 import pbartz.games.deject.components.PositionComponent;
 import pbartz.games.deject.components.TagComponent;
-import pbartz.games.deject.config.GameConfig;
-import pbartz.games.deject.config.LevelConfig;
 import pbartz.games.deject.core.Entity;
 import pbartz.games.deject.signals.Listener;
 import pbartz.games.deject.signals.Signal;
-import pbartz.games.deject.systems.AISystem;
 import pbartz.games.deject.systems.ColorInterpolationSystem;
-import pbartz.games.deject.systems.CreepShieldSystem;
-import pbartz.games.deject.systems.CreepSystem;
 import pbartz.games.deject.systems.ExpireSystem;
 import pbartz.games.deject.systems.InterpolationSystem;
-import pbartz.games.deject.systems.ItemSystem;
 import pbartz.games.deject.systems.RectInterpolationSystem;
 import pbartz.games.deject.systems.RotateInterpolationSystem;
-import pbartz.games.deject.systems.ScoreSystem;
 import pbartz.games.deject.systems.ScreenOverlaySystem;
 import pbartz.games.deject.systems.TouchSystem;
 import pbartz.games.deject.systems.ZoomInterpolationSystem;
 import pbartz.games.deject.systems.renderer.DimensionRenderingSystem;
 import android.graphics.Canvas;
-import android.util.Log;
 
 public class StartScene extends BasicScene {
 

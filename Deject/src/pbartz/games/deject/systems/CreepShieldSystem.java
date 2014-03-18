@@ -5,7 +5,6 @@ import pbartz.games.deject.BitmapLibrary;
 import pbartz.games.deject.components.BitmapComponent;
 import pbartz.games.deject.components.CreepComponent;
 import pbartz.games.deject.components.CreepShieldComponent;
-import pbartz.games.deject.components.ZoomComponent;
 import pbartz.games.deject.core.Entity;
 import pbartz.games.deject.core.Family;
 

@@ -2,22 +2,13 @@
 	"levels": [		
 		{
 			"number": 1,
-			"duration": 5.0,
+			"duration": 30,
 			"speed_multiplier": 1,
 			"creeps": [
 				{
-					"type": "golden",
-					"chance": 30
-				},				
-				{
-					"type": "red",
-					"chance": 50
-				},
-				{
 					"type": "green",
 					"chance": 100
-				}
-				
+				}				
 			],
 			
 			"items": [
@@ -39,9 +30,41 @@
 				
 				{
 					"type": "red",
-					"chance": 30
+					"chance": 20
 				},
 				
+				{
+					"type": "green",
+					"chance": 100
+				}
+				
+			],
+			
+			"items": [
+				{
+					"type": "heart_small",
+					"chance": 5
+				},
+				{
+					"type": "coin_small",
+					"chance": 5
+				}
+			]
+		},
+		{
+			"number": 3,
+			"duration": 30.0,
+			"speed_multiplier": 1.1,
+			"creeps": [
+				
+				{
+					"type": "red",
+					"chance": 20
+				},
+				{
+					"type": "golden",
+					"chance": 40
+				},
 				{
 					"type": "green",
 					"chance": 100
@@ -81,11 +104,11 @@
 			"items": [
 				{
 					"type": "heart_small",
-					"chance": 50
+					"chance": 5
 				},
 				{
 					"type": "coin_small",
-					"chance": 70
+					"chance": 20
 				}
 			]
 		},
@@ -103,7 +126,7 @@
 				},
 				{
 					"type": "coin_small",
-					"chance": 50
+					"chance": 30
 				}
 			]
 		},

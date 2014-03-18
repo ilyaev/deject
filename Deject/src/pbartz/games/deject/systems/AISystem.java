@@ -2,15 +2,11 @@ package pbartz.games.deject.systems;
 
 import java.util.Random;
 
-import android.util.Log;
-
 import pbartz.games.deject.DejectSurface;
 import pbartz.games.deject.EntityFactory;
 import pbartz.games.deject.components.AIComponent;
 import pbartz.games.deject.components.CreepComponent;
 import pbartz.games.deject.components.LevelInfoComponent;
-import pbartz.games.deject.components.PositionComponent;
-import pbartz.games.deject.components.PositionInterpolationComponent;
 import pbartz.games.deject.components.RectInterpolationComponent;
 import pbartz.games.deject.components.ScoreComponent;
 import pbartz.games.deject.config.GameConfig;
@@ -56,6 +52,7 @@ public class AISystem extends IteratingSystem {
 			
 		} else if (ai.getState() == AIComponent.STATE_LEVEL_COMPLETED && levelInfo == null) {
 			
+			score.increasLevel();
 			levelInfo = EntityFactory.spawnLevelInfoPanel(engine, surface, score.getLevel());
 			
 		} else if (ai.getState() == AIComponent.STATE_STARTING) {
@@ -68,7 +65,7 @@ public class AISystem extends IteratingSystem {
 			
 		} else if (ai.getState() == AIComponent.STATE_WORKING) {
 		
-			if (ai.isNextEvent(deltaTime)) {
+			if (ai.isNextEvent(deltaTime) && progressBar.getComponent(RectInterpolationComponent.class) != null) {
 				
 				
 				
@@ -90,7 +87,9 @@ public class AISystem extends IteratingSystem {
 			
 			if (progressBar.getComponent(RectInterpolationComponent.class) == null) {
 				
-				levelCompletedSignal.dispatch(level);
+				if (isEmptyField()) {
+					levelCompletedSignal.dispatch(level);
+				}
 				
 			}
 
@@ -98,6 +97,17 @@ public class AISystem extends IteratingSystem {
 		
 	}
 	
+	private boolean isEmptyField() {
+		
+		for (int i = 1 ; i <= 9 ; i++ ) {
+			if (creeps.get(i, null) != null || items.get(i, null) != null) {
+				return false;
+			}
+		}
+		
+		return true;
+	}
+
 	public void releaseProgressBar() {
 		
 		progressBar.add(new RectInterpolationComponent(
@@ -178,6 +188,7 @@ public class AISystem extends IteratingSystem {
 
 	public void startLevel() {
 		levelInfo.getComponent(LevelInfoComponent.class).setState(LevelInfoComponent.STATE_GO_DOWN);
+		EntityFactory.animateButtonsUp();
 		ai.setState(AIComponent.STATE_STARTING);		
 	}
 

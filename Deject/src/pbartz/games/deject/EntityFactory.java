@@ -2,6 +2,7 @@ package pbartz.games.deject;
 
 import java.util.Random;
 
+import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
@@ -34,6 +35,7 @@ import pbartz.games.deject.core.Interpolation;
 import pbartz.games.deject.core.PooledEngine;
 import pbartz.games.deject.systems.AISystem;
 import pbartz.games.deject.systems.ScoreSystem;
+import pbartz.games.deject.utils.Array;
 
 public class EntityFactory {
 
@@ -59,6 +61,8 @@ public class EntityFactory {
 	static float lifeOffsetX;
 	static float lifeHeight;
 	private static float lifeWidth;
+	
+	public static Array<Entity> buttons = new Array<Entity>();
 	
 	public static void caculateMetrics(DejectSurface surface) {
 		
@@ -248,6 +252,8 @@ public class EntityFactory {
 				entity.add(color);
 				
 				engine.addEntity(entity);
+				
+				buttons.add(entity);
 				
 				tag += 1;
 			}
@@ -632,13 +638,62 @@ public class EntityFactory {
 		entity.add(new TouchComponent());
 		entity.add(new TagComponent("levelInfo"));
 		
-		entity.add(new BitmapComponent(BitmapLibrary.getBitmap("level1")));
+		Bitmap levelBitmap = BitmapLibrary.getBitmap("level" + Integer.toString(level));
+		
+		if (levelBitmap != null) {
+			entity.add(new BitmapComponent(levelBitmap));
+		}
 		
 		entity.setOrder(1);
 		
 		engine.addEntity(entity);		
 		
+		animateButtonsDown();
+		
 		return entity;
+	}
+	
+	public static void animateButtonsDown() {
+		
+		Random r = new Random();
+		
+		for(int i = 0 ; i < buttons.size ; i++) {
+			
+			Entity button = buttons.get(i);
+			
+			PositionComponent position = button.getComponent(PositionComponent.class);
+			RectDimensionComponent dimension = button.getComponent(RectDimensionComponent.class);
+			
+			button.add(new PositionInterpolationComponent(
+				button.getComponent(PositionComponent.class),
+				position.x,
+				position.getOriginalY() + dimension.getHeight() * 3,
+				0.5f,
+				Interpolation.EASE_IN					
+			), r.nextFloat() / 5);
+			
+		}
+	}
+	
+	public static void animateButtonsUp() {
+		Random r = new Random();
+		
+		for(int i = 0 ; i < buttons.size ; i++) {
+			
+			Entity button = buttons.get(i);
+			
+			PositionComponent position = button.getComponent(PositionComponent.class);
+			RectDimensionComponent dimension = button.getComponent(RectDimensionComponent.class);
+			
+			button.add(new PositionInterpolationComponent(
+				button.getComponent(PositionComponent.class),
+				position.x,
+				position.getOriginalY(),
+				0.5f,
+				Interpolation.EASE_OUT					
+			), r.nextFloat() / 5);
+			
+		}
 	}
 
 	
