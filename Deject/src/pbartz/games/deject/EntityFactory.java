@@ -683,7 +683,6 @@ public class EntityFactory {
 			Entity button = buttons.get(i);
 			
 			PositionComponent position = button.getComponent(PositionComponent.class);
-			RectDimensionComponent dimension = button.getComponent(RectDimensionComponent.class);
 			
 			button.add(new PositionInterpolationComponent(
 				button.getComponent(PositionComponent.class),
@@ -694,6 +693,47 @@ public class EntityFactory {
 			), r.nextFloat() / 5);
 			
 		}
+	}
+
+
+
+	public static void spawnLifeLose(Engine engine, DejectSurface surface, int hPos) {
+		
+		float rX = lifeOffsetX + (lifeWidth / 2) + hPos*lifeWidth + 1*hPos;
+		float rY = 0;
+		
+		Random r = new Random();
+		
+		for(int i = 0 ; i < 50 ; i++) {
+			Entity entity = new Entity();
+			entity.add(new PositionComponent(surface.dp2px(rX), surface.dp2px(rY)));
+			entity.add(new ColorComponent(255, 255, 0, 0));
+			entity.add(new RectDimensionComponent(surface.dp2px(lifeWidth / 3), surface.dp2px(lifeHeight / 3)));
+			
+			entity.add(new PositionInterpolationComponent(
+				new PositionComponent(surface.dp2px(rX + (r.nextInt((int)lifeWidth) - (lifeWidth / 2))), surface.dp2px(rY)),
+				surface.dp2px(rX + (r.nextInt((int)lifeWidth) - (lifeWidth / 2))),
+				surface.dp2px(rY + surface.heightDp / 2 - r.nextInt((int)surface.heightDp / 5)),
+				0.5f,
+				Interpolation.EASE_OUT
+			));
+			
+			Paint tmpColor = createPaint(0, 255, 0, 0);
+			
+			entity.add(new ColorInterpolationComponent(
+				entity.getComponent(ColorComponent.class).getPaint(),
+				tmpColor,
+				0.5f,
+				Interpolation.EASE_OUT
+			));
+			
+			
+			entity.add(new ExpireComponent(0.5f));
+			
+			engine.addEntity(entity, r.nextFloat() / 2);
+			
+		}
+		
 	}
 
 	

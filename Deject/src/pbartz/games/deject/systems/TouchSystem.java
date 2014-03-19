@@ -82,7 +82,7 @@ public class TouchSystem extends IteratingSystem {
 					
 				} else {					
 					
-					engine.getSystem(CreepSystem.class).creepMissed(creep);
+					engine.getSystem(ScoreSystem.class).increaseLife(-1);
 					EntityFactory.spawnHammerMiss(engine, surface, position);
 					
 				}			

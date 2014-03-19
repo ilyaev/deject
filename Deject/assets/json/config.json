@@ -82,6 +82,42 @@
 					"chance": 5
 				}
 			]
+		},
+		{
+			"number": 4,
+			"duration": 30.0,
+			"speed_multiplier": 1.1,
+			"creeps": [
+				
+				{
+					"type": "red",
+					"chance": 20
+				},
+				{
+					"type": "spike",
+					"chance": 30
+				},
+				{
+					"type": "golden",
+					"chance": 40
+				},
+				{
+					"type": "green",
+					"chance": 100
+				}
+				
+			],
+			
+			"items": [
+				{
+					"type": "heart_small",
+					"chance": 5
+				},
+				{
+					"type": "coin_small",
+					"chance": 5
+				}
+			]
 		}
 	],
 	
@@ -155,7 +191,7 @@
 		{
 			"type": "spike",
 			"life": 2,
-			"image": "hammer3",
+			"image": "creep4",
 			"score": 4,
 			"min_hit": 2,
 			"items": [

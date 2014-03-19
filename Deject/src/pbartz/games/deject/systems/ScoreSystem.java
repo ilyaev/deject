@@ -1,6 +1,8 @@
 package pbartz.games.deject.systems;
 
 import pbartz.games.deject.BitmapLibrary;
+import pbartz.games.deject.DejectSurface;
+import pbartz.games.deject.EntityFactory;
 import pbartz.games.deject.components.BitmapComponent;
 import pbartz.games.deject.components.ColorComponent;
 import pbartz.games.deject.components.ScoreComponent;
@@ -20,10 +22,13 @@ public class ScoreSystem extends IteratingSystem {
 	ObjectMap <Integer, Entity> hearts = new ObjectMap<Integer, Entity>();
 	
 	public Signal<Entity> gameOverSignal = new Signal<Entity>();
+	private DejectSurface surface;
 
 	@SuppressWarnings("unchecked")
-	public ScoreSystem() {
+	public ScoreSystem(DejectSurface surface) {
 		super(Family.getFamilyFor(ScoreComponent.class));
+		
+		this.surface = surface;
 	}
 
 	@Override
@@ -78,6 +83,10 @@ public class ScoreSystem extends IteratingSystem {
 			
 			if (curLife <= 0) {
 				gameOverSignal.dispatch(this.score);
+			}
+			
+			if (add < 0) {
+				EntityFactory.spawnLifeLose(engine, surface, Math.round(curLife / 2));
 			}
 			
 		}

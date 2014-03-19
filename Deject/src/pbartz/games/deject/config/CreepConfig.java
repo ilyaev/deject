@@ -68,6 +68,17 @@ public class CreepConfig {
 					} catch (JSONException e1) {
 						e1.printStackTrace();
 					}
+					
+					try {
+						minHit = Integer.valueOf(obj.getString("min_hit"));
+					} catch (JSONException e) {
+						try {
+							minHit = Integer.valueOf(defObj.getString("min_hit"));
+						}catch (JSONException e1) {
+							e1.printStackTrace();
+						}
+					}
+					
 				
 				
 					try {

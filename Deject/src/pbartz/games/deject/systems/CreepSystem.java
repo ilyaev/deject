@@ -138,6 +138,15 @@ public class CreepSystem extends IteratingSystem {
 			
 		}
 		
+		int lifeLose = 0;
+		
+		if (entity.getComponent(CreepComponent.class).getMinHit() > engine.getSystem(ScoreSystem.class).getStength()) {
+
+			lifeLose = 1;
+			
+		}
+			
+		
 		if (canBeHit) {
 		
 			EntityFactory.spawnHammerHit(engine, surface, entity.getComponent(CreepComponent.class).getPosition());	
@@ -161,10 +170,16 @@ public class CreepSystem extends IteratingSystem {
 			EntityFactory.spawnHammerMiss(engine, surface, entity.getComponent(CreepComponent.class).getPosition());
 			
 		}
+		
+		if (lifeLose > 0) {
+			engine.getSystem(ScoreSystem.class).increaseLife(-lifeLose);
+		}
 	}
 
 	public void creepMissed(Entity entity) {
-		engine.getSystem(ScoreSystem.class).increaseLife(-1);
+		if (entity != null && entity.getComponent(CreepComponent.class).getMinHit() <= engine.getSystem(ScoreSystem.class).getStength()) {
+			engine.getSystem(ScoreSystem.class).increaseLife(-1);
+		}
 	}
 
 }

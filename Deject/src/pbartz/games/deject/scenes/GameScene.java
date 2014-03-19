@@ -52,7 +52,7 @@ public class GameScene extends BasicScene {
 		}
 		
 		// score
-		engine.addSystem(new ScoreSystem());
+		engine.addSystem(new ScoreSystem(this.surface));
 		
 		// control
 		engine.addSystem(new TouchSystem(this.surface));
