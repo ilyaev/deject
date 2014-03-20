@@ -48,20 +48,29 @@ public class DimensionRenderingSystem extends OrderedIteratingSystem {
 		rotate = entity.getComponent(RotateComponent.class);
 		zoom = entity.getComponent(ZoomComponent.class);
 		
-		if (entity.getComponent(TextComponent.class) != null) {
-			
-			text = entity.getComponent(TextComponent.class);
-			renderText();
-		
-		} else if (entity.getComponent(BitmapComponent.class) != null) {
+		if (entity.getComponent(BitmapComponent.class) != null) {
 			
 			bitmap = entity.getComponent(BitmapComponent.class);
 			renderBitmap();
 			
-		} else {
+			if (entity.getComponent(TextComponent.class) != null) {
+				
+				text = entity.getComponent(TextComponent.class);
+				renderText();
+			
+			}
+			
+		} else if (entity.getComponent(TextComponent.class) != null) {
+			
+			text = entity.getComponent(TextComponent.class);
+			renderText();
 		
+		} else {			
+			
 			renderRect();
 		}
+		
+		
 		
 	}
 

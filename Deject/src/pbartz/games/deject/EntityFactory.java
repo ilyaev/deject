@@ -12,6 +12,7 @@ import pbartz.games.deject.components.ColorComponent;
 import pbartz.games.deject.components.ColorInterpolationComponent;
 import pbartz.games.deject.components.CreepComponent;
 import pbartz.games.deject.components.CreepShieldComponent;
+import pbartz.games.deject.components.CreepSwapComponent;
 import pbartz.games.deject.components.ExpireComponent;
 import pbartz.games.deject.components.ItemComponent;
 import pbartz.games.deject.components.LevelInfoComponent;
@@ -320,13 +321,13 @@ public class EntityFactory {
 
 		Entity entity = prepareCellEntity(surface, position);
 		
-		ColorComponent color = new ColorComponent(255, 255, 0, 0);
+		ColorComponent color = new ColorComponent(255, 255, 255, 255);
 		color.getPaint().setAntiAlias(false);
 		color.getPaint().setFilterBitmap(false);
 		
 		entity.add(color);
 		
-		CreepConfig creepConfig = GameConfig.getCreepConfig(creepType);
+		CreepConfig creepConfig = GameConfig.getCreepConfig(creepType); 
 		
 		entity.add(new BitmapComponent(BitmapLibrary.getBitmap(creepConfig.getImage())));
 		
@@ -349,6 +350,19 @@ public class EntityFactory {
 					CreepShieldComponent creepShield = new CreepShieldComponent(creepConfig.getShield_interval(), creepConfig.getShield_duration());
 					
 					entity.add(creepShield);
+				}
+				
+				if (component.equalsIgnoreCase("buttonswap")) {
+					
+					Random r = new Random();
+					
+					int swapNumber = r.nextInt(9) + 1;
+					
+					CreepSwapComponent swap = new CreepSwapComponent(swapNumber);
+					
+					entity.add(swap);
+					entity.add(new TextComponent(Integer.toString(swapNumber), creepHeight / 3));
+					
 				}
 				
 			}

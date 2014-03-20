@@ -5,6 +5,7 @@ import pbartz.games.deject.DejectSurface;
 import pbartz.games.deject.EntityFactory;
 import pbartz.games.deject.components.AIComponent;
 import pbartz.games.deject.components.CreepComponent;
+import pbartz.games.deject.components.CreepSwapComponent;
 import pbartz.games.deject.components.PositionComponent;
 import pbartz.games.deject.components.TagComponent;
 import pbartz.games.deject.components.TouchComponent;
@@ -65,11 +66,31 @@ public class TouchSystem extends IteratingSystem {
 					return;
 				}
 				
+				Entity swapCreep = engine.getSystem(AISystem.class).
+						getSwapCreep(position);
+				
 				Entity creep = engine.getSystem(AISystem.class).
 						getCreeps().get(position);
 				
 				Entity item = engine.getSystem(AISystem.class).
 						getItems().get(position);
+				
+				if (swapCreep != null) {
+					
+					creep = swapCreep;
+					position = creep.getComponent(CreepComponent.class).getPosition();
+					
+				} else if (creep != null) {
+					
+					CreepSwapComponent swap = creep.getComponent(CreepSwapComponent.class);
+					
+					if (swap != null && position != swap.getTouchKey()) {
+						creep = null;
+					}
+					
+				}
+				
+				
 				
 				if (creep != null) {
 					

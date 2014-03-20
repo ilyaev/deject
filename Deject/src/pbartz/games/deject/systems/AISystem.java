@@ -6,6 +6,7 @@ import pbartz.games.deject.DejectSurface;
 import pbartz.games.deject.EntityFactory;
 import pbartz.games.deject.components.AIComponent;
 import pbartz.games.deject.components.CreepComponent;
+import pbartz.games.deject.components.CreepSwapComponent;
 import pbartz.games.deject.components.LevelInfoComponent;
 import pbartz.games.deject.components.RectInterpolationComponent;
 import pbartz.games.deject.components.ScoreComponent;
@@ -190,6 +191,26 @@ public class AISystem extends IteratingSystem {
 		levelInfo.getComponent(LevelInfoComponent.class).setState(LevelInfoComponent.STATE_GO_DOWN);
 		EntityFactory.animateButtonsUp();
 		ai.setState(AIComponent.STATE_STARTING);		
+	}
+
+	public Entity getSwapCreep(int position) {
+		
+		for(int i = 1 ; i <= 9 ; i++) {
+			
+			Entity entity = creeps.get(i);
+			
+			if (entity != null) {
+				
+				CreepSwapComponent swap = entity.getComponent(CreepSwapComponent.class);
+				
+				if (swap != null && swap.getTouchKey() == position) {
+					return entity;
+				}
+				
+			}
+		}
+		
+		return null;
 	}
 
 }

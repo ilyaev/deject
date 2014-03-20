@@ -6,7 +6,7 @@
 			"speed_multiplier": 1,
 			"creeps": [
 				{
-					"type": "green",
+					"type": "swap",
 					"chance": 100
 				}				
 			],
@@ -200,6 +200,27 @@
 					"chance": 100
 				}
 			]
+		},
+		{
+			"type": "swap",
+			"life": 1,
+			"image": "creep5",
+			"score": 10,
+			items: [
+				{
+					"type": "heart_small",
+					"chance": 2
+				},
+				{
+					"type": "coin_big",
+					"chance": 10
+				},
+				{
+					"type": "coin_small",
+					"chance": 50
+				}
+			],
+			"components": "buttonswap"
 		}	
 			
 	],
