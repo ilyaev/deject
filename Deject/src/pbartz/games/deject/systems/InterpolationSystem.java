@@ -4,6 +4,7 @@ import pbartz.games.deject.components.PositionComponent;
 import pbartz.games.deject.components.PositionInterpolationComponent;
 import pbartz.games.deject.core.Entity;
 import pbartz.games.deject.core.Family;
+import pbartz.games.deject.core.Interpolation;
 
 public class InterpolationSystem extends IteratingSystem {
 	
@@ -28,8 +29,17 @@ public class InterpolationSystem extends IteratingSystem {
 		
 		if (positionInterpolation.isCompleted()) {
 			
-			position.x = positionInterpolation.destX;
-			position.y = positionInterpolation.destY;
+			if (positionInterpolation.getType() == Interpolation.EASE_IN_OUT) {
+				
+				position.x = positionInterpolation.startX;
+				position.y = positionInterpolation.startY;
+				
+			} else {
+			
+				position.x = positionInterpolation.destX;
+				position.y = positionInterpolation.destY;
+				
+			}
 			
 			entity.remove(PositionInterpolationComponent.class);
 		}

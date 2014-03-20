@@ -10,7 +10,8 @@ public class CreepComponent extends Component {
 	public static final int WAITING = 2;
 	public static final int GOING_DOWN = 3;
 	public static final int FORCE_REMOVE = 4;
-	
+	public static final int HIT = 5;
+	public static final int HIT_END = 6;
 	
 	
 	int position = -1;
@@ -26,6 +27,9 @@ public class CreepComponent extends Component {
 	int health = 1;
 	int score = 0;
 	int minHit = 1;
+	
+	int oldState = NOT_INITED;
+	int oldTimeToNextState = 0;
 	
 	String type = "";
 	

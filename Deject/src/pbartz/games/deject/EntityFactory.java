@@ -16,6 +16,7 @@ import pbartz.games.deject.components.CreepSwapComponent;
 import pbartz.games.deject.components.ExpireComponent;
 import pbartz.games.deject.components.ItemComponent;
 import pbartz.games.deject.components.LevelInfoComponent;
+import pbartz.games.deject.components.MovementComponent;
 import pbartz.games.deject.components.PositionComponent;
 import pbartz.games.deject.components.PositionInterpolationComponent;
 import pbartz.games.deject.components.RotateComponent;
@@ -26,6 +27,7 @@ import pbartz.games.deject.components.TagComponent;
 import pbartz.games.deject.components.TextComponent;
 import pbartz.games.deject.components.TouchComponent;
 import pbartz.games.deject.components.ZoomComponent;
+import pbartz.games.deject.components.ZoomInterpolationComponent;
 import pbartz.games.deject.components.dimension.RectDimensionComponent;
 import pbartz.games.deject.config.CreepConfig;
 import pbartz.games.deject.config.GameConfig;
@@ -64,6 +66,9 @@ public class EntityFactory {
 	private static float lifeWidth;
 	
 	public static Array<Entity> buttons = new Array<Entity>();
+	public static float btnHeight;
+	public static float btnWidth;
+	private static float surfaceHeightDp;
 	
 	public static void caculateMetrics(DejectSurface surface) {
 		
@@ -86,7 +91,11 @@ public class EntityFactory {
 		levelPanelWidth = (surface.widthDp / 100) * 90;
 		levelPanelHeight = levelPanelWidth / 1.5f;
 		
+		btnHeight = ((surface.heightDp - 1) / controlPanelHeightPart) / 3;
+		btnWidth = (surface.widthDp - 1) / 3;
 		
+		
+		surfaceHeightDp = surface.heightDp;
 	}
 	
 	
@@ -222,11 +231,18 @@ public class EntityFactory {
 		
 	}
 	
+	public static float getButtonCenterY(int position) {
+		Point point = getCellPoint(position);
+		return surfaceHeightDp - (surfaceHeightDp / controlPanelHeightPart) + btnHeight / 2 + btnHeight * (point.y - 1);
+	}
+	
+	public static float getButtonCenterX(int position) {
+		Point point = getCellPoint(position);
+		return btnWidth / 2 + btnWidth * (point.x - 1);
+	}
+	
 	public static void createControlPanel(Engine engine, DejectSurface surface) {
 
-		float btnHeight = ((surface.heightDp - 1) / controlPanelHeightPart) / 3;
-		float btnWidth = (surface.widthDp - 1) / 3;
-		
 		int tag = 1;
 		
 		for(int y = 0 ; y < 3 ; y++) {
@@ -747,6 +763,77 @@ public class EntityFactory {
 			engine.addEntity(entity, r.nextFloat() / 2);
 			
 		}
+		
+	}
+
+
+
+	public static void spawnTouchReaction(Engine engine, DejectSurface surface, int position) {
+		
+		float lifeTime = 0.3f;
+		float zoomFactor = 1.5f;
+		
+		Entity entity = new Entity();
+		entity.add(new PositionComponent(surface.dp2px(getButtonCenterX(position)), surface.dp2px(getButtonCenterY(position))));
+		
+		entity.add(new ColorComponent(150, 255, 0, 0));
+		entity.add(new RectDimensionComponent(surface.dp2px(btnWidth), surface.dp2px(btnHeight)));
+		
+		entity.add(new ZoomComponent(1f, 1f));
+		
+		entity.add(new ZoomInterpolationComponent(
+				surface.dp2px(btnWidth), 
+				surface.dp2px(btnHeight), 
+				surface.dp2px(btnWidth) * zoomFactor, 
+				surface.dp2px(btnHeight) * zoomFactor, 
+				lifeTime, 
+				Interpolation.EASE_IN
+		));
+		
+		entity.add(new ColorInterpolationComponent(
+			entity.getComponent(ColorComponent.class).getPaint(), 
+			createPaint(0, 255, 0, 0), 
+			lifeTime, 
+			Interpolation.EASE_IN
+		));
+		
+		entity.add(new ExpireComponent(lifeTime));
+		entity.setOrder(1);
+		
+		engine.addEntity(entity);
+		
+	}
+
+
+
+	public static void spawnDefeatAnimation(Engine engine, DejectSurface surface, Entity creep) {
+		
+		PositionComponent position = creep.getComponent(PositionComponent.class);
+		RectDimensionComponent dimension = creep.getComponent(RectDimensionComponent.class);
+		
+		Entity entity = new Entity();
+		
+		entity.add(new PositionComponent(position.x, position.y));
+		entity.add(new RectDimensionComponent(dimension.getWidth(), dimension.getHeight()));
+		entity.add(new ColorComponent(255, 255, 0, 0));
+		
+		entity.add(new ColorInterpolationComponent(
+			entity.getComponent(ColorComponent.class).getPaint(), 
+			createPaint(0, 255, 0, 0), 
+			1f, 
+			Interpolation.EASE_IN
+		));
+		
+		
+		entity.add(new ExpireComponent(1f));
+		
+		Random r = new Random();
+		
+		entity.add(new MovementComponent(surface.dp2px(r.nextInt((int)creepWidth * 2) - (int)(creepWidth)), -surface.dp2px(surface.heightDp * 1.2f)));
+		
+		entity.setOrder(-1);
+		
+		engine.addEntity(entity);
 		
 	}
 

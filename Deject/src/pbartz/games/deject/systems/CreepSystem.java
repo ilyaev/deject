@@ -20,10 +20,12 @@ public class CreepSystem extends IteratingSystem {
 	ColorComponent color;
 	PositionComponent position;
 	RectDimensionComponent dimension;
+	private DejectSurface surface;
 
 	@SuppressWarnings("unchecked")
-	public CreepSystem() {
+	public CreepSystem(DejectSurface surface) {
 		super(Family.getFamilyFor(CreepComponent.class, PositionComponent.class, ColorComponent.class, RectDimensionComponent.class));
+		this.surface = surface;
 	}
 
 	@Override
@@ -118,8 +120,14 @@ public class CreepSystem extends IteratingSystem {
 	}
 	
 	private void wipeCreep(Entity entity) {
+		
+		EntityFactory.spawnDefeatAnimation(engine, surface, entity);
+		
 		engine.getSystem(AISystem.class).getCreeps().put(entity.getComponent(CreepComponent.class).getPosition(), null);
 		engine.removeEntity(entity);
+		
+		
+		
 	}
 	
 	public void creepTouched(Entity entity, DejectSurface surface) {

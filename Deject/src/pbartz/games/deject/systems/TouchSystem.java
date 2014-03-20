@@ -66,6 +66,8 @@ public class TouchSystem extends IteratingSystem {
 					return;
 				}
 				
+				EntityFactory.spawnTouchReaction(engine, surface, position);
+				
 				Entity swapCreep = engine.getSystem(AISystem.class).
 						getSwapCreep(position);
 				

@@ -6,7 +6,7 @@
 			"speed_multiplier": 1,
 			"creeps": [
 				{
-					"type": "swap",
+					"type": "green",
 					"chance": 100
 				}				
 			],
@@ -99,6 +99,46 @@
 				},
 				{
 					"type": "golden",
+					"chance": 40
+				},
+				{
+					"type": "green",
+					"chance": 100
+				}
+				
+			],
+			
+			"items": [
+				{
+					"type": "heart_small",
+					"chance": 5
+				},
+				{
+					"type": "coin_small",
+					"chance": 5
+				}
+			]
+		},
+		{
+			"number": 5,
+			"duration": 30.0,
+			"speed_multiplier": 1.1,
+			"creeps": [
+				
+				{
+					"type": "red",
+					"chance": 20
+				},
+				{
+					"type": "spike",
+					"chance": 30
+				},
+				{
+					"type": "golden",
+					"chance": 40
+				},
+				{
+					"type": "swap",
 					"chance": 40
 				},
 				{

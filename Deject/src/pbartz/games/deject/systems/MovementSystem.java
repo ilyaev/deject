@@ -8,10 +8,13 @@ import pbartz.games.deject.core.Family;
 public class MovementSystem extends IteratingSystem {
 	PositionComponent position;
 	MovementComponent movement;
+	
+	private float gravity = 2500;
 
 	@SuppressWarnings("unchecked")
-	public MovementSystem() {
+	public MovementSystem(float gravity) {
 		super(Family.getFamilyFor(PositionComponent.class, MovementComponent.class));
+		this.gravity = gravity;
 	}
 
 	@Override
@@ -19,8 +22,10 @@ public class MovementSystem extends IteratingSystem {
 		position = entity.getComponent(PositionComponent.class);
 		movement = entity.getComponent(MovementComponent.class);
 
-		position.x += movement.velocityX * deltaTime;
-		position.y += movement.velocityY * deltaTime;
+		position.x += movement.velocityX * (deltaTime / 1000);
+		position.y += movement.velocityY * (deltaTime / 1000);
+		
+		movement.velocityY += gravity * (deltaTime / 1000);
 		
 
 	}

@@ -22,6 +22,7 @@ import pbartz.games.deject.systems.ExpireSystem;
 import pbartz.games.deject.systems.InterpolationSystem;
 import pbartz.games.deject.systems.ItemSystem;
 import pbartz.games.deject.systems.LevelInfoSystem;
+import pbartz.games.deject.systems.MovementSystem;
 import pbartz.games.deject.systems.RectInterpolationSystem;
 import pbartz.games.deject.systems.RotateInterpolationSystem;
 import pbartz.games.deject.systems.ScoreSystem;
@@ -59,12 +60,13 @@ public class GameScene extends BasicScene {
 		
 		// AI
 		engine.addSystem(new AISystem(this.surface));
-		engine.addSystem(new CreepSystem());
+		engine.addSystem(new CreepSystem(this.surface));
 		engine.addSystem(new CreepShieldSystem());
 		engine.addSystem(new ItemSystem(this.surface));
 		
 		// Miscellaneous
 		engine.addSystem(new LevelInfoSystem(this.surface));
+		engine.addSystem(new MovementSystem(surface.dp2px(surface.heightDp * 3.3f)));
 		
 		// interpolation
 		engine.addSystem(new InterpolationSystem());
