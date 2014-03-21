@@ -8,6 +8,8 @@ import pbartz.games.deject.DejectSurface;
 import pbartz.games.deject.EntityFactory;
 import pbartz.games.deject.components.AIComponent;
 import pbartz.games.deject.components.LevelInfoComponent;
+import pbartz.games.deject.components.PositionInterpolationComponent;
+import pbartz.games.deject.components.ScoreComponent;
 import pbartz.games.deject.components.TagComponent;
 import pbartz.games.deject.config.GameConfig;
 import pbartz.games.deject.config.LevelConfig;
@@ -150,13 +152,19 @@ public class GameScene extends BasicScene {
 		// ToDo: Level completed
 		
 		engine.getSystem(AISystem.class).getAi().setState(AIComponent.STATE_LEVEL_COMPLETED);
+		EntityFactory.animateButtonsDown();
 		
 	}
 
 	private void gameOverSignal(Entity score) {
-		// ToDo: Game Over
-		engine.getSystem(AISystem.class).getAi().setState(AIComponent.STATE_GAMEOVER);
 		
+		if (engine.getSystem(AISystem.class).getAi().getState() != AIComponent.STATE_GAMEOVER) {
+		
+			engine.getSystem(AISystem.class).getAi().setState(AIComponent.STATE_GAMEOVER);
+			EntityFactory.spawnGameOver(engine, surface);
+			EntityFactory.animateButtonsDown();
+			
+		}
 	}
 	
 	private void entityExpired(Entity entity) {
@@ -172,6 +180,12 @@ public class GameScene extends BasicScene {
 				engine.getSystem(AISystem.class).startLevel();
 			}
 			
+		} else if (tag == "btn_play") {
+			if (EntityFactory.btnPlay != null && EntityFactory.btnPlay.getComponent(PositionInterpolationComponent.class) == null) {
+				engine.getSystem(AISystem.class).starGame();
+				
+				EntityFactory.hideGameOverPanel(surface);
+			}
 		}
 	}
 	

@@ -4,9 +4,11 @@ import pbartz.games.deject.core.Component;
 
 public class ScoreComponent extends Component {
 	
+	public static final int INITIAL_LIFE = 16;
+	
 	private int score = 0;
 	private int level = 1;
-	private int life = 16;
+	private int life = INITIAL_LIFE;
 	private int strength = 1;
 	private int gold = 0;
 
@@ -68,6 +70,14 @@ public class ScoreComponent extends Component {
 
 	public int getGold() {
 		return gold;
+	}
+
+	public void reset() {
+		gold = 0;
+		strength = 1;
+		level = 1;
+		score = 0;
+		
 	}
 	
 	

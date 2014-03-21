@@ -56,7 +56,7 @@ public class StartScene extends BasicScene {
 		BitmapLibrary.loadAssets(surface);
 		
 		EntityFactory.caculateMetrics(surface);
-		EntityFactory.createStartScreen(engine, surface);
+		EntityFactory.createStartScreen(engine, surface, 0);
 		
 		initListeners();
 		

@@ -121,12 +121,8 @@ public class CreepSystem extends IteratingSystem {
 	
 	private void wipeCreep(Entity entity) {
 		
-		EntityFactory.spawnDefeatAnimation(engine, surface, entity);
-		
 		engine.getSystem(AISystem.class).getCreeps().put(entity.getComponent(CreepComponent.class).getPosition(), null);
 		engine.removeEntity(entity);
-		
-		
 		
 	}
 	
@@ -168,6 +164,7 @@ public class CreepSystem extends IteratingSystem {
 				engine.getSystem(AISystem.class).generateItem(entity);
 				
 				EntityFactory.createBangFromCreep(engine, surface, entity);
+				EntityFactory.spawnDefeatAnimation(engine, surface, entity);
 				
 				entity.getComponent(CreepComponent.class).setState(CreepComponent.FORCE_REMOVE);
 				engine.getSystem(ScoreSystem.class).increaseScore(entity.getComponent(CreepComponent.class).getScore());

@@ -3,6 +3,7 @@ package pbartz.games.deject.systems;
 import pbartz.games.deject.BitmapLibrary;
 import pbartz.games.deject.DejectSurface;
 import pbartz.games.deject.EntityFactory;
+import pbartz.games.deject.components.AIComponent;
 import pbartz.games.deject.components.BitmapComponent;
 import pbartz.games.deject.components.ColorComponent;
 import pbartz.games.deject.components.ScoreComponent;
@@ -85,7 +86,7 @@ public class ScoreSystem extends IteratingSystem {
 				gameOverSignal.dispatch(this.score);
 			}
 			
-			if (add < 0) {
+			if (add < 0 && engine.getSystem(AISystem.class).getAi().getState() != AIComponent.STATE_GAMEOVER) {
 				EntityFactory.spawnLifeLose(engine, surface, Math.round(curLife / 2));
 			}
 			

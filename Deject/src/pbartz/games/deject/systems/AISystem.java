@@ -94,6 +94,14 @@ public class AISystem extends IteratingSystem {
 				
 			}
 
+		} else if (ai.getState() == AIComponent.STATE_GAMEOVER) {
+			
+			if (progressBar.getComponent(RectInterpolationComponent.class) != null) {
+				
+				progressBar.remove(RectInterpolationComponent.class);
+				
+			}
+			
 		}
 		
 	}
@@ -211,6 +219,17 @@ public class AISystem extends IteratingSystem {
 		}
 		
 		return null;
+	}
+
+	public void starGame() {
+		ai.setState(AIComponent.STATE_NOT_INITED);
+		
+		ScoreComponent score = engine.getSystem(ScoreSystem.class).getScoreEntity().getComponent(ScoreComponent.class);
+		
+		score.reset();
+		
+		engine.getSystem(ScoreSystem.class).increaseLife(ScoreComponent.INITIAL_LIFE);
+
 	}
 
 }

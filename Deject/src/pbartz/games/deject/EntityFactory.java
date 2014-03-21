@@ -70,6 +70,14 @@ public class EntityFactory {
 	public static float btnWidth;
 	private static float surfaceHeightDp;
 	
+	public static float goPanelWidth;
+	public static float goPanelHeight;
+	public static float goPanelcX;
+	public static float goPanelcY;
+	private static Entity gameOverEntity;
+	public static Entity btnPlay = null;
+	private static Entity btnScore = null;
+	
 	public static void caculateMetrics(DejectSurface surface) {
 		
 		infoPanelHeight = surface.heightDp / infoPanelHeightPart;
@@ -96,6 +104,15 @@ public class EntityFactory {
 		
 		
 		surfaceHeightDp = surface.heightDp;
+		
+		
+		goPanelWidth = (surface.widthDp / 100) * 90;
+		goPanelHeight = goPanelWidth / 1.5f;
+		
+		
+		goPanelcX = surface.widthDp / 2;
+		goPanelcY = surface.heightDp / 2;
+		
 	}
 	
 	
@@ -526,7 +543,7 @@ public class EntityFactory {
 
 
 
-	public static void createStartScreen(Engine engine, DejectSurface surface) {
+	public static void createStartScreen(Engine engine, DejectSurface surface, float offsetY) {
 		
 		// leader board button
 
@@ -541,7 +558,7 @@ public class EntityFactory {
 		float btnScoreX = (surface.widthDp / 2);
 		float btnScoreY = (surface.heightDp / 2);
 		
-		btnScore.add(new PositionComponent(surface.dp2px(btnScoreX), surface.dp2px(btnScoreY)));
+		btnScore.add(new PositionComponent(surface.dp2px(btnScoreX), surface.dp2px(btnScoreY + offsetY)));
 		
 		btnScore.add(new TouchComponent());
 		btnScore.add(new TagComponent("btn_leaderboard"));
@@ -549,11 +566,12 @@ public class EntityFactory {
 		btnScore.add(new PositionInterpolationComponent(
 			btnScore.getComponent(PositionComponent.class), 
 			surface.dp2px(surface.widthDp / 2 + surface.widthDp / 4),
-			surface.dp2px(surface.heightDp / 2),
+			surface.dp2px(surface.heightDp / 2 + offsetY),
 			0.7f,
 			Interpolation.EASE_OUT
 		));
 		
+		btnScore.setOrder(3);
 		engine.addEntity(btnScore, 0.7f);
 		
 		// play button;
@@ -576,21 +594,24 @@ public class EntityFactory {
 		btnPlay.add(new PositionInterpolationComponent(
 			btnPlay.getComponent(PositionComponent.class), 
 			surface.dp2px(btnX),
-			surface.dp2px(surface.heightDp / 2),
+			surface.dp2px(surface.heightDp / 2 + offsetY),
 			0.7f,
 			Interpolation.EASE_OUT
 		));
 		
 		btnPlay.add(new PositionInterpolationComponent(
-			new PositionComponent(surface.dp2px(btnX), surface.dp2px(surface.heightDp / 2)), 
+			new PositionComponent(surface.dp2px(btnX), surface.dp2px(surface.heightDp / 2 + offsetY)), 
 			surface.dp2px(surface.widthDp / 2 - surface.widthDp / 4),
-			surface.dp2px(surface.heightDp / 2),
+			surface.dp2px(surface.heightDp / 2 + offsetY),
 			0.7f,
 			Interpolation.EASE_OUT
 		), 0.7f);
 		
-		
+		btnPlay.setOrder(4);
 		engine.addEntity(btnPlay);
+		
+		EntityFactory.btnPlay = btnPlay;
+		EntityFactory.btnScore = btnScore;
 		
 	}
 
@@ -803,6 +824,72 @@ public class EntityFactory {
 		engine.addEntity(entity);
 		
 	}
+	
+	public static void spawnGameOver(Engine engine, DejectSurface surface) {
+		
+		Entity entity = new Entity();
+		
+		entity.add(new PositionComponent(surface.dp2px(goPanelcX), surface.dp2px(surface.heightDp + goPanelHeight / 2)));
+		entity.add(new RectDimensionComponent(surface.dp2px(goPanelWidth), surface.dp2px(goPanelHeight)));
+		
+		entity.add(new ColorComponent(125, 0, 255, 0));
+		
+		entity.add(new TouchComponent());
+		
+		entity.add(new PositionInterpolationComponent(
+			
+				entity.getComponent(PositionComponent.class),
+				surface.dp2px(goPanelcX),
+				surface.dp2px(goPanelcY),
+				0.8f,
+				Interpolation.EASE_IN				
+				
+		));
+		
+		
+		
+		entity.setOrder(2);
+		
+		
+		gameOverEntity = entity;
+		
+		engine.addEntity(entity);
+		
+		createStartScreen(engine, surface, goPanelHeight / 2 + creepHeight / 2);
+		
+	}
+	
+	public static void hideGameOverPanel(DejectSurface surface) {
+		
+		if (gameOverEntity != null) {
+			
+			gameOverEntity.add(new PositionInterpolationComponent(
+					gameOverEntity.getComponent(PositionComponent.class),
+					goPanelcX,
+					surface.dp2px(surface.heightDp + goPanelHeight / 2),
+					0.5f,
+					Interpolation.EASE_OUT					
+			));
+			
+			btnPlay.add(new PositionInterpolationComponent(
+					btnPlay.getComponent(PositionComponent.class),
+					btnPlay.getComponent(PositionComponent.class).x,
+					surface.dp2px(surface.heightDp + creepHeight / 2),
+					0.5f,
+					Interpolation.EASE_OUT					
+			));
+			
+			btnScore.add(new PositionInterpolationComponent(
+					btnScore.getComponent(PositionComponent.class),
+					btnScore.getComponent(PositionComponent.class).x,
+					surface.dp2px(surface.heightDp + creepHeight / 2),
+					0.5f,
+					Interpolation.EASE_OUT					
+			));
+
+		}
+		
+	}
 
 
 
@@ -836,6 +923,10 @@ public class EntityFactory {
 		engine.addEntity(entity);
 		
 	}
+
+
+
+	
 
 	
 }
