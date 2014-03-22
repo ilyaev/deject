@@ -56,6 +56,7 @@ public class DejectSurface extends SurfaceView implements Runnable {
 		this.context = context;
 		
 		scene = new StartScene(this);
+		//scene = new TestScene(this);
 		scene.initScene();		
 		
 	}

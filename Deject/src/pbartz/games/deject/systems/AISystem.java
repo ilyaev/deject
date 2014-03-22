@@ -10,6 +10,7 @@ import pbartz.games.deject.components.CreepSwapComponent;
 import pbartz.games.deject.components.LevelInfoComponent;
 import pbartz.games.deject.components.RectInterpolationComponent;
 import pbartz.games.deject.components.ScoreComponent;
+import pbartz.games.deject.components.dimension.RectDimensionComponent;
 import pbartz.games.deject.config.GameConfig;
 import pbartz.games.deject.config.LevelConfig;
 import pbartz.games.deject.core.Entity;
@@ -91,6 +92,10 @@ public class AISystem extends IteratingSystem {
 				if (isEmptyField()) {
 					levelCompletedSignal.dispatch(level);
 				}
+				
+			} else {
+				
+				EntityFactory.galaxyEmitter.setBaseSpeed(6f - 4.5f * (1 - progressBar.getComponent(RectDimensionComponent.class).getWidth() / EntityFactory.pbarWidth));
 				
 			}
 
@@ -198,7 +203,11 @@ public class AISystem extends IteratingSystem {
 	public void startLevel() {
 		levelInfo.getComponent(LevelInfoComponent.class).setState(LevelInfoComponent.STATE_GO_DOWN);
 		EntityFactory.animateButtonsUp();
-		ai.setState(AIComponent.STATE_STARTING);		
+		ai.setState(AIComponent.STATE_STARTING);
+		
+		Random r = new Random();
+		
+		EntityFactory.galaxyEmitter.setArms(r.nextInt(10));
 	}
 
 	public Entity getSwapCreep(int position) {

@@ -21,10 +21,13 @@ import pbartz.games.deject.systems.ColorInterpolationSystem;
 import pbartz.games.deject.systems.CreepShieldSystem;
 import pbartz.games.deject.systems.CreepSystem;
 import pbartz.games.deject.systems.ExpireSystem;
+import pbartz.games.deject.systems.GalaxyEmitterSystem;
 import pbartz.games.deject.systems.InterpolationSystem;
 import pbartz.games.deject.systems.ItemSystem;
 import pbartz.games.deject.systems.LevelInfoSystem;
 import pbartz.games.deject.systems.MovementSystem;
+import pbartz.games.deject.systems.GalaxyCoordinateTranslateSystem;
+import pbartz.games.deject.systems.RadialPositionInterpolationSystem;
 import pbartz.games.deject.systems.RectInterpolationSystem;
 import pbartz.games.deject.systems.RotateInterpolationSystem;
 import pbartz.games.deject.systems.ScoreSystem;
@@ -69,6 +72,8 @@ public class GameScene extends BasicScene {
 		// Miscellaneous
 		engine.addSystem(new LevelInfoSystem(this.surface));
 		engine.addSystem(new MovementSystem(surface.dp2px(surface.heightDp * 3.3f)));
+		engine.addSystem(new GalaxyCoordinateTranslateSystem());
+		engine.addSystem(new GalaxyEmitterSystem());
 		
 		// interpolation
 		engine.addSystem(new InterpolationSystem());
@@ -76,6 +81,7 @@ public class GameScene extends BasicScene {
 		engine.addSystem(new RotateInterpolationSystem());
 		engine.addSystem(new ZoomInterpolationSystem());
 		engine.addSystem(new RectInterpolationSystem());
+		engine.addSystem(new RadialPositionInterpolationSystem());
 		
 		// expiration
 		engine.addSystem(new ExpireSystem());
@@ -98,6 +104,7 @@ public class GameScene extends BasicScene {
 		
 		EntityFactory.createAIEntity(engine);		
 		
+		EntityFactory.createGalaxy(engine, surface);
 		
 		initListeners();
 		

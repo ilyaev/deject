@@ -1,10 +1,23 @@
 package pbartz.games.deject.scenes;
 
+import java.util.Random;
+
 import pbartz.games.deject.BitmapLibrary;
 import pbartz.games.deject.DejectSurface;
 import pbartz.games.deject.EntityFactory;
+import pbartz.games.deject.components.ColorComponent;
+import pbartz.games.deject.components.PositionComponent;
+import pbartz.games.deject.components.dimension.RectDimensionComponent;
 import pbartz.games.deject.config.GameConfig;
 import pbartz.games.deject.config.LevelConfig;
+import pbartz.games.deject.core.Entity;
+import pbartz.games.deject.systems.ColorInterpolationSystem;
+import pbartz.games.deject.systems.ExpireSystem;
+import pbartz.games.deject.systems.InterpolationSystem;
+import pbartz.games.deject.systems.RectInterpolationSystem;
+import pbartz.games.deject.systems.RotateInterpolationSystem;
+import pbartz.games.deject.systems.ZoomInterpolationSystem;
+import pbartz.games.deject.systems.renderer.DimensionRenderingSystem;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
@@ -14,52 +27,45 @@ import android.util.Log;
 public class TestScene extends BasicScene {
 	
 	Bitmap bm = null;
-	private Paint bmPaint = EntityFactory.createPaint(255, 255, 0, 0);
-	
-	private Bitmap drawBitmap = null;
+	private Paint whitePaint;
+
 	public TestScene(DejectSurface surface) {
 		super(surface);
 
-		bmPaint.setAntiAlias(false);
-		bmPaint.setFilterBitmap(false);
-		
-		drawBitmap = Bitmap.createBitmap((int)(surface.widthPx / 4), (int)(surface.heightPx / 4), Config.RGB_565);
-		new Canvas(drawBitmap);
 	}
 
 	@Override
 	public void initScene() {
+			
+		whitePaint = new Paint();
+		whitePaint.setARGB(255, 255, 255, 255);
 		
+		// interpolation
+		engine.addSystem(new InterpolationSystem());
+		engine.addSystem(new ColorInterpolationSystem());
+		engine.addSystem(new RotateInterpolationSystem());
+		engine.addSystem(new ZoomInterpolationSystem());
+		engine.addSystem(new RectInterpolationSystem());
 		
-		GameConfig.loadConfig(surface);
-		BitmapLibrary.loadAssets(surface);
+		// expiration
+		engine.addSystem(new ExpireSystem());
 		
-		bm = BitmapLibrary.getBitmap("hammer");
-		
-		LevelConfig level = GameConfig.getLevelConfig(1);
-		
-		Log.v("LEV", level.toString());
+		// rendering
+		engine.addSystem(new DimensionRenderingSystem(this.surface));
+
 		
 	}
 
+	
+
 	@Override
 	public void update(Canvas canvas, float timeDiff) {
-//		drawCanvas.drawARGB(255, 255, 224, 153);
-//		drawCanvas.drawBitmap(bm, 0, 0, bmPaint);
-//		drawCanvas.drawCircle(50, 50, 20, bmPaint);
-//		
-//		
-//		canvas.save();
-//		canvas.scale(surface.widthPx / drawBitmap.getWidth(), surface.heightPx / drawBitmap.getHeight());
-//		canvas.drawBitmap(drawBitmap, 0, 0, bmPaint);
-//		canvas.restore();
-		
-		canvas.drawARGB(255, 255, 224, 153);
+		canvas.drawARGB(255, 0, 0, 0);
 		canvas.save();
-		canvas.translate(50f, 50f);
-//		canvas.scale(8, 8);
-		canvas.drawBitmap(bm, 0, 0 , bmPaint);
+		canvas.translate(surface.widthPx / 2, surface.heightPx / 2);
+		engine.update(timeDiff);
 		canvas.restore();
+		canvas.drawText("FPS: " + Integer.toString(surface.fps), 0, 40, whitePaint);
 	}
 
 	@Override

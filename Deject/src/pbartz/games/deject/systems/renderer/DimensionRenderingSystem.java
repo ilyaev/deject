@@ -103,7 +103,7 @@ public class DimensionRenderingSystem extends OrderedIteratingSystem {
 
 	private void renderRect() {
 		
-		Rect tmpRect = new Rect(((RectDimensionComponent) dimension).getZeroRect());
+		Rect tmpRect = dimension.getZeroRect();
 		
 		canvas.save();
 		canvas.translate(position.x, position.y);

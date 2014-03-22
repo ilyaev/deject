@@ -14,11 +14,15 @@ import pbartz.games.deject.components.CreepComponent;
 import pbartz.games.deject.components.CreepShieldComponent;
 import pbartz.games.deject.components.CreepSwapComponent;
 import pbartz.games.deject.components.ExpireComponent;
+import pbartz.games.deject.components.GalaxyComponent;
+import pbartz.games.deject.components.GalaxyEmitterComponent;
 import pbartz.games.deject.components.ItemComponent;
 import pbartz.games.deject.components.LevelInfoComponent;
 import pbartz.games.deject.components.MovementComponent;
 import pbartz.games.deject.components.PositionComponent;
 import pbartz.games.deject.components.PositionInterpolationComponent;
+import pbartz.games.deject.components.RadialPositionComponent;
+import pbartz.games.deject.components.RadialPositionInterpolationComponent;
 import pbartz.games.deject.components.RotateComponent;
 import pbartz.games.deject.components.RotateInterpolationComponent;
 import pbartz.games.deject.components.ScoreComponent;
@@ -77,6 +81,9 @@ public class EntityFactory {
 	private static Entity gameOverEntity;
 	public static Entity btnPlay = null;
 	private static Entity btnScore = null;
+	public static float starBaseWidth;
+	
+	public static GalaxyEmitterComponent galaxyEmitter;
 	
 	public static void caculateMetrics(DejectSurface surface) {
 		
@@ -113,6 +120,8 @@ public class EntityFactory {
 		goPanelcX = surface.widthDp / 2;
 		goPanelcY = surface.heightDp / 2;
 		
+		
+		starBaseWidth = surface.widthPx / 10;
 	}
 	
 	
@@ -895,6 +904,8 @@ public class EntityFactory {
 
 	public static void spawnDefeatAnimation(Engine engine, DejectSurface surface, Entity creep) {
 		
+		Random r = new Random();
+		
 		PositionComponent position = creep.getComponent(PositionComponent.class);
 		RectDimensionComponent dimension = creep.getComponent(RectDimensionComponent.class);
 		
@@ -904,6 +915,15 @@ public class EntityFactory {
 		entity.add(new RectDimensionComponent(dimension.getWidth(), dimension.getHeight()));
 		entity.add(new ColorComponent(255, 255, 0, 0));
 		
+		String headBmp = creep.getComponent(CreepComponent.class).getConfig().getImage() + "_head";
+		
+		
+		if (BitmapLibrary.getBitmap(headBmp) != null) {
+			entity.add(new BitmapComponent(BitmapLibrary.getBitmap(headBmp)));
+		}
+		
+		entity.add(new RotateComponent(0f));
+		
 		entity.add(new ColorInterpolationComponent(
 			entity.getComponent(ColorComponent.class).getPaint(), 
 			createPaint(0, 255, 0, 0), 
@@ -911,10 +931,15 @@ public class EntityFactory {
 			Interpolation.EASE_IN
 		));
 		
+		entity.add(new RotateInterpolationComponent(
+			0f,
+			r.nextFloat() * 720 - 360,
+			1f,
+			Interpolation.EASE_IN			
+		));
+		
 		
 		entity.add(new ExpireComponent(1f));
-		
-		Random r = new Random();
 		
 		entity.add(new MovementComponent(surface.dp2px(r.nextInt((int)creepWidth * 2) - (int)(creepWidth)), -surface.dp2px(surface.heightDp * 1.2f)));
 		
@@ -923,10 +948,31 @@ public class EntityFactory {
 		engine.addEntity(entity);
 		
 	}
-
-
-
 	
-
+	public static void createGalaxy(Engine engine, DejectSurface surface) {
+		
+		Random r = new Random();
+		
+		GalaxyEmitterComponent emitter = new GalaxyEmitterComponent(
+				surface.widthPx / 2,
+				surface.heightPx / 3,
+				surface.widthPx / 2,
+				surface.widthPx / 2
+		);
+		
+		emitter.setArms(r.nextInt(10));
+		
+		Entity entity = new Entity();
+		
+		entity.add(emitter);
+		entity.add(new GalaxyComponent());
+		
+		engine.addEntity(entity);
+		
+		galaxyEmitter = emitter;
+		
+	}
+	
+	
 	
 }
