@@ -35,6 +35,7 @@ public class ItemComponent extends Component {
 	
 	float timeToNextState = 0;
 	
+	String typeName = "";
 	
 	public ItemComponent(int position, int weight) {
 		this.gold = weight;
@@ -113,6 +114,7 @@ public class ItemComponent extends Component {
 		config = itemConfig;
 		gold = itemConfig.getGold();
 		life = itemConfig.getLife();
+		typeName = itemConfig.getType();
 	}
 
 	public int getGold() {
@@ -129,6 +131,10 @@ public class ItemComponent extends Component {
 
 	public void setLife(int life) {
 		this.life = life;
+	}
+	
+	public String getTypeName() {
+		return this.typeName;
 	}
 	
 	

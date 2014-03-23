@@ -10,7 +10,10 @@ public class GalaxyEmitterComponent extends Component {
 	float height;
 	
 	float baseSpeed = 7f;
-	
+	int newStarChance = 30;
+	int burstChance = 5;
+	int burstStars = 10;
+	int colorStarChance = 5;
 	int arms = 3;
 	
 	public GalaxyEmitterComponent(float centerX, float centerY, float width, float height) {
@@ -69,6 +72,40 @@ public class GalaxyEmitterComponent extends Component {
 	public void setArms(int arms) {
 		this.arms = arms;
 	}
+
+	public int getNewStarChance() {
+		return newStarChance;
+	}
+
+	public void setNewStarChance(int newStarChance) {
+		this.newStarChance = newStarChance;
+	}
+
+	public int getBurstChance() {
+		return burstChance;
+	}
+
+	public void setBurstChance(int burstChance) {
+		this.burstChance = burstChance;
+	}
+
+	public int getBurstStars() {
+		return burstStars;
+	}
+
+	public void setBurstStars(int burstStars) {
+		this.burstStars = burstStars;
+	}
+
+	public int getColorStarChance() {
+		return colorStarChance;
+	}
+
+	public void setColorStarChance(int colorStarChance) {
+		this.colorStarChance = colorStarChance;
+	}
+	
+	
 	
 
 }

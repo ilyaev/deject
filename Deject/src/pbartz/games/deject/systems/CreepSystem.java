@@ -132,7 +132,9 @@ public class CreepSystem extends IteratingSystem {
 		
 		CreepShieldComponent shield = entity.getComponent(CreepShieldComponent.class);
 		
-		if (shield != null) {
+		int str = engine.getSystem(ScoreSystem.class).getStength();
+		
+		if (shield != null && str < entity.getComponent(CreepComponent.class).getHealth() * 3) {
 			
 			if (shield.getState() == CreepShieldComponent.STATE_CLOSED) {
 				
@@ -155,7 +157,7 @@ public class CreepSystem extends IteratingSystem {
 		
 			EntityFactory.spawnHammerHit(engine, surface, entity.getComponent(CreepComponent.class).getPosition());	
 			
-			int str = engine.getSystem(ScoreSystem.class).getStength();
+			
 			
 			boolean isKilled = entity.getComponent(CreepComponent.class).decreasHealth(str);
 			

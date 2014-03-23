@@ -13,13 +13,21 @@
 			
 			"items": [
 				{
+					"type": "trunk",
+					"chance": 1
+				},
+				{
 					"type": "heart_small",
-					"chance": 5
+					"chance": 2
+				},
+				{
+					"type": "coin_big",
+					"chance": 3
 				},
 				{
 					"type": "coin_small",
-					"chance": 5
-				}
+					"chance": 4
+				}				
 			]
 		},
 		{
@@ -42,12 +50,20 @@
 			
 			"items": [
 				{
+					"type": "trunk",
+					"chance": 1
+				},
+				{
 					"type": "heart_small",
-					"chance": 5
+					"chance": 2
+				},
+				{
+					"type": "coin_big",
+					"chance": 3
 				},
 				{
 					"type": "coin_small",
-					"chance": 5
+					"chance": 4
 				}
 			]
 		},
@@ -74,12 +90,20 @@
 			
 			"items": [
 				{
+					"type": "trunk",
+					"chance": 1
+				},
+				{
 					"type": "heart_small",
-					"chance": 5
+					"chance": 2
+				},
+				{
+					"type": "coin_big",
+					"chance": 3
 				},
 				{
 					"type": "coin_small",
-					"chance": 5
+					"chance": 4
 				}
 			]
 		},
@@ -110,12 +134,20 @@
 			
 			"items": [
 				{
+					"type": "trunk",
+					"chance": 1
+				},
+				{
 					"type": "heart_small",
-					"chance": 5
+					"chance": 2
+				},
+				{
+					"type": "coin_big",
+					"chance": 3
 				},
 				{
 					"type": "coin_small",
-					"chance": 5
+					"chance": 4
 				}
 			]
 		},
@@ -150,12 +182,20 @@
 			
 			"items": [
 				{
+					"type": "trunk",
+					"chance": 1
+				},
+				{
 					"type": "heart_small",
-					"chance": 5
+					"chance": 2
+				},
+				{
+					"type": "coin_big",
+					"chance": 3
 				},
 				{
 					"type": "coin_small",
-					"chance": 5
+					"chance": 4
 				}
 			]
 		}
@@ -292,6 +332,14 @@
 			"type": "heart_small",
 			"image": "heart_small_cell",
 			"life": 1
+		},
+		{
+			"type": "trunk",
+			"image": "trunk"
+		},
+		{
+			"type": "all_to_coins",
+			"image": "golden_stone"
 		}
 		
 	]

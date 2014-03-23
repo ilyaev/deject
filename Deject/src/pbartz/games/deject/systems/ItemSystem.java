@@ -96,12 +96,17 @@ public class ItemSystem extends IteratingSystem {
 					Interpolation.EASE_OUT
 				));
 				
-				item.setState(ItemComponent.FORCE_REMOVE);
+				item.setState(ItemComponent.GOING_DOWN);
 				item.setTimeToNextState(item.getSpeedGoingDown());
 				
 			} else if (item.getState() == ItemComponent.GOING_DOWN) {			
 				
 				item.setState(ItemComponent.FORCE_REMOVE);
+				
+				
+				if (entity.getComponent(ItemComponent.class).getTypeName().equalsIgnoreCase("trunk")) {
+					engine.getSystem(AISystem.class).getItems().put(entity.getComponent(ItemComponent.class).getPosition(), null);
+				}
 				
 			}  else if (item.getState() == ItemComponent.FORCE_REMOVE) {
 				
@@ -133,7 +138,9 @@ public class ItemSystem extends IteratingSystem {
 	}
 
 	private void wipeItem(Entity entity) {
-		engine.getSystem(AISystem.class).getItems().put(entity.getComponent(ItemComponent.class).getPosition(), null);
+		if (!entity.getComponent(ItemComponent.class).getTypeName().equalsIgnoreCase("trunk")) {
+			engine.getSystem(AISystem.class).getItems().put(entity.getComponent(ItemComponent.class).getPosition(), null);
+		}
 		engine.removeEntity(entity);		
 	}
 
@@ -145,6 +152,21 @@ public class ItemSystem extends IteratingSystem {
 		
 		engine.getSystem(ScoreSystem.class).
 			increaseLife(entity.getComponent(ItemComponent.class).getLife());
+		
+		String itemType = entity.getComponent(ItemComponent.class).getTypeName();
+		
+		if (itemType.equalsIgnoreCase("trunk")) {
+		
+			Entity special = EntityFactory.spawnCellItem(engine, surface, entity.getComponent(ItemComponent.class).getPosition(), "all_to_coins", 0.2f);
+			engine.getSystem(AISystem.class).getItems().put(entity.getComponent(ItemComponent.class).getPosition(), special);
+		
+		} else if (itemType.equalsIgnoreCase("all_to_coins")) {
+			
+			engine.getSystem(AISystem.class).turnAllToGold();
+			
+		}
+		
+		
 	}
 
 }

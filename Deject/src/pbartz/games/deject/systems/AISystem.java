@@ -36,6 +36,8 @@ public class AISystem extends IteratingSystem {
 	ObjectMap<Integer, Entity> items = new ObjectMap<Integer, Entity>();
 	
 	public Signal<LevelConfig> levelCompletedSignal = new Signal<LevelConfig>();
+
+	private String currentItemType = null;
 	
 	@SuppressWarnings("unchecked")
 	public AISystem(DejectSurface surface) {
@@ -74,11 +76,30 @@ public class AISystem extends IteratingSystem {
 				if (!isBoardFilled()) {
 					int position = getNextFreeCell();
 					
-					String creepType = level.getNextCreep();
+					if (position > 0) {
+						String creepType = level.getNextCreep();
+						
+						if (creepType != null) {
+							Entity newCreep = EntityFactory.spawnCellCreep(engine, surface, position, creepType);
+							creeps.put(position, newCreep);
+						}
+					}
 					
-					if (creepType != null) {
-						Entity newCreep = EntityFactory.spawnCellCreep(engine, surface, position, creepType);
-						creeps.put(position, newCreep);
+				}
+				
+				if (!isBoardFilled()) {
+					
+					int position = getNextFreeCell();
+					
+					if (position > 0) {
+						String itemType = level.getNextItem();
+						
+						if (itemType != null) {
+							
+							Entity newItem = EntityFactory.spawnCellItem(engine, surface, position, itemType, 0f);
+							items.put(position, newItem);
+							
+						}
 					}
 				}
 				
@@ -167,11 +188,19 @@ public class AISystem extends IteratingSystem {
 		
 		Random r = new Random();
 		
+		int count = 1;
+		
 		do {
 			
 			position = r.nextInt(9) + 1;
 			
 			if (creeps.get(position, null) == null && items.get(position, null) == null) {
+				flag = true;
+			}
+			
+			count += 1;
+			if (count == 15) {
+				position = 0;
 				flag = true;
 			}
 			
@@ -184,10 +213,16 @@ public class AISystem extends IteratingSystem {
 	public void generateItem(Entity entity) {
 		int position = entity.getComponent(CreepComponent.class).getPosition();	
 		
+		Random r = new Random();
+		
 		String itemType = entity.getComponent(CreepComponent.class).getNextItem();
 		
+		if (currentItemType  != null) {
+			itemType = currentItemType;
+		}
+		
 		if (itemType != null) {
-			Entity item = EntityFactory.spawnCellItem(engine, surface, position, itemType);
+			Entity item = EntityFactory.spawnCellItem(engine, surface, position, itemType, 0f);
 			items.put(position, item);
 		}
 	}
@@ -240,5 +275,29 @@ public class AISystem extends IteratingSystem {
 		engine.getSystem(ScoreSystem.class).increaseLife(ScoreComponent.INITIAL_LIFE);
 
 	}
+
+	public void turnAllToGold() {
+		
+		int oldStr = score.getStrength();
+		score.setStrength(10);
+		
+		currentItemType = "coin_big";
+		
+		for(int i = 1 ; i <= 9 ; i++) {
+			
+			if (creeps.get(i) != null) {
+				
+				engine.getSystem(CreepSystem.class).creepTouched(creeps.get(i), surface);
+				
+			}
+			
+		}
+		
+		currentItemType = "null";
+		score.setStrength(oldStr);
+		
+	}
+	
+	
 
 }

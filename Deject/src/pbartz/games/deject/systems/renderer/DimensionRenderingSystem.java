@@ -75,7 +75,10 @@ public class DimensionRenderingSystem extends OrderedIteratingSystem {
 	}
 
 	private void renderBitmap() {
-		Rect rect = dimension.getZeroRect();
+		
+		if (bitmap.getBitmap() == null) return;
+		
+ 		Rect rect = dimension.getZeroRect();
 		canvas.save();
 		canvas.translate(position.x, position.y);
 		

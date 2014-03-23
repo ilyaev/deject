@@ -110,5 +110,24 @@ public class LevelConfig {
 		
 		return null;
 	}
+
+	public String getNextItem() {
+		
+		Random r = new Random();
+		
+		for(int i = 0 ; i < items.size() ; i++) {
+			
+			LevelItemConfig item = items.get(i);
+			
+			if (r.nextInt(101) <= item.getChance()) {
+				
+				return item.getType();
+				
+			}
+			
+		}
+		
+		return null;
+	}
 	
 }

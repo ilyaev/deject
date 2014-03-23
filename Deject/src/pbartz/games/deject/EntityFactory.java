@@ -528,7 +528,7 @@ public class EntityFactory {
 
 
 
-	public static Entity spawnCellItem(Engine engine, DejectSurface surface, int position, String itemType) {
+	public static Entity spawnCellItem(Engine engine, DejectSurface surface, int position, String itemType, float delay) {
 		Entity entity = prepareCellEntity(surface, position);
 		
 		ColorComponent color = new ColorComponent(0, 255, 0, 0);
@@ -545,7 +545,11 @@ public class EntityFactory {
 		entity.add(item);
 		entity.add(new BitmapComponent(BitmapLibrary.getBitmap(itemConfig.getImage())));
 		
-		engine.addEntity(entity);
+		if (delay > 0) {
+			engine.addEntity(entity, delay);
+		} else {
+			engine.addEntity(entity);
+		}
 		
 		return entity;
 	}
@@ -864,7 +868,7 @@ public class EntityFactory {
 		
 		engine.addEntity(entity);
 		
-		createStartScreen(engine, surface, goPanelHeight / 2 + creepHeight / 2);
+		createStartScreen(engine, surface, goPanelHeight / 2 -  creepHeight / 2 - 5);
 		
 	}
 	
@@ -874,7 +878,7 @@ public class EntityFactory {
 			
 			gameOverEntity.add(new PositionInterpolationComponent(
 					gameOverEntity.getComponent(PositionComponent.class),
-					goPanelcX,
+					surface.dp2px(goPanelcX),
 					surface.dp2px(surface.heightDp + goPanelHeight / 2),
 					0.5f,
 					Interpolation.EASE_OUT					
