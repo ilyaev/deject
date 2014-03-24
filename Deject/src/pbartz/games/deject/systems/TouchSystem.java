@@ -62,7 +62,7 @@ public class TouchSystem extends IteratingSystem {
 			
 			if (position > 0) {
 				
-				if (engine.getSystem(AISystem.class).getAi().getState() != AIComponent.STATE_WORKING) {
+				if (engine.getSystem(AISystem.class).getAi().getState() != AIComponent.STATE_WORKING && engine.getSystem(AISystem.class).getAi().getState() != AIComponent.STATE_SHOP) {
 					return;
 				}
 				

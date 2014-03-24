@@ -34,6 +34,12 @@ public class RectInterpolationComponent extends Component {
 		this.time += diff;
 	}
 	
+	public float getLeftTime() {
+		
+		return (this.speed - this.time) / 1000f;
+		
+	}
+	
 	public boolean isCompleted() {
 		if (this.time >= this.speed) return true;
 		return false;

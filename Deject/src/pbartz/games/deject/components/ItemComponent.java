@@ -115,6 +115,7 @@ public class ItemComponent extends Component {
 		gold = itemConfig.getGold();
 		life = itemConfig.getLife();
 		typeName = itemConfig.getType();
+		waitingTime = itemConfig.getWaitingTime();
 	}
 
 	public int getGold() {

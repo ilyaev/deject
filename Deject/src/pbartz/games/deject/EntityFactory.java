@@ -83,7 +83,7 @@ public class EntityFactory {
 	private static Entity btnScore = null;
 	public static float starBaseWidth;
 	
-	public static GalaxyEmitterComponent galaxyEmitter;
+	public static GalaxyEmitterComponent galaxyEmitter = null;
 	
 	public static void caculateMetrics(DejectSurface surface) {
 		
@@ -481,8 +481,8 @@ public class EntityFactory {
 				Entity entity = new Entity();
 				
 				entity.add(new PositionComponent(px, py));
-				entity.add(new RectDimensionComponent((int)partW, (int)partH));
-				entity.add(new ColorComponent(255, 128, 189, 30));
+				entity.add(new RectDimensionComponent((int)(partW * 1.5f  - r.nextFloat() * partW), (int)(partH * 1.5f - r.nextFloat() * partH)));
+				entity.add(new ColorComponent(255, 255, 0, 0));
 				
 				entity.add(new PositionInterpolationComponent(
 					entity.getComponent(PositionComponent.class), 
@@ -500,6 +500,23 @@ public class EntityFactory {
 				));
 				
 				entity.add(new ExpireComponent(duration));
+				
+				String bmName = "blood";
+				
+				if (r.nextInt(100) < 30) {
+					bmName += "1";
+				} else if (r.nextInt(100) < 30) {
+					bmName += "2";
+				}
+				
+				entity.add(new BitmapComponent(BitmapLibrary.getBitmap(bmName)));
+				entity.add(new RotateComponent(0));
+				entity.add(new RotateInterpolationComponent(
+					0,
+					r.nextFloat() * 720 - 360,
+					duration,
+					Interpolation.EASE_IN
+				));
 				
 				engine.addEntity(entity);
 				
@@ -772,7 +789,7 @@ public class EntityFactory {
 			Entity entity = new Entity();
 			entity.add(new PositionComponent(surface.dp2px(rX), surface.dp2px(rY)));
 			entity.add(new ColorComponent(255, 255, 0, 0));
-			entity.add(new RectDimensionComponent(surface.dp2px(lifeWidth / 3), surface.dp2px(lifeHeight / 3)));
+			entity.add(new RectDimensionComponent(surface.dp2px(lifeWidth / 2 - r.nextFloat() * (lifeWidth / 3)), surface.dp2px(lifeHeight / 3)));
 			
 			entity.add(new PositionInterpolationComponent(
 				new PositionComponent(surface.dp2px(rX + (r.nextInt((int)lifeWidth) - (lifeWidth / 2))), surface.dp2px(rY)),
@@ -793,6 +810,15 @@ public class EntityFactory {
 			
 			
 			entity.add(new ExpireComponent(0.5f));
+//			
+//			String bmName = "blood";
+//			
+//			if (r.nextInt(100) < 30) {
+//				bmName += "2";
+//			}
+//			
+//			entity.add(new BitmapComponent(BitmapLibrary.getBitmap(bmName)));
+
 			
 			engine.addEntity(entity, r.nextFloat() / 2);
 			

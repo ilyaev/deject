@@ -27,6 +27,10 @@
 				{
 					"type": "coin_small",
 					"chance": 4
+				},
+				{
+					"type": "shop",
+					"chance": 100
 				}				
 			]
 		},
@@ -309,7 +313,8 @@
 		
 		gold: 0,
 		score: 0,
-		life: 0
+		life: 0,
+		waitingTime: 2
 	
 	}, 
 	
@@ -340,6 +345,55 @@
 		{
 			"type": "all_to_coins",
 			"image": "golden_stone"
+		},
+		{
+			"type": "shop",
+			"image": "shop"
+		},
+		{
+			"type": "shop1",
+			"image": "shop1",
+			"waitingTime": 30
+		},
+		{
+			"type": "shop2",
+			"image": "shop1",
+			"waitingTime": 30
+		},
+		{
+			"type": "shop3",
+			"image": "shop1",
+			"waitingTime": 30
+		},
+		{
+			"type": "shop4",
+			"image": "shop1",
+			"waitingTime": 30
+		},
+		{
+			"type": "shop5",
+			"image": "shop1",
+			"waitingTime": 30
+		},
+		{
+			"type": "shop6",
+			"image": "shop1",
+			"waitingTime": 30
+		},
+		{
+			"type": "shop7",
+			"image": "shop1",
+			"waitingTime": 30
+		},
+		{
+			"type": "shop8",
+			"image": "shop1",
+			"waitingTime": 30
+		},
+		{
+			"type": "shop9",
+			"image": "shop1",
+			"waitingTime": 30
 		}
 		
 	]

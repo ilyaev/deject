@@ -12,6 +12,9 @@ public class ItemConfig {
 	int score = 0;
 	int gold = 0;
 	
+	float waitingTime = 2f;
+	
+	
 	public ItemConfig(String itemType) {
 		
 		try {
@@ -26,6 +29,16 @@ public class ItemConfig {
 			
 					type = obj.getString("type");
 					image = obj.getString("image");
+					
+					try {
+						waitingTime = Float.valueOf(obj.getString("waitingTime"));
+					} catch (JSONException e) {
+						try {
+							waitingTime = Float.valueOf(defObj.getString("waitingTime"));
+						}catch (JSONException e1) {
+							e1.printStackTrace();
+						}
+					}
 					
 					try {
 						life = Integer.valueOf(obj.getString("life"));
@@ -104,5 +117,15 @@ public class ItemConfig {
 	public void setGold(int gold) {
 		this.gold = gold;
 	}
+
+	public float getWaitingTime() {
+		return waitingTime;
+	}
+
+	public void setWaitingTime(float waitingTime) {
+		this.waitingTime = waitingTime;
+	}
+	
+	
 	
 }

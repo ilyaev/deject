@@ -10,6 +10,7 @@ public class AIComponent extends Component {
 	public static final int STATE_GAMEOVER = 3;
 	public static final int STATE_STARTING = 4;
 	public static final int STATE_LEVEL_COMPLETED = 5;
+	public static final int STATE_SHOP = 6;
 	
 	float timer = 0;
 	int state = STATE_NOT_INITED;

@@ -175,7 +175,20 @@ public class GameScene extends BasicScene {
 	}
 	
 	private void entityExpired(Entity entity) {
+		
+		if (entity.getComponent(TagComponent.class) == null) return;
+		
+		String tag = entity.getComponent(TagComponent.class).getTag();
+		
+		if (tag == "exit_shop") {
 			
+			if (engine.getSystem(AISystem.class).getAi().getState() == AIComponent.STATE_SHOP) {
+				
+				engine.getSystem(AISystem.class).getAi().setState(AIComponent.STATE_WORKING);
+				engine.getSystem(AISystem.class).resumeProgressBar();
+			}
+			
+		}
 	}	
 
 	protected void entityTouchedDown(Entity entity) {		

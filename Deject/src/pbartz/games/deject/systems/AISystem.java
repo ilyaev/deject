@@ -7,9 +7,12 @@ import pbartz.games.deject.EntityFactory;
 import pbartz.games.deject.components.AIComponent;
 import pbartz.games.deject.components.CreepComponent;
 import pbartz.games.deject.components.CreepSwapComponent;
+import pbartz.games.deject.components.ExpireComponent;
+import pbartz.games.deject.components.ItemComponent;
 import pbartz.games.deject.components.LevelInfoComponent;
 import pbartz.games.deject.components.RectInterpolationComponent;
 import pbartz.games.deject.components.ScoreComponent;
+import pbartz.games.deject.components.TagComponent;
 import pbartz.games.deject.components.dimension.RectDimensionComponent;
 import pbartz.games.deject.config.GameConfig;
 import pbartz.games.deject.config.LevelConfig;
@@ -38,6 +41,10 @@ public class AISystem extends IteratingSystem {
 	public Signal<LevelConfig> levelCompletedSignal = new Signal<LevelConfig>();
 
 	private String currentItemType = null;
+	
+	float levelTimeLeft = 0;
+
+	private Entity shopOutHandler = null;
 	
 	@SuppressWarnings("unchecked")
 	public AISystem(DejectSurface surface) {
@@ -116,7 +123,9 @@ public class AISystem extends IteratingSystem {
 				
 			} else {
 				
-				EntityFactory.galaxyEmitter.setBaseSpeed(6f - 4.5f * (1 - progressBar.getComponent(RectDimensionComponent.class).getWidth() / EntityFactory.pbarWidth));
+				if (EntityFactory.galaxyEmitter != null) {
+					EntityFactory.galaxyEmitter.setBaseSpeed(6f - 4.5f * (1 - progressBar.getComponent(RectDimensionComponent.class).getWidth() / EntityFactory.pbarWidth));
+				}
 				
 			}
 
@@ -151,6 +160,29 @@ public class AISystem extends IteratingSystem {
 			EntityFactory.pbarHeight,
 			EntityFactory.pbarHeight,
 			level.getDuration(), 
+			Interpolation.LINEAR
+		));
+		
+	}
+	
+	public void pauseProgressBar() {
+		if (progressBar.getComponent(RectInterpolationComponent.class) != null) {
+			levelTimeLeft = progressBar.getComponent(RectInterpolationComponent.class).getLeftTime();
+	 		progressBar.remove(RectInterpolationComponent.class);
+		} else {
+			levelTimeLeft = 0;
+		}
+		
+	}
+	
+	public void resumeProgressBar() {
+		
+		progressBar.add(new RectInterpolationComponent(
+			progressBar.getComponent(RectDimensionComponent.class).getWidth(),
+			0,			
+			EntityFactory.pbarHeight,
+			EntityFactory.pbarHeight,
+			levelTimeLeft, 
 			Interpolation.LINEAR
 		));
 		
@@ -242,7 +274,10 @@ public class AISystem extends IteratingSystem {
 		
 		Random r = new Random();
 		
-		EntityFactory.galaxyEmitter.setArms(r.nextInt(10));
+		
+		if (EntityFactory.galaxyEmitter != null) {
+			EntityFactory.galaxyEmitter.setArms(r.nextInt(10));
+		}
 	}
 
 	public Entity getSwapCreep(int position) {
@@ -293,11 +328,75 @@ public class AISystem extends IteratingSystem {
 			
 		}
 		
-		currentItemType = "null";
+		currentItemType = null;
 		score.setStrength(oldStr);
 		
 	}
 	
+	
+	public void switchToShop() {
+
+		ai.setState(AIComponent.STATE_SHOP);
+		
+		pauseProgressBar();
+		
+		for(int i = 1 ; i <= 9 ; i++) {
+			
+			if (creeps.get(i) != null) {
+				
+				
+				engine.removeEntity(creeps.get(i));
+				creeps.put(i, null);
+				
+			}
+			
+			if (items.get(i) != null) {
+				
+				engine.removeEntity(items.get(i));
+				items.put(i, null);
+				
+			}
+			
+			items.put(i, EntityFactory.spawnCellItem(engine, surface, i, "shop" + Integer.toString(i), 0));
+			
+		}
+		
+		Entity entity = new Entity();
+		entity.add(new TagComponent("exit_shop"));
+		entity.add(new ExpireComponent(31f));
+		
+		shopOutHandler = entity;
+		
+		engine.addEntity(entity);
+		
+	}
+
+	public void shopOut() {
+		
+		if (shopOutHandler != null) {
+			
+			engine.removeEntity(shopOutHandler);
+			
+		}
+		
+		for(int i = 1 ; i <= 9 ; i++) {
+
+			if (items.get(i) != null) {
+				
+				items.get(i).getComponent(ItemComponent.class).setTimeToNextState(0);
+				
+			}
+			
+		}
+		
+		Entity entity = new Entity();
+		entity.add(new TagComponent("exit_shop"));
+		entity.add(new ExpireComponent(1f));
+		
+		engine.addEntity(entity);
+		
+		
+	}
 	
 
 }

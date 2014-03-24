@@ -5,9 +5,11 @@ import pbartz.games.deject.DejectSurface;
 import pbartz.games.deject.EntityFactory;
 import pbartz.games.deject.components.ColorComponent;
 import pbartz.games.deject.components.ColorInterpolationComponent;
+import pbartz.games.deject.components.ExpireComponent;
 import pbartz.games.deject.components.ItemComponent;
 import pbartz.games.deject.components.PositionComponent;
 import pbartz.games.deject.components.PositionInterpolationComponent;
+import pbartz.games.deject.components.TagComponent;
 import pbartz.games.deject.components.dimension.RectDimensionComponent;
 import pbartz.games.deject.core.Entity;
 import pbartz.games.deject.core.Family;
@@ -163,6 +165,15 @@ public class ItemSystem extends IteratingSystem {
 		} else if (itemType.equalsIgnoreCase("all_to_coins")) {
 			
 			engine.getSystem(AISystem.class).turnAllToGold();
+			
+		} else if (itemType.equalsIgnoreCase("shop")) {
+			
+			engine.getSystem(AISystem.class).switchToShop();
+			
+		} else if (itemType.equalsIgnoreCase("shop9")) {
+			
+			engine.getSystem(AISystem.class).shopOut();
+			
 			
 		}
 		
