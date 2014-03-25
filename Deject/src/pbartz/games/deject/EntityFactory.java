@@ -84,6 +84,8 @@ public class EntityFactory {
 	public static float starBaseWidth;
 	
 	public static GalaxyEmitterComponent galaxyEmitter = null;
+	public static Entity scoreValueEntity = null;
+	public static Entity highScoreValueEntity = null;
 	
 	public static void caculateMetrics(DejectSurface surface) {
 		
@@ -453,11 +455,11 @@ public class EntityFactory {
 	
 	public static void createBangFromItem(Engine engine, DejectSurface surface, Entity entity) {
 		
-		createBangFromCreep(engine, surface, entity);
+		createBangFromCreep(engine, surface, entity, "item_particle");
 		
 	}
 
-	public static void createBangFromCreep(Engine engine, DejectSurface surface, Entity creep) {
+	public static void createBangFromCreep(Engine engine, DejectSurface surface, Entity creep, String bmPrefix) {
 		PositionComponent position = creep.getComponent(PositionComponent.class);
 		RectDimensionComponent dimension = creep.getComponent(RectDimensionComponent.class);
 		
@@ -501,7 +503,7 @@ public class EntityFactory {
 				
 				entity.add(new ExpireComponent(duration));
 				
-				String bmName = "blood";
+				String bmName = bmPrefix;
 				
 				if (r.nextInt(100) < 30) {
 					bmName += "1";
@@ -865,15 +867,17 @@ public class EntityFactory {
 	}
 	
 	public static void spawnGameOver(Engine engine, DejectSurface surface) {
-		
+
 		Entity entity = new Entity();
 		
 		entity.add(new PositionComponent(surface.dp2px(goPanelcX), surface.dp2px(surface.heightDp + goPanelHeight / 2)));
 		entity.add(new RectDimensionComponent(surface.dp2px(goPanelWidth), surface.dp2px(goPanelHeight)));
 		
-		entity.add(new ColorComponent(125, 0, 255, 0));
+		entity.add(new ColorComponent(0, 0, 0, 0));
 		
 		entity.add(new TouchComponent());
+		
+		entity.add(new BitmapComponent(BitmapLibrary.getBitmap("game_over")));
 		
 		entity.add(new PositionInterpolationComponent(
 			
@@ -885,16 +889,59 @@ public class EntityFactory {
 				
 		));
 		
-		
-		
+		entity.add(new ColorInterpolationComponent(
+			entity.getComponent(ColorComponent.class).getPaint(),
+			createPaint(255, 0, 0, 0),
+			0.8f,
+			Interpolation.EASE_IN
+		));
+
 		entity.setOrder(2);
-		
 		
 		gameOverEntity = entity;
 		
 		engine.addEntity(entity);
 		
 		createStartScreen(engine, surface, goPanelHeight / 2 -  creepHeight / 2 - 5);
+		
+		// labels
+		
+		float sX = goPanelcX - (goPanelWidth / 2) + goPanelWidth / 1.21f;
+		float sY = goPanelcY - (goPanelHeight / 2) +  goPanelHeight / 7.6f;
+		
+		float sW = goPanelWidth / 2.98f;
+		float sH = goPanelHeight / 13.1f;
+		
+		Entity scoreText = new Entity();
+		
+		scoreText.add(new PositionComponent(surface.dp2px(sX), surface.dp2px(sY)));
+		scoreText.add(new ColorComponent(255, 0, 0, 0));
+		
+		scoreText.add(new TextComponent(Integer.toString(engine.getSystem(ScoreSystem.class).getScoreEntity().getComponent(ScoreComponent.class).getScore()), surface.dp2px(sH)));
+		
+		scoreText.add(new RectDimensionComponent(surface.dp2px(sW), surface.dp2px(sH)));
+		
+		scoreText.setOrder(3);
+		
+		engine.addEntity(scoreText);
+		
+		Entity hScoreText = new Entity();
+		
+		sY = goPanelcY - (goPanelHeight / 2) +  goPanelHeight / 3.88888f;
+		
+		hScoreText.add(new PositionComponent(surface.dp2px(sX), surface.dp2px(sY)));
+		hScoreText.add(new ColorComponent(255, 0, 0, 0));
+		
+		hScoreText.add(new TextComponent("123456", surface.dp2px(sH)));
+		
+		hScoreText.add(new RectDimensionComponent(surface.dp2px(sW), surface.dp2px(sH)));
+		
+		hScoreText.setOrder(3);
+		
+		engine.addEntity(hScoreText);
+		
+		scoreValueEntity = scoreText;
+		highScoreValueEntity = hScoreText;
 		
 	}
 	

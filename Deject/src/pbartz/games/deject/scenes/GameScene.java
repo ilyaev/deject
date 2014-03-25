@@ -205,6 +205,8 @@ public class GameScene extends BasicScene {
 				engine.getSystem(AISystem.class).starGame();
 				
 				EntityFactory.hideGameOverPanel(surface);
+				engine.removeEntity(EntityFactory.scoreValueEntity);
+				engine.removeEntity(EntityFactory.highScoreValueEntity);
 			}
 		}
 	}

@@ -340,6 +340,8 @@ public class AISystem extends IteratingSystem {
 		
 		pauseProgressBar();
 		
+		Random r = new Random();
+		
 		for(int i = 1 ; i <= 9 ; i++) {
 			
 			if (creeps.get(i) != null) {
@@ -357,7 +359,7 @@ public class AISystem extends IteratingSystem {
 				
 			}
 			
-			items.put(i, EntityFactory.spawnCellItem(engine, surface, i, "shop" + Integer.toString(i), 0));
+			items.put(i, EntityFactory.spawnCellItem(engine, surface, i, "shop" + Integer.toString(i), r.nextFloat() * 0.2f));
 			
 		}
 		
@@ -378,6 +380,8 @@ public class AISystem extends IteratingSystem {
 			engine.removeEntity(shopOutHandler);
 			
 		}
+		
+		Random r = new Random();
 		
 		for(int i = 1 ; i <= 9 ; i++) {
 

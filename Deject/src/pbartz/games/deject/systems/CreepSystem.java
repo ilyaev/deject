@@ -165,7 +165,7 @@ public class CreepSystem extends IteratingSystem {
 				
 				engine.getSystem(AISystem.class).generateItem(entity);
 				
-				EntityFactory.createBangFromCreep(engine, surface, entity);
+				EntityFactory.createBangFromCreep(engine, surface, entity, "blood");
 				EntityFactory.spawnDefeatAnimation(engine, surface, entity);
 				
 				entity.getComponent(CreepComponent.class).setState(CreepComponent.FORCE_REMOVE);

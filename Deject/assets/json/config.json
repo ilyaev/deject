@@ -14,10 +14,14 @@
 			"items": [
 				{
 					"type": "trunk",
-					"chance": 1
+					"chance": 2
 				},
 				{
 					"type": "heart_small",
+					"chance": 2
+				},
+				{
+					"type": "shop",
 					"chance": 2
 				},
 				{
@@ -27,11 +31,8 @@
 				{
 					"type": "coin_small",
 					"chance": 4
-				},
-				{
-					"type": "shop",
-					"chance": 100
-				}				
+				}
+								
 			]
 		},
 		{
@@ -59,6 +60,10 @@
 				},
 				{
 					"type": "heart_small",
+					"chance": 2
+				},
+				{
+					"type": "shop",
 					"chance": 2
 				},
 				{
@@ -99,6 +104,10 @@
 				},
 				{
 					"type": "heart_small",
+					"chance": 2
+				},
+				{
+					"type": "shop",
 					"chance": 2
 				},
 				{
@@ -143,6 +152,10 @@
 				},
 				{
 					"type": "heart_small",
+					"chance": 2
+				},
+				{
+					"type": "shop",
 					"chance": 2
 				},
 				{
@@ -191,6 +204,10 @@
 				},
 				{
 					"type": "heart_small",
+					"chance": 2
+				},
+				{
+					"type": "shop",
 					"chance": 2
 				},
 				{
@@ -392,7 +409,7 @@
 		},
 		{
 			"type": "shop9",
-			"image": "shop1",
+			"image": "shop9",
 			"waitingTime": 30
 		}
 		
