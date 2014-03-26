@@ -363,7 +363,7 @@ public class AISystem extends IteratingSystem {
 			
 		}
 		
-		Entity entity = new Entity();
+		Entity entity = engine.createEntity();
 		entity.add(new TagComponent("exit_shop"));
 		entity.add(new ExpireComponent(31f));
 		
@@ -393,7 +393,7 @@ public class AISystem extends IteratingSystem {
 			
 		}
 		
-		Entity entity = new Entity();
+		Entity entity = engine.createEntity();
 		entity.add(new TagComponent("exit_shop"));
 		entity.add(new ExpireComponent(1f));
 		

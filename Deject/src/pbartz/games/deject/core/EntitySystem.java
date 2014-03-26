@@ -9,7 +9,7 @@ package pbartz.games.deject.core;
 public class EntitySystem {
 	/** Use this to set the priority of the system. Lower means it'll get executed first. */
 	public int priority;
-	public Engine engine;
+	public PooledEngine engine;
 	
 	/**
 	 * Default constructor that will initialise an EntitySystem with priority 0.
@@ -31,7 +31,7 @@ public class EntitySystem {
 	 * @param engine The Engine this system was added to
 	 */
 	public void addedToEngine(Engine engine){
-		this.engine = engine;
+		this.engine = (PooledEngine) engine;
 	}
 	
 	/**

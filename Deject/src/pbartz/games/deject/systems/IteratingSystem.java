@@ -4,6 +4,7 @@ import pbartz.games.deject.core.Engine;
 import pbartz.games.deject.core.Entity;
 import pbartz.games.deject.core.EntitySystem;
 import pbartz.games.deject.core.Family;
+import pbartz.games.deject.core.PooledEngine;
 import pbartz.games.deject.utils.IntMap;
 import pbartz.games.deject.utils.IntMap.Keys;
 
@@ -45,7 +46,7 @@ public abstract class IteratingSystem extends EntitySystem {
 		entities = engine.getEntitiesFor(family);
 		
 		if (this.engine == null) {
-			this.engine = engine;
+			this.engine = (PooledEngine) engine;
 		}
 	}
 

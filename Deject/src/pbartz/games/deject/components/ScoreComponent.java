@@ -29,7 +29,7 @@ public class ScoreComponent extends Component {
 	}
 	
 	public void increasLevel() {
-		setLevel(getLevel() + 1);
+		setLevel(Math.min(INITIAL_LIFE, getLevel() + 1));
 	}
 
 	public void setScore(int score) {
@@ -61,7 +61,7 @@ public class ScoreComponent extends Component {
 	}
 
 	public void addGold(int add) {
-		setGold(getGold() + add);		
+		setGold(Math.max(0, getGold() + add));		
 	}
 
 	private void setGold(int i) {

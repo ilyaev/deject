@@ -2,9 +2,10 @@ package pbartz.games.deject.components.dimension;
 
 import pbartz.games.deject.components.PositionComponent;
 import pbartz.games.deject.core.Component;
+import pbartz.games.deject.utils.Pool.Poolable;
 import android.graphics.Rect;
 
-public class RectDimensionComponent extends Component {
+public class RectDimensionComponent extends Component implements Poolable {
 	
 	int width = 0;
 	int height = 0;
@@ -15,7 +16,7 @@ public class RectDimensionComponent extends Component {
 	Rect rect = null;
 	private Rect zero_rect;
 	
-	public RectDimensionComponent(int w, int h) {
+	public void init(int w, int h) {
 		this.width = w;
 		this.height = h;
 	}
@@ -62,6 +63,12 @@ public class RectDimensionComponent extends Component {
 		if (zero_rect != null) {
 			zero_rect.set(-(int)(width/2), -(int)(height/2), (int)(width / 2), (int)(height / 2));
 		}
+	}
+
+	@Override
+	public void reset() {
+		rect = null;
+		zero_rect = null;		
 	}
 
 }

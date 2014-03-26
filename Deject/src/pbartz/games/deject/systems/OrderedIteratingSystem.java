@@ -1,6 +1,7 @@
 package pbartz.games.deject.systems;
 
 import pbartz.games.deject.core.Engine;
+import pbartz.games.deject.core.PooledEngine;
 import pbartz.games.deject.core.Entity;
 import pbartz.games.deject.core.EntitySystem;
 import pbartz.games.deject.core.Family;
@@ -28,7 +29,7 @@ public abstract class OrderedIteratingSystem extends EntitySystem {
 		entities = engine.getEntitiesFor(family);
 		
 		if (this.engine == null) {
-			this.engine = engine;
+			this.engine = (PooledEngine) engine;
 		}
 	}
 

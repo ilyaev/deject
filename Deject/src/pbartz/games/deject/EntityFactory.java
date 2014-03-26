@@ -13,6 +13,7 @@ import pbartz.games.deject.components.ColorInterpolationComponent;
 import pbartz.games.deject.components.CreepComponent;
 import pbartz.games.deject.components.CreepShieldComponent;
 import pbartz.games.deject.components.CreepSwapComponent;
+import pbartz.games.deject.components.CreepThiefComponent;
 import pbartz.games.deject.components.ExpireComponent;
 import pbartz.games.deject.components.GalaxyComponent;
 import pbartz.games.deject.components.GalaxyEmitterComponent;
@@ -87,6 +88,8 @@ public class EntityFactory {
 	public static Entity scoreValueEntity = null;
 	public static Entity highScoreValueEntity = null;
 	
+	public static Random r = new Random();
+	
 	public static void caculateMetrics(DejectSurface surface) {
 		
 		infoPanelHeight = surface.heightDp / infoPanelHeightPart;
@@ -128,9 +131,9 @@ public class EntityFactory {
 	
 	
 
-	public static void createScorePanel(Engine engine, DejectSurface surface) {
+	public static void createScorePanel(PooledEngine engine, DejectSurface surface) {
 		
-		Entity scoreEntity = new Entity();
+		Entity scoreEntity = engine.createEntity();
 		scoreEntity.add(new ScoreComponent());
 		
 		engine.addEntity(scoreEntity);
@@ -140,21 +143,24 @@ public class EntityFactory {
 		
 		// Gold icon
 		
-		Entity gold_icon = new Entity();
+		Entity gold_icon = engine.createEntity();
 		
 		float sX = lifeOffsetX + (lifeWidth / 2);
 		float sY = lifeHeight + lifeHeight / 2;
 		
-		gold_icon.add(new PositionComponent(surface.dp2px(sX), surface.dp2px(sY)));
-		gold_icon.add(new RectDimensionComponent(surface.dp2px(lifeWidth), surface.dp2px(lifeHeight)));
-		gold_icon.add(new ColorComponent(255, 255, 0, 0));
-		gold_icon.add(new BitmapComponent(BitmapLibrary.getBitmap("coin_gold_small")));
+		PositionComponent posComp = engine.createComponent(PositionComponent.class);
+		posComp.init(surface.dp2px(sX), surface.dp2px(sY));
+		
+		gold_icon.add(posComp);
+		gold_icon.add(getRectComponent(engine, surface.dp2px(lifeWidth), surface.dp2px(lifeHeight)));
+		gold_icon.add(getColorComponent(engine, 255, 255, 0, 0));
+		gold_icon.add(getBitmapComponent(engine, BitmapLibrary.getBitmap("coin_gold_small")));
 		
 		engine.addEntity(gold_icon);
 		
 		// gold value
 		
-		Entity goldValue = new Entity();
+		Entity goldValue = engine.createEntity();
 		
 		float iconsPanelWidth = ((surface.widthDp - lifeOffsetX) / 3);
 		float valuePanelWidth = iconsPanelWidth - lifeWidth; 
@@ -162,9 +168,12 @@ public class EntityFactory {
 		float gvX = lifeOffsetX + lifeWidth + (valuePanelWidth / 2) + 1;
 		float gvY = sY - 2;
 		
-		goldValue.add(new PositionComponent(surface.dp2px(gvX), surface.dp2px(gvY)));
-		goldValue.add(new RectDimensionComponent(surface.dp2px(valuePanelWidth), surface.dp2px(lifeHeight)));
-		goldValue.add(new ColorComponent(255, 255, 255, 255));
+		PositionComponent posComp2 = engine.createComponent(PositionComponent.class);
+		posComp2.init(surface.dp2px(gvX), surface.dp2px(gvY));
+		
+		goldValue.add(posComp2);
+		goldValue.add(getRectComponent(engine, surface.dp2px(valuePanelWidth), surface.dp2px(lifeHeight)));
+		goldValue.add(getColorComponent(engine, 255, 255, 255, 255));
 		goldValue.add(new TextComponent("0", lifeHeight * 1.5f));
 		
 		engine.getSystem(ScoreSystem.class).setLabelGoldEntity(goldValue);
@@ -178,11 +187,14 @@ public class EntityFactory {
 		float pbX = (valuePanelWidth + lifeOffsetX + lifeWidth) + pbWidth / 2;
 		float pbY = gvY + 2;
 		
-		Entity pbEntity = new Entity();
+		Entity pbEntity = engine.createEntity();
 		
-		pbEntity.add(new PositionComponent(surface.dp2px(pbX), surface.dp2px(pbY)));
-		pbEntity.add(new RectDimensionComponent(surface.dp2px(pbWidth), surface.dp2px(lifeHeight)));
-		pbEntity.add(new ColorComponent(255, 255, 0, 0));
+		PositionComponent posComp3 = engine.createComponent(PositionComponent.class);
+		posComp3.init(surface.dp2px(pbX), surface.dp2px(pbY));
+		
+		pbEntity.add(posComp3);
+		pbEntity.add(getRectComponent(engine, surface.dp2px(pbWidth), surface.dp2px(lifeHeight)));
+		pbEntity.add(getColorComponent(engine, 255, 255, 0, 0));
 		
 		
 		pbarWidth = surface.dp2px(pbWidth);
@@ -190,7 +202,7 @@ public class EntityFactory {
 		pbarX = surface.dp2px(pbX);
 		pbarY = surface.dp2px(pbY);
 		
-		pbEntity.add(new BitmapComponent(BitmapLibrary.getBitmap("pbar")));
+		pbEntity.add(getBitmapComponent(engine, BitmapLibrary.getBitmap("pbar")));
 		
 		engine.addEntity(pbEntity);
 		
@@ -200,19 +212,23 @@ public class EntityFactory {
 		
 		// Score value
 		
-		Entity entity = new Entity();
+		Entity entity = engine.createEntity();
 		
 		entity.add(new TextComponent("0", infoPanelHeight / 2));
 		
 		float pX = 0 + surface.widthDp / 3 - ((surface.widthDp / 3) / 2);
 		float pY = 0 + infoPanelHeight / 2;
 		
-		entity.add(new PositionComponent(surface.dp2px(pX), surface.dp2px(pY)));
+		
+		PositionComponent posComp4 = engine.createComponent(PositionComponent.class);
+		posComp4.init(surface.dp2px(pX), surface.dp2px(pY));
+		
+		entity.add(posComp4);
 		
 		
-		entity.add(new ColorComponent(255, 255, 255, 255));
+		entity.add(getColorComponent(engine, 255, 255, 255, 255));
 		
-		entity.add(new RectDimensionComponent(
+		entity.add(getRectComponent(engine, 
 			surface.dp2px(surface.widthDp / 3),
 			surface.dp2px(infoPanelHeight)
 		));
@@ -227,13 +243,16 @@ public class EntityFactory {
 		// weapon icon
 		
 		
-		Entity wepEntity = new Entity();
+		Entity wepEntity = engine.createEntity();
 		
-		wepEntity.add(new PositionComponent(surface.dp2px(infoPanelHeight / 2), surface.dp2px(infoPanelHeight / 2)));
-		wepEntity.add(new RectDimensionComponent(surface.dp2px(infoPanelHeight), surface.dp2px(infoPanelHeight)));
-		wepEntity.add(new ColorComponent(255, 255, 0, 0));
+		PositionComponent posComp5 = engine.createComponent(PositionComponent.class);
+		posComp5.init(surface.dp2px(infoPanelHeight / 2), surface.dp2px(infoPanelHeight / 2));
 		
-		wepEntity.add(new BitmapComponent(BitmapLibrary.getBitmap("hammer")));
+		wepEntity.add(posComp5);
+		wepEntity.add(getRectComponent(engine, surface.dp2px(infoPanelHeight), surface.dp2px(infoPanelHeight)));
+		wepEntity.add(getColorComponent(engine, 255, 255, 0, 0));
+		
+		wepEntity.add(getBitmapComponent(engine, BitmapLibrary.getBitmap("hammer")));
 		
 		engine.addEntity(wepEntity);
 		
@@ -241,15 +260,18 @@ public class EntityFactory {
 		// hearts panel
 		for(int i = 0 ; i < 8; i++) {
 			
-			Entity heart = new Entity();
+			Entity heart = engine.createEntity();
 			
 			float hX = lifeOffsetX + (lifeWidth / 2) + i*lifeWidth + 1*i;
 			float hY = lifeHeight / 2;
 			
-			heart.add(new PositionComponent(surface.dp2px(hX), surface.dp2px(hY)));
-			heart.add(new RectDimensionComponent(surface.dp2px(lifeWidth), surface.dp2px(lifeHeight)));
-			heart.add(new ColorComponent(255, 255, 0, 0));
-			heart.add(new BitmapComponent(BitmapLibrary.getBitmap("heart_small")));
+			PositionComponent posComp6 = engine.createComponent(PositionComponent.class);
+			posComp6.init(surface.dp2px(hX), surface.dp2px(hY));
+			
+			heart.add(posComp6);
+			heart.add(getRectComponent(engine, surface.dp2px(lifeWidth), surface.dp2px(lifeHeight)));
+			heart.add(getColorComponent(engine, 255, 255, 0, 0));
+			heart.add(getBitmapComponent(engine, BitmapLibrary.getBitmap("heart_small")));
 			
 			engine.getSystem(ScoreSystem.class).setHeart(i, heart);
 			
@@ -269,7 +291,7 @@ public class EntityFactory {
 		return btnWidth / 2 + btnWidth * (point.x - 1);
 	}
 	
-	public static void createControlPanel(Engine engine, DejectSurface surface) {
+	public static void createControlPanel(PooledEngine engine, DejectSurface surface) {
 
 		int tag = 1;
 		
@@ -279,16 +301,19 @@ public class EntityFactory {
 			for(int x = 0 ; x < 3 ; x++) {
 				float centerX = btnWidth / 2 + btnWidth * x;
 				
-				Entity entity = new Entity();
+				Entity entity = engine.createEntity();
 				
-				entity.add(new PositionComponent(surface.dp2px(centerX), surface.dp2px(centerY)));
-				entity.add(new RectDimensionComponent(surface.dp2px(btnWidth), surface.dp2px(btnHeight)));
+				PositionComponent posComp = engine.createComponent(PositionComponent.class);
+				posComp.init(surface.dp2px(centerX), surface.dp2px(centerY));
+				
+				entity.add(posComp);
+				entity.add(getRectComponent(engine, surface.dp2px(btnWidth), surface.dp2px(btnHeight)));
 				entity.add(new TouchComponent());
 				entity.add(new TagComponent(Integer.toString(tag)));
 				
-				entity.add(new BitmapComponent(BitmapLibrary.getBitmap("btn_blank")));
+				entity.add(getBitmapComponent(engine, BitmapLibrary.getBitmap("btn_blank")));
 				
-				ColorComponent color = new ColorComponent(255, 0, 0, 0);
+				ColorComponent color = getColorComponent(engine, 255, 0, 0, 0);
 				
 				Paint borderPaint = createPaint(255, 255, 255, 255);
 				borderPaint.setStyle(Paint.Style.STROKE);
@@ -305,13 +330,13 @@ public class EntityFactory {
 		}
 	}
 	
-	public static Entity spawnHammerHit(Engine engine, DejectSurface surface, int position) {
+	public static Entity spawnHammerHit(PooledEngine engine, DejectSurface surface, int position) {
 		
 		float life = 0.25f;
 		
-		Entity entity = prepareCellEntity(surface, position);
+		Entity entity = prepareCellEntity(engine, surface, position);
 		
-		ColorComponent color = new ColorComponent(0, 255, 0, 0);
+		ColorComponent color = getColorComponent(engine, 0, 255, 0, 0);
 		color.getPaint().setAntiAlias(false);
 		color.getPaint().setFilterBitmap(false);
 		
@@ -323,7 +348,7 @@ public class EntityFactory {
 		entity.add(new RotateInterpolationComponent(0, -90, life, Interpolation.EASE_OUT));
 		entity.add(new ColorInterpolationComponent(color.getPaint(), tmpColor, life, Interpolation.EASE_OUT));
 		
-		entity.add(new BitmapComponent(BitmapLibrary.getBitmap("hammer")));
+		entity.add(getBitmapComponent(engine, BitmapLibrary.getBitmap("hammer")));
 		
 		entity.add(new ExpireComponent(life + 0.05f));
 		
@@ -333,13 +358,13 @@ public class EntityFactory {
 		
 	}
 	
-	public static Entity spawnHammerMiss(Engine engine, DejectSurface surface, int position) {
+	public static Entity spawnHammerMiss(PooledEngine engine, DejectSurface surface, int position) {
 		
 		float life = 0.25f;
 		
-		Entity entity = prepareCellEntity(surface, position);
+		Entity entity = prepareCellEntity(engine, surface, position);
 		
-		ColorComponent color = new ColorComponent(0, 255, 0, 0);
+		ColorComponent color = getColorComponent(engine, 0, 255, 0, 0);
 		color.getPaint().setAntiAlias(false);
 		color.getPaint().setFilterBitmap(false);
 		
@@ -351,7 +376,7 @@ public class EntityFactory {
 		entity.add(new RotateInterpolationComponent(0, -40, life, Interpolation.EASE_OUT));
 		entity.add(new ColorInterpolationComponent(color.getPaint(), tmpColor, life, Interpolation.EASE_OUT));
 		
-		entity.add(new BitmapComponent(BitmapLibrary.getBitmap("hammer")));
+		entity.add(getBitmapComponent(engine, BitmapLibrary.getBitmap("hammer")));
 		
 		entity.add(new ExpireComponent(life + 0.05f));
 		
@@ -361,11 +386,11 @@ public class EntityFactory {
 		
 	}
 
-	public static Entity spawnCellCreep(Engine engine, DejectSurface surface, int position, String creepType) {
+	public static Entity spawnCellCreep(PooledEngine engine, DejectSurface surface, int position, String creepType) {
 
-		Entity entity = prepareCellEntity(surface, position);
+		Entity entity = prepareCellEntity(engine, surface, position);
 		
-		ColorComponent color = new ColorComponent(255, 255, 255, 255);
+		ColorComponent color = getColorComponent(engine, 255, 255, 255, 255);
 		color.getPaint().setAntiAlias(false);
 		color.getPaint().setFilterBitmap(false);
 		
@@ -373,7 +398,7 @@ public class EntityFactory {
 		
 		CreepConfig creepConfig = GameConfig.getCreepConfig(creepType); 
 		
-		entity.add(new BitmapComponent(BitmapLibrary.getBitmap(creepConfig.getImage())));
+		entity.add(getBitmapComponent(engine, BitmapLibrary.getBitmap(creepConfig.getImage())));
 		
 		CreepComponent creep = new CreepComponent(position);
 		
@@ -398,7 +423,7 @@ public class EntityFactory {
 				
 				if (component.equalsIgnoreCase("buttonswap")) {
 					
-					Random r = new Random();
+					
 					
 					int swapNumber = r.nextInt(9) + 1;
 					
@@ -406,6 +431,13 @@ public class EntityFactory {
 					
 					entity.add(swap);
 					entity.add(new TextComponent(Integer.toString(swapNumber), creepHeight / 3));
+					
+				}
+				
+				if (component.equalsIgnoreCase("thief")) {
+					
+					CreepThiefComponent thief = new CreepThiefComponent();
+					entity.add(thief);
 					
 				}
 				
@@ -418,7 +450,7 @@ public class EntityFactory {
 		return entity;
 	}
 	
-	public static Entity prepareCellEntity(DejectSurface surface, int position) {
+	public static Entity prepareCellEntity(PooledEngine engine, DejectSurface surface, int position) {
 		Point cellPoint = getCellPoint(position);
 		
 		float creepHeight = EntityFactory.creepHeight;
@@ -427,22 +459,25 @@ public class EntityFactory {
 		float centerX = EntityFactory.creepRealWidth / 2 + EntityFactory.creepRealWidth * (cellPoint.x - 1);
 		float centerY = infoPanelHeight + EntityFactory.creepRealHeight / 2 + EntityFactory.creepRealHeight * (cellPoint.y - 1) - 1;
 		
-		Entity entity = new Entity();
+		Entity entity = engine.createEntity();
 		
-		entity.add(new PositionComponent(surface.dp2px(centerX), surface.dp2px(centerY)));
-		entity.add(new RectDimensionComponent(surface.dp2px(creepWidth), surface.dp2px(creepHeight)));
+		
+		PositionComponent posComp = engine.createComponent(PositionComponent.class);
+		posComp.init(surface.dp2px(centerX), surface.dp2px(centerY));
+		
+		entity.add(posComp);
+		entity.add(getRectComponent(engine, surface.dp2px(creepWidth), surface.dp2px(creepHeight)));
 		
 		return entity;
 	}
 
 	public static void createAIEntity(PooledEngine engine) {
 		
-		Entity entity = new Entity();
+		Entity entity = engine.createEntity();
 		AIComponent ai = new AIComponent();
 		
 		ai.setState(AIComponent.STATE_NOT_INITED);
 		
-		Random r = new Random();
 		ai.setTimer(r.nextFloat() * 2);
 		
 		entity.add(ai);
@@ -453,19 +488,18 @@ public class EntityFactory {
 		
 	}
 	
-	public static void createBangFromItem(Engine engine, DejectSurface surface, Entity entity) {
+	public static void createBangFromItem(PooledEngine engine, DejectSurface surface, Entity entity) {
 		
 		createBangFromCreep(engine, surface, entity, "item_particle");
 		
 	}
 
-	public static void createBangFromCreep(Engine engine, DejectSurface surface, Entity creep, String bmPrefix) {
+	public static void createBangFromCreep(PooledEngine engine, DejectSurface surface, Entity creep, String bmPrefix) {
 		PositionComponent position = creep.getComponent(PositionComponent.class);
 		RectDimensionComponent dimension = creep.getComponent(RectDimensionComponent.class);
 		
 		float duration = 0.5f;
 		
-		Random r = new Random();
 		
 		Rect rect = dimension.getRect(position);
 		
@@ -480,11 +514,14 @@ public class EntityFactory {
 				float px = rect.left + (x * partW) + (partW / 2);
 				float py = rect.top + (y * partH) + (partH / 2);
 				
-				Entity entity = new Entity();
+				Entity entity = engine.createEntity();
 				
-				entity.add(new PositionComponent(px, py));
-				entity.add(new RectDimensionComponent((int)(partW * 1.5f  - r.nextFloat() * partW), (int)(partH * 1.5f - r.nextFloat() * partH)));
-				entity.add(new ColorComponent(255, 255, 0, 0));
+				PositionComponent posComp = engine.createComponent(PositionComponent.class);
+				posComp.init(px, py);
+				
+				entity.add(posComp);
+				entity.add(getRectComponent(engine, (int)(partW * 1.5f  - r.nextFloat() * partW), (int)(partH * 1.5f - r.nextFloat() * partH)));
+				entity.add(getColorComponent(engine, 255, 255, 0, 0));
 				
 				entity.add(new PositionInterpolationComponent(
 					entity.getComponent(PositionComponent.class), 
@@ -511,7 +548,7 @@ public class EntityFactory {
 					bmName += "2";
 				}
 				
-				entity.add(new BitmapComponent(BitmapLibrary.getBitmap(bmName)));
+				entity.add(getBitmapComponent(engine, BitmapLibrary.getBitmap(bmName)));
 				entity.add(new RotateComponent(0));
 				entity.add(new RotateInterpolationComponent(
 					0,
@@ -547,10 +584,10 @@ public class EntityFactory {
 
 
 
-	public static Entity spawnCellItem(Engine engine, DejectSurface surface, int position, String itemType, float delay) {
-		Entity entity = prepareCellEntity(surface, position);
+	public static Entity spawnCellItem(PooledEngine engine, DejectSurface surface, int position, String itemType, float delay) {
+		Entity entity = prepareCellEntity(engine, surface, position);
 		
-		ColorComponent color = new ColorComponent(0, 255, 0, 0);
+		ColorComponent color = getColorComponent(engine, 0, 255, 0, 0);
 		color.getPaint().setAntiAlias(false);
 		color.getPaint().setFilterBitmap(false);
 		
@@ -562,7 +599,7 @@ public class EntityFactory {
 		item.setConfig(itemConfig);
 		
 		entity.add(item);
-		entity.add(new BitmapComponent(BitmapLibrary.getBitmap(itemConfig.getImage())));
+		entity.add(getBitmapComponent(engine, BitmapLibrary.getBitmap(itemConfig.getImage())));
 		
 		if (delay > 0) {
 			engine.addEntity(entity, delay);
@@ -575,22 +612,26 @@ public class EntityFactory {
 
 
 
-	public static void createStartScreen(Engine engine, DejectSurface surface, float offsetY) {
+	public static void createStartScreen(PooledEngine engine, DejectSurface surface, float offsetY) {
 		
 		// leader board button
 
 		
-		Entity btnScore = new Entity();
+		Entity btnScore = engine.createEntity();
 		
-		btnScore.add(new RectDimensionComponent(surface.dp2px(creepWidth), surface.dp2px(creepWidth)));
-		btnScore.add(new ColorComponent(255, 255, 0, 0));
+		btnScore.add(getRectComponent(engine, surface.dp2px(creepWidth), surface.dp2px(creepWidth)));
+		btnScore.add(getColorComponent(engine, 255, 255, 0, 0));
 		
-		btnScore.add(new BitmapComponent(BitmapLibrary.getBitmap("btn_leaderboard")));
+		btnScore.add(getBitmapComponent(engine, BitmapLibrary.getBitmap("btn_leaderboard")));
 		
 		float btnScoreX = (surface.widthDp / 2);
 		float btnScoreY = (surface.heightDp / 2);
 		
-		btnScore.add(new PositionComponent(surface.dp2px(btnScoreX), surface.dp2px(btnScoreY + offsetY)));
+		
+		PositionComponent posComp = engine.createComponent(PositionComponent.class);
+		posComp.init(surface.dp2px(btnScoreX), surface.dp2px(btnScoreY + offsetY));
+		
+		btnScore.add(posComp);
 		
 		btnScore.add(new TouchComponent());
 		btnScore.add(new TagComponent("btn_leaderboard"));
@@ -608,17 +649,21 @@ public class EntityFactory {
 		
 		// play button;
 		
-		Entity btnPlay = new Entity();
+		Entity btnPlay = engine.createEntity();
 		
-		btnPlay.add(new RectDimensionComponent(surface.dp2px(creepWidth), surface.dp2px(creepWidth)));
-		btnPlay.add(new ColorComponent(255, 255, 0, 0));
+		btnPlay.add(getRectComponent(engine, surface.dp2px(creepWidth), surface.dp2px(creepWidth)));
+		btnPlay.add(getColorComponent(engine, 255, 255, 0, 0));
 		
-		btnPlay.add(new BitmapComponent(BitmapLibrary.getBitmap("btn_play")));
+		btnPlay.add(getBitmapComponent(engine, BitmapLibrary.getBitmap("btn_play")));
 		
 		float btnX = (surface.widthDp / 2);
 		float btnY = (surface.heightDp);
 		
-		btnPlay.add(new PositionComponent(surface.dp2px(btnX), surface.dp2px(btnY)));
+		
+		PositionComponent posComp2 = engine.createComponent(PositionComponent.class);
+		posComp2.init(surface.dp2px(btnX), surface.dp2px(btnY));
+		
+		btnPlay.add(posComp2);
 		
 		btnPlay.add(new TouchComponent());
 		btnPlay.add(new TagComponent("btn_play"));
@@ -631,8 +676,11 @@ public class EntityFactory {
 			Interpolation.EASE_OUT
 		));
 		
+		PositionComponent posComp3 = engine.createComponent(PositionComponent.class);
+		posComp3.init(surface.dp2px(btnX), surface.dp2px(surface.heightDp / 2 + offsetY));
+		
 		btnPlay.add(new PositionInterpolationComponent(
-			new PositionComponent(surface.dp2px(btnX), surface.dp2px(surface.heightDp / 2 + offsetY)), 
+			posComp3, 
 			surface.dp2px(surface.widthDp / 2 - surface.widthDp / 4),
 			surface.dp2px(surface.heightDp / 2 + offsetY),
 			0.7f,
@@ -651,11 +699,11 @@ public class EntityFactory {
 
 	public static void createFadeOut(PooledEngine engine, DejectSurface surface) {
 		
-		Entity entity = new Entity();
+		Entity entity = engine.createEntity();
 		
 		entity.add(new ScreenOverlayComponent());
 		
-		entity.add(new ColorComponent(0, 0, 0, 0));
+		entity.add(getColorComponent(engine, 0, 0, 0, 0));
 		
 		entity.add(new ColorInterpolationComponent(				
 			entity.getComponent(ColorComponent.class).getPaint(),
@@ -668,7 +716,7 @@ public class EntityFactory {
 		
 		engine.addEntity(entity);
 		
-		Entity exp = new Entity();
+		Entity exp = engine.createEntity();
 		
 		exp.add(new ExpireComponent(0.5f));
 		exp.add(new TagComponent("fade_out"));
@@ -679,11 +727,11 @@ public class EntityFactory {
 	
 	public static void createFadeIn(PooledEngine engine, DejectSurface surface) {
 		
-		Entity entity = new Entity();
+		Entity entity = engine.createEntity();
 		
 		entity.add(new ScreenOverlayComponent());
 		
-		entity.add(new ColorComponent(255, 0, 0, 0));
+		entity.add(getColorComponent(engine, 255, 0, 0, 0));
 		
 		entity.add(new ColorInterpolationComponent(				
 			entity.getComponent(ColorComponent.class).getPaint(),
@@ -701,20 +749,21 @@ public class EntityFactory {
 
 
 
-	public static Entity spawnLevelInfoPanel(Engine engine,	DejectSurface surface, int level) {
-		Entity entity = new Entity();
+	public static Entity spawnLevelInfoPanel(PooledEngine engine,	DejectSurface surface, int level) {
+		Entity entity = engine.createEntity();
 		
-		entity.add(new PositionComponent(
-			surface.dp2px(levelPanelX),
-			surface.dp2px(levelPanelY + levelPanelHeight)
-		));
 		
-		entity.add(new RectDimensionComponent(
+		PositionComponent posComp3 = engine.createComponent(PositionComponent.class);
+		posComp3.init(surface.dp2px(levelPanelX), surface.dp2px(levelPanelY + levelPanelHeight));
+		
+		entity.add(posComp3);
+		
+		entity.add(getRectComponent(engine, 
 			surface.dp2px(levelPanelWidth),
 			surface.dp2px(levelPanelHeight)
 		));
 		
-		entity.add(new ColorComponent(255, 255, 0, 0));
+		entity.add(getColorComponent(engine, 255, 255, 0, 0));
 		
 		entity.add(new LevelInfoComponent(level));
 		
@@ -724,7 +773,7 @@ public class EntityFactory {
 		Bitmap levelBitmap = BitmapLibrary.getBitmap("level" + Integer.toString(level));
 		
 		if (levelBitmap != null) {
-			entity.add(new BitmapComponent(levelBitmap));
+			entity.add(getBitmapComponent(engine, levelBitmap));
 		}
 		
 		entity.setOrder(1);
@@ -737,8 +786,6 @@ public class EntityFactory {
 	}
 	
 	public static void animateButtonsDown() {
-		
-		Random r = new Random();
 		
 		for(int i = 0 ; i < buttons.size ; i++) {
 			
@@ -759,8 +806,7 @@ public class EntityFactory {
 	}
 	
 	public static void animateButtonsUp() {
-		Random r = new Random();
-		
+
 		for(int i = 0 ; i < buttons.size ; i++) {
 			
 			Entity button = buttons.get(i);
@@ -780,21 +826,27 @@ public class EntityFactory {
 
 
 
-	public static void spawnLifeLose(Engine engine, DejectSurface surface, int hPos) {
+	public static void spawnLifeLose(PooledEngine engine, DejectSurface surface, int hPos) {
 		
 		float rX = lifeOffsetX + (lifeWidth / 2) + hPos*lifeWidth + 1*hPos;
 		float rY = 0;
 		
-		Random r = new Random();
-		
 		for(int i = 0 ; i < 50 ; i++) {
-			Entity entity = new Entity();
-			entity.add(new PositionComponent(surface.dp2px(rX), surface.dp2px(rY)));
-			entity.add(new ColorComponent(255, 255, 0, 0));
-			entity.add(new RectDimensionComponent(surface.dp2px(lifeWidth / 2 - r.nextFloat() * (lifeWidth / 3)), surface.dp2px(lifeHeight / 3)));
+			Entity entity = engine.createEntity();
+			
+			PositionComponent posComp = engine.createComponent(PositionComponent.class);
+			posComp.init(surface.dp2px(rX), surface.dp2px(rY));
+			
+			entity.add(posComp);
+			entity.add(getColorComponent(engine, 255, 255, 0, 0));
+			entity.add(getRectComponent(engine, surface.dp2px(lifeWidth / 2 - r.nextFloat() * (lifeWidth / 3)), surface.dp2px(lifeHeight / 3)));
+			
+			
+			PositionComponent posComp2 = engine.createComponent(PositionComponent.class);
+			posComp2.init(surface.dp2px(rX + (r.nextInt((int)lifeWidth) - (lifeWidth / 2))), surface.dp2px(rY));
 			
 			entity.add(new PositionInterpolationComponent(
-				new PositionComponent(surface.dp2px(rX + (r.nextInt((int)lifeWidth) - (lifeWidth / 2))), surface.dp2px(rY)),
+				posComp2,
 				surface.dp2px(rX + (r.nextInt((int)lifeWidth) - (lifeWidth / 2))),
 				surface.dp2px(rY + surface.heightDp / 2 - r.nextInt((int)surface.heightDp / 5)),
 				0.5f,
@@ -830,16 +882,20 @@ public class EntityFactory {
 
 
 
-	public static void spawnTouchReaction(Engine engine, DejectSurface surface, int position) {
+	public static void spawnTouchReaction(PooledEngine engine, DejectSurface surface, int position) {
 		
 		float lifeTime = 0.3f;
 		float zoomFactor = 1.5f;
 		
-		Entity entity = new Entity();
-		entity.add(new PositionComponent(surface.dp2px(getButtonCenterX(position)), surface.dp2px(getButtonCenterY(position))));
+		Entity entity = engine.createEntity();
 		
-		entity.add(new ColorComponent(150, 255, 0, 0));
-		entity.add(new RectDimensionComponent(surface.dp2px(btnWidth), surface.dp2px(btnHeight)));
+		PositionComponent posComp = engine.createComponent(PositionComponent.class);
+		posComp.init(surface.dp2px(getButtonCenterX(position)), surface.dp2px(getButtonCenterY(position)));
+		
+		entity.add(posComp);
+		
+		entity.add(getColorComponent(engine, 150, 255, 0, 0));
+		entity.add(getRectComponent(engine, surface.dp2px(btnWidth), surface.dp2px(btnHeight)));
 		
 		entity.add(new ZoomComponent(1f, 1f));
 		
@@ -866,18 +922,21 @@ public class EntityFactory {
 		
 	}
 	
-	public static void spawnGameOver(Engine engine, DejectSurface surface) {
+	public static void spawnGameOver(PooledEngine engine, DejectSurface surface) {
 
-		Entity entity = new Entity();
+		Entity entity = engine.createEntity();
 		
-		entity.add(new PositionComponent(surface.dp2px(goPanelcX), surface.dp2px(surface.heightDp + goPanelHeight / 2)));
-		entity.add(new RectDimensionComponent(surface.dp2px(goPanelWidth), surface.dp2px(goPanelHeight)));
+		PositionComponent posComp = engine.createComponent(PositionComponent.class);
+		posComp.init(surface.dp2px(goPanelcX), surface.dp2px(surface.heightDp + goPanelHeight / 2));
 		
-		entity.add(new ColorComponent(0, 0, 0, 0));
+		entity.add(posComp);
+		entity.add(getRectComponent(engine, surface.dp2px(goPanelWidth), surface.dp2px(goPanelHeight)));
+		
+		entity.add(getColorComponent(engine, 0, 0, 0, 0));
 		
 		entity.add(new TouchComponent());
 		
-		entity.add(new BitmapComponent(BitmapLibrary.getBitmap("game_over")));
+		entity.add(getBitmapComponent(engine, BitmapLibrary.getBitmap("game_over")));
 		
 		entity.add(new PositionInterpolationComponent(
 			
@@ -912,29 +971,36 @@ public class EntityFactory {
 		float sW = goPanelWidth / 2.98f;
 		float sH = goPanelHeight / 13.1f;
 		
-		Entity scoreText = new Entity();
+		Entity scoreText = engine.createEntity();
 		
-		scoreText.add(new PositionComponent(surface.dp2px(sX), surface.dp2px(sY)));
-		scoreText.add(new ColorComponent(255, 0, 0, 0));
+		
+		PositionComponent posComp2 = engine.createComponent(PositionComponent.class);
+		posComp2.init(surface.dp2px(sX), surface.dp2px(sY));
+		
+		scoreText.add(posComp2);
+		scoreText.add(getColorComponent(engine, 255, 0, 0, 0));
 		
 		scoreText.add(new TextComponent(Integer.toString(engine.getSystem(ScoreSystem.class).getScoreEntity().getComponent(ScoreComponent.class).getScore()), surface.dp2px(sH)));
 		
-		scoreText.add(new RectDimensionComponent(surface.dp2px(sW), surface.dp2px(sH)));
+		scoreText.add(getRectComponent(engine, surface.dp2px(sW), surface.dp2px(sH)));
 		
 		scoreText.setOrder(3);
 		
 		engine.addEntity(scoreText);
 		
-		Entity hScoreText = new Entity();
+		Entity hScoreText = engine.createEntity();
 		
 		sY = goPanelcY - (goPanelHeight / 2) +  goPanelHeight / 3.88888f;
 		
-		hScoreText.add(new PositionComponent(surface.dp2px(sX), surface.dp2px(sY)));
-		hScoreText.add(new ColorComponent(255, 0, 0, 0));
+		PositionComponent posComp3 = engine.createComponent(PositionComponent.class);
+		posComp3.init(surface.dp2px(sX), surface.dp2px(sY));
+		
+		hScoreText.add(posComp3);
+		hScoreText.add(getColorComponent(engine, 255, 0, 0, 0));
 		
 		hScoreText.add(new TextComponent("123456", surface.dp2px(sH)));
 		
-		hScoreText.add(new RectDimensionComponent(surface.dp2px(sW), surface.dp2px(sH)));
+		hScoreText.add(getRectComponent(engine, surface.dp2px(sW), surface.dp2px(sH)));
 		
 		hScoreText.setOrder(3);
 		
@@ -979,24 +1045,25 @@ public class EntityFactory {
 
 
 
-	public static void spawnDefeatAnimation(Engine engine, DejectSurface surface, Entity creep) {
-		
-		Random r = new Random();
+	public static void spawnDefeatAnimation(PooledEngine engine, DejectSurface surface, Entity creep) {
 		
 		PositionComponent position = creep.getComponent(PositionComponent.class);
 		RectDimensionComponent dimension = creep.getComponent(RectDimensionComponent.class);
 		
-		Entity entity = new Entity();
+		Entity entity = engine.createEntity();
 		
-		entity.add(new PositionComponent(position.x, position.y));
-		entity.add(new RectDimensionComponent(dimension.getWidth(), dimension.getHeight()));
-		entity.add(new ColorComponent(255, 255, 0, 0));
+		PositionComponent posComp = engine.createComponent(PositionComponent.class);
+		posComp.init(position.x, position.y);
+		
+		entity.add(posComp);
+		entity.add(getRectComponent(engine, dimension.getWidth(), dimension.getHeight()));
+		entity.add(getColorComponent(engine, 255, 255, 0, 0));
 		
 		String headBmp = creep.getComponent(CreepComponent.class).getConfig().getImage() + "_head";
 		
 		
 		if (BitmapLibrary.getBitmap(headBmp) != null) {
-			entity.add(new BitmapComponent(BitmapLibrary.getBitmap(headBmp)));
+			entity.add(getBitmapComponent(engine, BitmapLibrary.getBitmap(headBmp)));
 		}
 		
 		entity.add(new RotateComponent(0f));
@@ -1026,9 +1093,8 @@ public class EntityFactory {
 		
 	}
 	
-	public static void createGalaxy(Engine engine, DejectSurface surface) {
+	public static void createGalaxy(PooledEngine engine, DejectSurface surface) {
 		
-		Random r = new Random();
 		
 		GalaxyEmitterComponent emitter = new GalaxyEmitterComponent(
 				surface.widthPx / 2,
@@ -1039,7 +1105,7 @@ public class EntityFactory {
 		
 		emitter.setArms(r.nextInt(10));
 		
-		Entity entity = new Entity();
+		Entity entity = engine.createEntity();
 		
 		entity.add(emitter);
 		entity.add(new GalaxyComponent());
@@ -1047,6 +1113,34 @@ public class EntityFactory {
 		engine.addEntity(entity);
 		
 		galaxyEmitter = emitter;
+		
+	}
+	
+	public static ColorComponent getColorComponent(PooledEngine engine, int a, int r, int g, int b) {
+		
+		ColorComponent color = engine.createComponent(ColorComponent.class);
+		
+		color.init(a,  r, g, b);
+		
+		return color;
+	}
+	
+	public static BitmapComponent getBitmapComponent(PooledEngine engine, Bitmap bitmap) {
+		
+		BitmapComponent bm = engine.createComponent(BitmapComponent.class);
+		
+		bm.init(bitmap);
+		
+		return bm;		
+	}
+	
+	public static RectDimensionComponent getRectComponent(PooledEngine engine, int w, int h) {
+		
+		RectDimensionComponent dimension = engine.createComponent(RectDimensionComponent.class);
+		
+		dimension.init(w, h);
+		
+		return dimension;
 		
 	}
 	

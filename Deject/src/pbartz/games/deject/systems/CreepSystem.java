@@ -1,12 +1,15 @@
 package pbartz.games.deject.systems;
 
 import android.graphics.Paint;
+import pbartz.games.deject.BitmapLibrary;
 import pbartz.games.deject.DejectSurface;
 import pbartz.games.deject.EntityFactory;
+import pbartz.games.deject.components.BitmapComponent;
 import pbartz.games.deject.components.ColorComponent;
 import pbartz.games.deject.components.ColorInterpolationComponent;
 import pbartz.games.deject.components.CreepComponent;
 import pbartz.games.deject.components.CreepShieldComponent;
+import pbartz.games.deject.components.CreepThiefComponent;
 import pbartz.games.deject.components.PositionComponent;
 import pbartz.games.deject.components.PositionInterpolationComponent;
 import pbartz.games.deject.components.dimension.RectDimensionComponent;
@@ -55,8 +58,11 @@ public class CreepSystem extends IteratingSystem {
 					Interpolation.EASE_IN
 				));
 				
+				PositionComponent posComp = engine.createComponent(PositionComponent.class);
+				posComp.init(position.x, position.y + (dimension.getHeight()));
+				
 				entity.add(new PositionInterpolationComponent(
-					new PositionComponent(position.x, position.y + (dimension.getHeight())), 
+					posComp, 
 					position.x, 
 					position.y, 
 					creep.getSpeedUp(), 
@@ -131,8 +137,11 @@ public class CreepSystem extends IteratingSystem {
 		boolean canBeHit = true;
 		
 		CreepShieldComponent shield = entity.getComponent(CreepShieldComponent.class);
+		CreepThiefComponent thief = entity.getComponent(CreepThiefComponent.class);
 		
 		int str = engine.getSystem(ScoreSystem.class).getStength();
+		int lifeLose = 0;
+		int moneyLose = 0;
 		
 		if (shield != null && str < entity.getComponent(CreepComponent.class).getHealth() * 3) {
 			
@@ -144,7 +153,28 @@ public class CreepSystem extends IteratingSystem {
 			
 		}
 		
-		int lifeLose = 0;
+		if (thief != null && str < entity.getComponent(CreepComponent.class).getHealth()) {
+			
+			if (thief.getState() != CreepThiefComponent.STOLEN) {
+				
+				thief.setState(CreepThiefComponent.STOLEN);
+				
+				moneyLose = 3;
+
+				entity.getComponent(BitmapComponent.class).setBitmap(						
+					BitmapLibrary.getBitmap(entity.getComponent(CreepComponent.class).getConfig().getImage() + "_coin")						
+				);
+				
+				if (entity.getComponent(CreepComponent.class).getState() == CreepComponent.WAITING) {
+					entity.getComponent(CreepComponent.class).setTimeToNextState(0);
+				}
+			}
+			
+			canBeHit = false;
+		}
+		
+		
+		
 		
 		if (entity.getComponent(CreepComponent.class).getMinHit() > engine.getSystem(ScoreSystem.class).getStength()) {
 
@@ -180,6 +210,10 @@ public class CreepSystem extends IteratingSystem {
 		
 		if (lifeLose > 0) {
 			engine.getSystem(ScoreSystem.class).increaseLife(-lifeLose);
+		}
+		
+		if (moneyLose > 0) {
+			engine.getSystem(ScoreSystem.class).increaseGold(-moneyLose);
 		}
 	}
 

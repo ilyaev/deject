@@ -1,9 +1,10 @@
 package pbartz.games.deject.components;
 
 import pbartz.games.deject.core.Component;
+import pbartz.games.deject.utils.Pool.Poolable;
 import android.graphics.Paint;
 
-public class ColorComponent extends Component{
+public class ColorComponent extends Component implements Poolable{
 	
 	Paint paint;
 	Paint borderPaint = null;
@@ -13,7 +14,7 @@ public class ColorComponent extends Component{
 	int b;
 	int a;
 	
-	public ColorComponent(int a, int r, int g, int b) {
+	public void init(int a, int r, int g, int b) {
 		this.a = a;
 		this.r = r;
 		this.g = g;
@@ -53,6 +54,12 @@ public class ColorComponent extends Component{
 
 	public void setPaint(Paint currentPaint) {
 		paint = currentPaint;		
+	}
+
+	@Override
+	public void reset() {
+		// TODO Auto-generated method stub
+		borderPaint = null;
 	}	
 	
 }

@@ -20,6 +20,7 @@ import pbartz.games.deject.core.Interpolation;
 public class GalaxyEmitterSystem extends IteratingSystem {
 
 	GalaxyEmitterComponent emitter = null;
+	Random r = new Random();
 	
 	@SuppressWarnings("unchecked")
 	public GalaxyEmitterSystem() {
@@ -29,9 +30,7 @@ public class GalaxyEmitterSystem extends IteratingSystem {
 	@Override
 	public void processEntity(Entity entity, float deltaTime) {
 		
-		emitter = entity.getComponent(GalaxyEmitterComponent.class);
-		
-		Random r = new Random();
+		emitter = entity.getComponent(GalaxyEmitterComponent.class);		
 		
 		int stars = 1;
 		
@@ -52,25 +51,36 @@ public class GalaxyEmitterSystem extends IteratingSystem {
 				float armOffset = r.nextFloat() * armOffsetMax;
 				armOffset = armOffset - armOffsetMax / 2;
 				
-				Entity star = new Entity();
+				Entity star = engine.createEntity();
 				
 				int sSize = (int) (EntityFactory.starBaseWidth + r.nextFloat() * EntityFactory.starBaseWidth - EntityFactory.starBaseWidth / 2);
 				
-				star.add(new PositionComponent(-100, -100));
+				
+				PositionComponent posComp = engine.createComponent(PositionComponent.class);
+				posComp.init(-100, -100);
+
+				star.add(posComp);
 				
 				
-				star.add(new RadialPositionComponent(angle, distance, armOffset));
-				star.add(new RadialPositionInterpolationComponent(
+				RadialPositionComponent radPosComp = engine.createComponent(RadialPositionComponent.class);
+				radPosComp.init(angle, distance, armOffset);
+				
+				RadialPositionInterpolationComponent radPosInterpolationComp = engine.createComponent(RadialPositionInterpolationComponent.class);
+				radPosInterpolationComp.init(
 					distance,
 					1f,
 					angle,
 					angle,
 					emitter.getBaseSpeed() + r.nextFloat() * 3 - 1.5f,
 					Interpolation.EASE_IN
-				));
+				);
 				
-				star.add(new ColorComponent(r.nextInt(255), 125, 125, 125));
-				star.add(new BitmapComponent(BitmapLibrary.getBitmap("particle_star")));
+				star.add(radPosComp);
+				star.add(radPosInterpolationComp);
+				
+				star.add(EntityFactory.getColorComponent(engine, r.nextInt(255), 125, 125, 125));
+				star.add(EntityFactory.getBitmapComponent(engine, BitmapLibrary.getBitmap("particle_star")));
+				
 				star.setOrder(-1);
 				
 				star.add(emitter);
@@ -78,7 +88,7 @@ public class GalaxyEmitterSystem extends IteratingSystem {
 				if (stars == 1 && r.nextInt(100) < emitter.getColorStarChance()) {
 					
 					sSize = (int) (EntityFactory.starBaseWidth / 2);
-					star.add(new RectDimensionComponent(sSize, sSize));
+					star.add(EntityFactory.getRectComponent(engine, sSize, sSize));
 					
 					float startT = emitter.getBaseSpeed() / 1.2f - r.nextFloat() * emitter.getBaseSpeed() / 1.5f;
 					
@@ -110,11 +120,11 @@ public class GalaxyEmitterSystem extends IteratingSystem {
 					}
 					
 					
-					star.add(new ColorComponent(r.nextInt(255), 255, 0, 0));
-					star.add(new BitmapComponent(BitmapLibrary.getBitmap(particle)));
+					star.add(EntityFactory.getColorComponent(engine, r.nextInt(255), 255, 0, 0));
+					star.add(EntityFactory.getBitmapComponent(engine, BitmapLibrary.getBitmap(particle)));
 					
 				} else {
-					star.add(new RectDimensionComponent(sSize, sSize));
+					star.add(EntityFactory.getRectComponent(engine, sSize, sSize));
 				}
 				
 				

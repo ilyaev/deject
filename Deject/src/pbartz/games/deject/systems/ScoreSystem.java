@@ -106,17 +106,20 @@ public class ScoreSystem extends IteratingSystem {
 			
 			if (heart != null) {
 				
-				heart.remove(BitmapComponent.class);
+				if (heart.getComponent(BitmapComponent.class) != null) {				
+					heart.remove(BitmapComponent.class);
+				}
+				
 				heart.getComponent(ColorComponent.class).setAlpha(0);
 				
 				if (i < full) {
 					heart.getComponent(ColorComponent.class).setAlpha(255);
-					heart.add(new BitmapComponent(BitmapLibrary.getBitmap("heart_small")));
+					heart.add(EntityFactory.getBitmapComponent(engine, BitmapLibrary.getBitmap("heart_small")));
 				}
 				
 				if (i == full && rest == 1) {
 					heart.getComponent(ColorComponent.class).setAlpha(255);
-					heart.add(new BitmapComponent(BitmapLibrary.getBitmap("heart_small_half")));
+					heart.add(EntityFactory.getBitmapComponent(engine, BitmapLibrary.getBitmap("heart_small_half")));
 				}
 				
 			}

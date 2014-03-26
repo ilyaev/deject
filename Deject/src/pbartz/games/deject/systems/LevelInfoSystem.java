@@ -29,12 +29,13 @@ public class LevelInfoSystem extends IteratingSystem {
 		if (levelInfo.getState() != LevelInfoComponent.STATE_WAITING && levelInfo.isNextEvent(deltaTime)) {
 			
 			if (levelInfo.getState() == LevelInfoComponent.STATE_NOT_INITED) {
+				
+				PositionComponent posComp = engine.createComponent(PositionComponent.class);
+				posComp.init(surface.dp2px(EntityFactory.levelPanelX),
+						surface.dp2px(EntityFactory.levelPanelY + EntityFactory.levelPanelHeight));
 			
 				entity.add(new PositionInterpolationComponent(
-					new PositionComponent(
-						surface.dp2px(EntityFactory.levelPanelX),
-						surface.dp2px(EntityFactory.levelPanelY + EntityFactory.levelPanelHeight)
-					),
+					posComp,
 					surface.dp2px(EntityFactory.levelPanelX),
 					surface.dp2px(EntityFactory.levelPanelY),
 					levelInfo.getSpeedUp(),
@@ -49,11 +50,12 @@ public class LevelInfoSystem extends IteratingSystem {
 				
 			} else if (levelInfo.getState() == LevelInfoComponent.STATE_GO_DOWN) {
 				
+				PositionComponent posComp2 = engine.createComponent(PositionComponent.class);
+				posComp2.init(surface.dp2px(EntityFactory.levelPanelX),
+						surface.dp2px(EntityFactory.levelPanelY));
+				
 				entity.add(new PositionInterpolationComponent(
-					new PositionComponent(
-						surface.dp2px(EntityFactory.levelPanelX),
-						surface.dp2px(EntityFactory.levelPanelY)
-					),
+					posComp2,
 					surface.dp2px(EntityFactory.levelPanelX),
 					surface.dp2px(EntityFactory.levelPanelY + EntityFactory.levelPanelHeight * 2),
 					levelInfo.getSpeedUp(),

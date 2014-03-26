@@ -1,12 +1,13 @@
 package pbartz.games.deject.components;
 
 import pbartz.games.deject.core.Component;
+import pbartz.games.deject.utils.Pool.Poolable;
 
-public class PositionComponent extends Component {
+public class PositionComponent extends Component implements Poolable {
 	public float x, y;
 	public float originalX, originalY;
 
-	public PositionComponent(float x, float y){
+	public void init(float x, float y) {
 		this.x = x;
 		this.y = y;
 		
@@ -25,6 +26,11 @@ public class PositionComponent extends Component {
 
 	public float getOriginalY() {
 		return originalY;
+	}
+
+	@Override
+	public void reset() {
+				
 	}
 	
 }
