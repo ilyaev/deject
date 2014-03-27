@@ -26,8 +26,8 @@ public class DimensionRenderingSystem extends OrderedIteratingSystem {
 	ColorComponent color;
 	TextComponent text;
 	BitmapComponent bitmap;
-    RotateComponent rotate;
-    ZoomComponent zoom;
+    RotateComponent rotate = null;
+    ZoomComponent zoom = null;
 	
 	@SuppressWarnings("unchecked")
 	public DimensionRenderingSystem(DejectSurface surface) {
@@ -45,22 +45,32 @@ public class DimensionRenderingSystem extends OrderedIteratingSystem {
 		dimension = entity.getComponent(RectDimensionComponent.class);
 		color = entity.getComponent(ColorComponent.class);
 		
-		rotate = entity.getComponent(RotateComponent.class);
-		zoom = entity.getComponent(ZoomComponent.class);
+		bitmap = entity.getComponent(BitmapComponent.class);
 		
-		if (entity.getComponent(BitmapComponent.class) != null) {
-			
-			bitmap = entity.getComponent(BitmapComponent.class);
+		if (entity.hasComponent(RotateComponent.class)) {		
+			rotate = entity.getComponent(RotateComponent.class);
+		} else {
+			rotate = null;
+		}
+		
+//		if (entity.hasComponent(ZoomComponent.class)) {
+//			zoom = entity.getComponent(ZoomComponent.class);
+//		} else {
+//			zoom = null;
+//		}
+		
+		if (bitmap != null) {
+
 			renderBitmap();
+//			
+//			if (hasText) {
+//				
+//				text = entity.getComponent(TextComponent.class);
+//				renderText();
+//			
+//			}
 			
-			if (entity.getComponent(TextComponent.class) != null) {
-				
-				text = entity.getComponent(TextComponent.class);
-				renderText();
-			
-			}
-			
-		} else if (entity.getComponent(TextComponent.class) != null) {
+		} else if (entity.hasComponent(TextComponent.class)) {
 			
 			text = entity.getComponent(TextComponent.class);
 			renderText();
@@ -89,10 +99,10 @@ public class DimensionRenderingSystem extends OrderedIteratingSystem {
 		canvas.scale((float)dimension.getWidth() / (float)bitmap.getBitmap().getWidth(), (float)dimension.getHeight() / (float)bitmap.getBitmap().getHeight(), rect.left, rect.top);
 		
 		
-		if (zoom != null) {
-			canvas.scale(zoom.getZoomX(), zoom.getZoomY(), rect.left, rect.top);
-		}
-		
+//		if (zoom != null) {
+//			canvas.scale(zoom.getZoomX(), zoom.getZoomY(), rect.left, rect.top);
+//		}
+//		
 		canvas.drawBitmap(bitmap.getBitmap(), rect.left, rect.top, color.getPaint());
 		canvas.restore();
 	}

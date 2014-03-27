@@ -159,7 +159,7 @@ public class GameScene extends BasicScene {
 		// ToDo: Level completed
 		
 		engine.getSystem(AISystem.class).getAi().setState(AIComponent.STATE_LEVEL_COMPLETED);
-		EntityFactory.animateButtonsDown();
+		EntityFactory.animateButtonsDown(engine);
 		
 	}
 
@@ -169,7 +169,7 @@ public class GameScene extends BasicScene {
 		
 			engine.getSystem(AISystem.class).getAi().setState(AIComponent.STATE_GAMEOVER);
 			EntityFactory.spawnGameOver(engine, surface);
-			EntityFactory.animateButtonsDown();
+			EntityFactory.animateButtonsDown(engine);
 			
 		}
 	}
@@ -204,7 +204,7 @@ public class GameScene extends BasicScene {
 			if (EntityFactory.btnPlay != null && EntityFactory.btnPlay.getComponent(PositionInterpolationComponent.class) == null) {
 				engine.getSystem(AISystem.class).starGame();
 				
-				EntityFactory.hideGameOverPanel(surface);
+				EntityFactory.hideGameOverPanel(engine, surface);
 				engine.removeEntity(EntityFactory.scoreValueEntity);
 				engine.removeEntity(EntityFactory.highScoreValueEntity);
 			}

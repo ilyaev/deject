@@ -2,8 +2,9 @@ package pbartz.games.deject.components;
 
 import pbartz.games.deject.core.Component;
 import pbartz.games.deject.core.Interpolation;
+import pbartz.games.deject.utils.Pool.Poolable;
 
-public class RotateInterpolationComponent extends Component {
+public class RotateInterpolationComponent extends Component implements Poolable{
 	
 	float start_angle = 0;
 	float end_angle = 0;
@@ -14,13 +15,15 @@ public class RotateInterpolationComponent extends Component {
 	
 	int type = Interpolation.LINEAR;
 	
-	public RotateInterpolationComponent(float start_angle, float end_angle, float speed, int easing) {
+	public void init(float start_angle, float end_angle, float speed, int easing) {
 			
 		this.start_angle = start_angle;
 		this.end_angle = end_angle;
 		
 		this.speed = speed * 1000;		
 		this.type = easing;
+		
+		time = 0;
 	}
 	
 	public void increaseTime(float diff) {
@@ -57,6 +60,12 @@ public class RotateInterpolationComponent extends Component {
 
 	public void setEndAngle(float end_angle) {
 		this.end_angle = end_angle;
+	}
+
+	@Override
+	public void reset() {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	

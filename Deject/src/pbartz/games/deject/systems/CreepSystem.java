@@ -51,7 +51,7 @@ public class CreepSystem extends IteratingSystem {
 				tmpPaint.set(color.getPaint());
 				tmpPaint.setAlpha(255);
 				
-				entity.add(new ColorInterpolationComponent(
+				entity.add(EntityFactory.getColorInterpolationComponent(engine, 
 					color.getPaint(), 
 					tmpPaint, 
 					creep.getSpeedUp(), 
@@ -61,7 +61,7 @@ public class CreepSystem extends IteratingSystem {
 				PositionComponent posComp = engine.createComponent(PositionComponent.class);
 				posComp.init(position.x, position.y + (dimension.getHeight()));
 				
-				entity.add(new PositionInterpolationComponent(
+				entity.add(EntityFactory.getPositionInterpolationComponent(engine, 
 					posComp, 
 					position.x, 
 					position.y, 
@@ -89,14 +89,14 @@ public class CreepSystem extends IteratingSystem {
 				tmpPaint.set(color.getPaint());
 				tmpPaint.setAlpha(0);
 				
-				entity.add(new ColorInterpolationComponent(
+				entity.add(EntityFactory.getColorInterpolationComponent(engine, 
 					color.getPaint(), 
 					tmpPaint, 
 					creep.getSpeedDown(), 
 					Interpolation.EASE_IN
 				));
 				
-				entity.add(new PositionInterpolationComponent(
+				entity.add(EntityFactory.getPositionInterpolationComponent(engine, 
 					position, 
 					position.x, 
 					position.y + (dimension.getHeight()), 

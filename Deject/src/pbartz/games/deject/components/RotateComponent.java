@@ -1,12 +1,13 @@
 package pbartz.games.deject.components;
 
 import pbartz.games.deject.core.Component;
+import pbartz.games.deject.utils.Pool.Poolable;
 
-public class RotateComponent extends Component {
+public class RotateComponent extends Component implements Poolable {
 	
 	float angle = 0;
 	
-	public RotateComponent(float angle) {
+	public void init(float angle) {
 		this.angle = 0;
 	}
 
@@ -23,6 +24,12 @@ public class RotateComponent extends Component {
 		if (angle < 0) {
 			angle = 360 + angle;
 		}
+	}
+
+	@Override
+	public void reset() {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

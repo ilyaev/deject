@@ -34,7 +34,7 @@ public class LevelInfoSystem extends IteratingSystem {
 				posComp.init(surface.dp2px(EntityFactory.levelPanelX),
 						surface.dp2px(EntityFactory.levelPanelY + EntityFactory.levelPanelHeight));
 			
-				entity.add(new PositionInterpolationComponent(
+				entity.add(EntityFactory.getPositionInterpolationComponent(engine, 
 					posComp,
 					surface.dp2px(EntityFactory.levelPanelX),
 					surface.dp2px(EntityFactory.levelPanelY),
@@ -54,7 +54,7 @@ public class LevelInfoSystem extends IteratingSystem {
 				posComp2.init(surface.dp2px(EntityFactory.levelPanelX),
 						surface.dp2px(EntityFactory.levelPanelY));
 				
-				entity.add(new PositionInterpolationComponent(
+				entity.add(EntityFactory.getPositionInterpolationComponent(engine, 
 					posComp2,
 					surface.dp2px(EntityFactory.levelPanelX),
 					surface.dp2px(EntityFactory.levelPanelY + EntityFactory.levelPanelHeight * 2),

@@ -4,8 +4,9 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import pbartz.games.deject.core.Component;
 import pbartz.games.deject.core.Interpolation;
+import pbartz.games.deject.utils.Pool.Poolable;
 
-public class ColorInterpolationComponent extends Component {
+public class ColorInterpolationComponent extends Component implements Poolable {
 	
 	Paint startPaint;
 	Paint endPaint;
@@ -16,7 +17,7 @@ public class ColorInterpolationComponent extends Component {
 	int type;
 	float time = 0;
 	
-	public ColorInterpolationComponent(Paint oldPaint, Paint endPaint, float speed, int type) {
+	public void init(Paint oldPaint, Paint endPaint, float speed, int type) {
 	
 		startPaint = oldPaint;
 		
@@ -70,6 +71,13 @@ public class ColorInterpolationComponent extends Component {
 		currentPaint.setARGB(Math.max(0, Math.min(cA, 255)), Math.max(0, Math.min(cR, 255)), Math.max(0, Math.min(cG, 255)), Math.max(0, Math.min(cB, 255)));
 		
 		return currentPaint;
+	}
+
+
+	@Override
+	public void reset() {
+		// TODO Auto-generated method stub
+		time = 0;
 	}
 	
 }

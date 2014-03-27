@@ -15,7 +15,7 @@ import android.view.SurfaceView;
 
 public class DejectSurface extends SurfaceView implements Runnable {
 	
-	private final static int 	MAX_FPS = 60;
+	private final static int 	MAX_FPS = 40;
     private final static int	FRAME_PERIOD = 1000 / MAX_FPS;
     
     Engine engine = null;

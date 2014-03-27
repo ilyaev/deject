@@ -2,8 +2,9 @@ package pbartz.games.deject.components;
 
 import pbartz.games.deject.core.Component;
 import pbartz.games.deject.core.Interpolation;
+import pbartz.games.deject.utils.Pool.Poolable;
 
-public class PositionInterpolationComponent extends Component {
+public class PositionInterpolationComponent extends Component implements Poolable {
 
 
 	int type = Interpolation.LINEAR;
@@ -18,7 +19,7 @@ public class PositionInterpolationComponent extends Component {
 	
 	float time = 0;
 	
-	public PositionInterpolationComponent(PositionComponent position, float newX, float newY, float speed, int easing) {
+	public void init(PositionComponent position, float newX, float newY, float speed, int easing) {
 		this.destX = newX;
 		this.destY = newY;
 		this.startX = position.x;
@@ -67,6 +68,13 @@ public class PositionInterpolationComponent extends Component {
 
 	public void setType(int type) {
 		this.type = type;
+	}
+
+
+	@Override
+	public void reset() {
+		// TODO Auto-generated method stub
+		time = 0;
 	}
 	
 }

@@ -43,7 +43,7 @@ public class ItemSystem extends IteratingSystem {
 			
 			if (item.getState() == ItemComponent.NOT_INITED) {
 				
-				entity.add(new PositionInterpolationComponent(
+				entity.add(EntityFactory.getPositionInterpolationComponent(engine, 
 					entity.getComponent(PositionComponent.class), 
 					position.x,
 					position.y - (dimension.getHeight()), 
@@ -58,7 +58,7 @@ public class ItemSystem extends IteratingSystem {
 				
 			} else if (item.getState() == ItemComponent.TOSS_UP) {
 				
-				entity.add(new PositionInterpolationComponent(
+				entity.add(EntityFactory.getPositionInterpolationComponent(engine, 
 					entity.getComponent(PositionComponent.class), 
 					position.x,
 					position.y + (dimension.getHeight()), 
@@ -76,7 +76,7 @@ public class ItemSystem extends IteratingSystem {
 				
 			} else if (item.getState() == ItemComponent.WAITING) {
 				
-				entity.add(new PositionInterpolationComponent(
+				entity.add(EntityFactory.getPositionInterpolationComponent(engine, 
 					entity.getComponent(PositionComponent.class), 
 					position.x,
 					position.y + (dimension.getHeight()), 
@@ -91,7 +91,7 @@ public class ItemSystem extends IteratingSystem {
 				tmpPaint.set(color.getPaint());
 				tmpPaint.setAlpha(0);
 				
-				entity.add(new ColorInterpolationComponent(
+				entity.add(EntityFactory.getColorInterpolationComponent(engine, 
 					color.getPaint(), 
 					tmpPaint, 
 					item.getSpeedGoingDown(), 
@@ -116,7 +116,7 @@ public class ItemSystem extends IteratingSystem {
 				
 			} else if (item.getState() == ItemComponent.BLOW_UP) {
 				
-				entity.add(new PositionInterpolationComponent(
+				entity.add(EntityFactory.getPositionInterpolationComponent(engine, 
 					entity.getComponent(PositionComponent.class), 
 					position.x,
 					position.y - (dimension.getHeight()), 

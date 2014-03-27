@@ -73,6 +73,7 @@ public class PooledEngine extends Engine {
 		@Override
 		public void reset() {
 			removeAll();
+			order = 0;
 			flags = 0;
 		}
 	}

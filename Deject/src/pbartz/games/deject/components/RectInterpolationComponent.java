@@ -2,8 +2,9 @@ package pbartz.games.deject.components;
 
 import pbartz.games.deject.core.Component;
 import pbartz.games.deject.core.Interpolation;
+import pbartz.games.deject.utils.Pool.Poolable;
 
-public class RectInterpolationComponent extends Component {
+public class RectInterpolationComponent extends Component implements Poolable {
 	
 	float start_width = 0;
 	float end_width = 0;
@@ -17,7 +18,7 @@ public class RectInterpolationComponent extends Component {
 	
 	int type = Interpolation.LINEAR;
 	
-	public RectInterpolationComponent(float start_width, float end_width, float start_height, float end_height, float speed, int easing) {
+	public void init(float start_width, float end_width, float start_height, float end_height, float speed, int easing) {
 		
 		this.start_width = start_width;
 		this.end_width = end_width;
@@ -28,6 +29,8 @@ public class RectInterpolationComponent extends Component {
 
 		this.speed = speed * 1000;		
 		this.type = easing;
+		
+		this.time = 0;
 	}
 	
 	public void increaseTime(float diff) {
@@ -73,6 +76,12 @@ public class RectInterpolationComponent extends Component {
 
 	public float getEndHeight() {
 		return end_height;
+	}
+
+	@Override
+	public void reset() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

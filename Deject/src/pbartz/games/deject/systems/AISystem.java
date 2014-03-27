@@ -24,7 +24,7 @@ import pbartz.games.deject.utils.ObjectMap;
 
 public class AISystem extends IteratingSystem {
 
-	AIComponent ai;
+	AIComponent ai = null;
 	
 	ScoreComponent score = null;
 	LevelConfig level = null;
@@ -55,7 +55,9 @@ public class AISystem extends IteratingSystem {
 	@Override
 	public void processEntity(Entity entity, float deltaTime) {
 		
-		ai = entity.getComponent(AIComponent.class);
+		if (ai == null) {
+			ai = entity.getComponent(AIComponent.class);
+		}
 		
 		if (ai.getState() == AIComponent.STATE_NOT_INITED && levelInfo == null) {
 			
@@ -76,7 +78,7 @@ public class AISystem extends IteratingSystem {
 			
 		} else if (ai.getState() == AIComponent.STATE_WORKING) {
 		
-			if (ai.isNextEvent(deltaTime) && progressBar.getComponent(RectInterpolationComponent.class) != null) {
+			if (ai.isNextEvent(deltaTime) && progressBar.hasComponent(RectInterpolationComponent.class)) {
 				
 				
 				
@@ -115,7 +117,7 @@ public class AISystem extends IteratingSystem {
 				
 			}
 			
-			if (progressBar.getComponent(RectInterpolationComponent.class) == null) {
+			if (!progressBar.hasComponent(RectInterpolationComponent.class)) {
 				
 				if (isEmptyField()) {
 					levelCompletedSignal.dispatch(level);
@@ -131,7 +133,7 @@ public class AISystem extends IteratingSystem {
 
 		} else if (ai.getState() == AIComponent.STATE_GAMEOVER) {
 			
-			if (progressBar.getComponent(RectInterpolationComponent.class) != null) {
+			if (progressBar.hasComponent(RectInterpolationComponent.class)) {
 				
 				progressBar.remove(RectInterpolationComponent.class);
 				
@@ -154,7 +156,7 @@ public class AISystem extends IteratingSystem {
 
 	public void releaseProgressBar() {
 		
-		progressBar.add(new RectInterpolationComponent(
+		progressBar.add(EntityFactory.getRectInterpolationComponent(engine,
 			EntityFactory.pbarWidth,
 			0,			
 			EntityFactory.pbarHeight,
@@ -166,7 +168,7 @@ public class AISystem extends IteratingSystem {
 	}
 	
 	public void pauseProgressBar() {
-		if (progressBar.getComponent(RectInterpolationComponent.class) != null) {
+		if (progressBar.hasComponent(RectInterpolationComponent.class)) {
 			levelTimeLeft = progressBar.getComponent(RectInterpolationComponent.class).getLeftTime();
 	 		progressBar.remove(RectInterpolationComponent.class);
 		} else {
@@ -177,7 +179,7 @@ public class AISystem extends IteratingSystem {
 	
 	public void resumeProgressBar() {
 		
-		progressBar.add(new RectInterpolationComponent(
+		progressBar.add(EntityFactory.getRectInterpolationComponent(engine,
 			progressBar.getComponent(RectDimensionComponent.class).getWidth(),
 			0,			
 			EntityFactory.pbarHeight,
@@ -244,9 +246,7 @@ public class AISystem extends IteratingSystem {
 
 	public void generateItem(Entity entity) {
 		int position = entity.getComponent(CreepComponent.class).getPosition();	
-		
-		Random r = new Random();
-		
+
 		String itemType = entity.getComponent(CreepComponent.class).getNextItem();
 		
 		if (currentItemType  != null) {
@@ -269,7 +269,7 @@ public class AISystem extends IteratingSystem {
 
 	public void startLevel() {
 		levelInfo.getComponent(LevelInfoComponent.class).setState(LevelInfoComponent.STATE_GO_DOWN);
-		EntityFactory.animateButtonsUp();
+		EntityFactory.animateButtonsUp(engine);
 		ai.setState(AIComponent.STATE_STARTING);
 		
 		Random r = new Random();
@@ -359,13 +359,13 @@ public class AISystem extends IteratingSystem {
 				
 			}
 			
-			items.put(i, EntityFactory.spawnCellItem(engine, surface, i, "shop" + Integer.toString(i), r.nextFloat() * 0.2f));
+			items.put(i, EntityFactory.spawnCellItem(engine, surface, i, "shop" + Integer.toString(i), r.nextFloat() * 0.1f));
 			
 		}
 		
 		Entity entity = engine.createEntity();
 		entity.add(new TagComponent("exit_shop"));
-		entity.add(new ExpireComponent(31f));
+		entity.add(EntityFactory.getExpireComponent(engine, 1f));
 		
 		shopOutHandler = entity;
 		
@@ -381,8 +381,6 @@ public class AISystem extends IteratingSystem {
 			
 		}
 		
-		Random r = new Random();
-		
 		for(int i = 1 ; i <= 9 ; i++) {
 
 			if (items.get(i) != null) {
@@ -395,7 +393,7 @@ public class AISystem extends IteratingSystem {
 		
 		Entity entity = engine.createEntity();
 		entity.add(new TagComponent("exit_shop"));
-		entity.add(new ExpireComponent(1f));
+		entity.add(EntityFactory.getExpireComponent(engine, 1f));
 		
 		engine.addEntity(entity);
 		
