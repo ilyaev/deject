@@ -20,6 +20,7 @@ public class CreepConfig {
 	
 	float shield_interval = 0f;
 	float shield_duration = 0f;
+	int shield_damage = 0;
 	
 	
 	int minHit = 1;
@@ -67,6 +68,14 @@ public class CreepConfig {
 						
 					} catch (JSONException e1) {
 						e1.printStackTrace();
+					}
+					
+					try {
+						
+						shield_damage = Integer.valueOf(obj.getString("shield_damage"));
+						
+					} catch (JSONException e) {
+						e.printStackTrace();
 					}
 					
 					try {
@@ -266,6 +275,17 @@ public class CreepConfig {
 	public String getComponent(int i) {
 		return components[i];
 	}
+
+
+	public int getShield_damage() {
+		return shield_damage;
+	}
+
+
+	public void setShield_damage(int shield_damage) {
+		this.shield_damage = shield_damage;
+	}
+	
 	
 	
 

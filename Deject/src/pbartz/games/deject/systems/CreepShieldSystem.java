@@ -2,6 +2,7 @@ package pbartz.games.deject.systems;
 
 import android.graphics.Bitmap;
 import pbartz.games.deject.BitmapLibrary;
+import pbartz.games.deject.EntityFactory;
 import pbartz.games.deject.components.BitmapComponent;
 import pbartz.games.deject.components.CreepComponent;
 import pbartz.games.deject.components.CreepShieldComponent;
@@ -33,14 +34,14 @@ public class CreepShieldSystem extends IteratingSystem {
 				Bitmap shieldBitmap = BitmapLibrary.getBitmap(creep.getConfig().getImage() + IMAGE_PREFIX); 
 				
 				if (shieldBitmap != null) {
-					entity.getComponent(BitmapComponent.class).setBitmap(shieldBitmap);
+					entity.add(EntityFactory.getReusableBitmapComponent(engine, creep.getConfig().getImage() + IMAGE_PREFIX));
 				}
 				
 				shield.setState(CreepShieldComponent.STATE_CLOSED);
 				
 			} else if (shield.getState() == CreepShieldComponent.STATE_CLOSED) {
 				
-				entity.getComponent(BitmapComponent.class).setBitmap(BitmapLibrary.getBitmap(creep.getConfig().getImage()));
+				entity.add(EntityFactory.getReusableBitmapComponent(engine, creep.getConfig().getImage()));
 				shield.setState(CreepShieldComponent.STATE_OPEN);
 				
 			}

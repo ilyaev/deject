@@ -2,6 +2,7 @@ package pbartz.games.deject.systems.renderer;
 
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.util.Log;
 import pbartz.games.deject.DejectSurface;
 import pbartz.games.deject.components.BitmapComponent;
 import pbartz.games.deject.components.ColorComponent;
@@ -10,10 +11,13 @@ import pbartz.games.deject.components.RotateComponent;
 import pbartz.games.deject.components.TextComponent;
 import pbartz.games.deject.components.ZoomComponent;
 import pbartz.games.deject.components.dimension.RectDimensionComponent;
+import pbartz.games.deject.core.Component;
 import pbartz.games.deject.core.Entity;
 import pbartz.games.deject.core.Family;
 import pbartz.games.deject.systems.IteratingSystem;
 import pbartz.games.deject.systems.OrderedIteratingSystem;
+import pbartz.games.deject.utils.Array;
+import pbartz.games.deject.utils.ImmutableArray;
 
 public class DimensionRenderingSystem extends OrderedIteratingSystem {
 
@@ -28,6 +32,8 @@ public class DimensionRenderingSystem extends OrderedIteratingSystem {
 	BitmapComponent bitmap;
     RotateComponent rotate = null;
     ZoomComponent zoom = null;
+    
+    private ImmutableArray<Component> allComponents = new Array<Component>();
 	
 	@SuppressWarnings("unchecked")
 	public DimensionRenderingSystem(DejectSurface surface) {
@@ -39,40 +45,71 @@ public class DimensionRenderingSystem extends OrderedIteratingSystem {
 	@Override
 	public void processEntity(Entity entity, float deltaTime) {
 		
-		canvas = surface.getCanvas();
+		bitmap = null;
+		rotate = null;
+		text = null;
 		
-		position = entity.getComponent(PositionComponent.class);
-		dimension = entity.getComponent(RectDimensionComponent.class);
-		color = entity.getComponent(ColorComponent.class);
+		allComponents = entity.getComponents();
 		
-		bitmap = entity.getComponent(BitmapComponent.class);
+		Class<? extends Component> compClass = null;
 		
-		if (entity.hasComponent(RotateComponent.class)) {		
-			rotate = entity.getComponent(RotateComponent.class);
-		} else {
-			rotate = null;
+		int size = allComponents.getSize();
+		
+		for(int i = 0 ; i < size ; i++) {
+			
+			Component comp = allComponents.get(i);
+			
+			compClass = comp.getClass();
+			
+			if (compClass == PositionComponent.class) {
+				
+				position = (PositionComponent) comp;
+				continue;
+				
+			} else if (compClass == RectDimensionComponent.class) {
+				
+				dimension = (RectDimensionComponent) comp;
+				continue;
+				
+			} else if (compClass == ColorComponent.class) {
+				
+				color = (ColorComponent) comp;
+				continue;
+				
+			} else if (compClass == BitmapComponent.class) {
+				
+				bitmap = (BitmapComponent) comp;
+				continue;
+				
+			} else if (compClass == RotateComponent.class) {
+				
+				rotate = (RotateComponent) comp;
+				continue;
+				
+			} else if (compClass == TextComponent.class) {
+				
+				text = (TextComponent) comp;
+				continue;
+				
+			}
+ 
+			
 		}
 		
-//		if (entity.hasComponent(ZoomComponent.class)) {
-//			zoom = entity.getComponent(ZoomComponent.class);
-//		} else {
-//			zoom = null;
-//		}
+		canvas = surface.getCanvas();
 		
 		if (bitmap != null) {
 
 			renderBitmap();
-//			
-//			if (hasText) {
-//				
-//				text = entity.getComponent(TextComponent.class);
-//				renderText();
-//			
-//			}
 			
-		} else if (entity.hasComponent(TextComponent.class)) {
+			if (text != null) {
+				
+				renderText();
 			
-			text = entity.getComponent(TextComponent.class);
+			}
+			
+		} else if (text != null) {
+
 			renderText();
 		
 		} else {			
@@ -97,13 +134,8 @@ public class DimensionRenderingSystem extends OrderedIteratingSystem {
 		}
 		
 		canvas.scale((float)dimension.getWidth() / (float)bitmap.getBitmap().getWidth(), (float)dimension.getHeight() / (float)bitmap.getBitmap().getHeight(), rect.left, rect.top);
-		
-		
-//		if (zoom != null) {
-//			canvas.scale(zoom.getZoomX(), zoom.getZoomY(), rect.left, rect.top);
-//		}
-//		
-		canvas.drawBitmap(bitmap.getBitmap(), rect.left, rect.top, color.getPaint());
+
+		canvas.drawBitmap(bitmap.getBitmap(), rect.left, rect.top, color.getPaint().getAlpha() == 255 ? null : color.getPaint());
 		canvas.restore();
 	}
 
@@ -137,11 +169,7 @@ public class DimensionRenderingSystem extends OrderedIteratingSystem {
 			int shift = surface.dp2px(1f);
 			
 			tmpRect.set(tmpRect.left + shift, tmpRect.top + shift, tmpRect.right - shift, tmpRect.bottom - shift);
-			
-			if (zoom != null) {
-				canvas.scale(zoom.getZoomX(), zoom.getZoomY(), tmpRect.left, tmpRect.top);
-			}
-			
+
 			canvas.drawRect(((RectDimensionComponent) dimension).getZeroRect(), color.getBorderPaint());
 			canvas.drawRect(tmpRect, color.getPaint());
 		}

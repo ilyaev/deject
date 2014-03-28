@@ -79,7 +79,7 @@ public class GalaxyEmitterSystem extends IteratingSystem {
 				star.add(radPosInterpolationComp);
 				
 				star.add(EntityFactory.getColorComponent(engine, r.nextInt(255), 125, 125, 125));
-				star.add(EntityFactory.getBitmapComponent(engine, BitmapLibrary.getBitmap("particle_star")));
+				star.add(EntityFactory.getReusableBitmapComponent(engine, "particle_star"));
 				
 				star.setOrder(-1);
 				
@@ -121,7 +121,7 @@ public class GalaxyEmitterSystem extends IteratingSystem {
 					
 					
 					star.add(EntityFactory.getColorComponent(engine, r.nextInt(255), 255, 0, 0));
-					star.add(EntityFactory.getBitmapComponent(engine, BitmapLibrary.getBitmap(particle)));
+					star.add(EntityFactory.getReusableBitmapComponent(engine, particle));
 					
 				} else {
 					star.add(EntityFactory.getRectComponent(engine, sSize, sSize));

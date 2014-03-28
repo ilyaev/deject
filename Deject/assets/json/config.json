@@ -275,6 +275,198 @@
 					"chance": 4
 				}
 			]
+		},
+		{
+			"number": 7,
+			"duration": 30.0,
+			"speed_multiplier": 1.1,
+			"creeps": [
+				
+				{
+					"type": "red",
+					"chance": 20
+				},
+				{
+					"type": "spike",
+					"chance": 30
+				},
+				{
+					"type": "golden",
+					"chance": 30
+				},
+				{
+					"type": "daemon_small",
+					"chance": 30
+				},
+				{
+					"type": "swap",
+					"chance": 40
+				},
+				{
+					"type": "thief",
+					"chance": 50
+				},
+				{
+					"type": "green",
+					"chance": 100
+				}
+				
+			],
+			
+			"items": [
+				{
+					"type": "trunk",
+					"chance": 1
+				},
+				{
+					"type": "heart_small",
+					"chance": 2
+				},
+				{
+					"type": "shop",
+					"chance": 2
+				},
+				{
+					"type": "coin_big",
+					"chance": 3
+				},
+				{
+					"type": "coin_small",
+					"chance": 4
+				}
+			]
+		},
+		{
+			"number": 8,
+			"duration": 30.0,
+			"speed_multiplier": 1.1,
+			"creeps": [
+				
+				{
+					"type": "red",
+					"chance": 20
+				},
+				{
+					"type": "spike",
+					"chance": 30
+				},
+				{
+					"type": "golden",
+					"chance": 30
+				},
+				{
+					"type": "daemon_small",
+					"chance": 30
+				},
+				{
+					"type": "bomb",
+					"chance": 30
+				},
+				{
+					"type": "swap",
+					"chance": 40
+				},
+				{
+					"type": "thief",
+					"chance": 50
+				},
+				{
+					"type": "green",
+					"chance": 100
+				}
+				
+			],
+			
+			"items": [
+				{
+					"type": "trunk",
+					"chance": 1
+				},
+				{
+					"type": "heart_small",
+					"chance": 2
+				},
+				{
+					"type": "shop",
+					"chance": 2
+				},
+				{
+					"type": "coin_big",
+					"chance": 3
+				},
+				{
+					"type": "coin_small",
+					"chance": 4
+				}
+			]
+		},
+		{
+			"number": 9,
+			"duration": 30.0,
+			"speed_multiplier": 1.1,
+			"creeps": [
+				
+				{
+					"type": "red",
+					"chance": 20
+				},
+				{
+					"type": "spike",
+					"chance": 30
+				},
+				{
+					"type": "golden",
+					"chance": 30
+				},
+				{
+					"type": "daemon_small",
+					"chance": 30
+				},
+				{
+					"type": "bomb",
+					"chance": 30
+				},
+				{
+					"type": "daemon_big",
+					"chance": 30
+				},
+				{
+					"type": "swap",
+					"chance": 40
+				},
+				{
+					"type": "thief",
+					"chance": 50
+				},
+				{
+					"type": "green",
+					"chance": 100
+				}
+				
+			],
+			
+			"items": [
+				{
+					"type": "trunk",
+					"chance": 1
+				},
+				{
+					"type": "heart_small",
+					"chance": 2
+				},
+				{
+					"type": "shop",
+					"chance": 2
+				},
+				{
+					"type": "coin_big",
+					"chance": 3
+				},
+				{
+					"type": "coin_small",
+					"chance": 4
+				}
+			]
 		}
 	],
 	
@@ -352,6 +544,7 @@
 			"score": 4,
 			"min_hit": 2,
 			"speed_waiting": 3,
+			"shield_damage": 1,
 			"items": [
 				{
 					"type": "heart_small",
@@ -403,6 +596,71 @@
 				}
 			],
 			"components": "thief"
+		},
+		{
+			"type": "bomb",
+			"life": 10,
+			"image": "creep8",
+			"score": 0,
+			"shield_damage": 6,
+			"speed_waiting": 4f,
+			"min_hit": 10,
+			"items": [
+				{
+					"type": "coin_big",
+					"chance": 10
+				}
+			]			
+		},
+		{
+			"type": "daemon_small",
+			"life": 1,
+			"image": "creep1",
+			"score": 10,
+			"speed_waiting": 4f,
+			items: [
+				{
+					"type": "heart_small",
+					"chance": 2
+				},
+				{
+					"type": "coin_big",
+					"chance": 10
+				},
+				{
+					"type": "coin_small",
+					"chance": 50
+				}
+			],
+			"components": "shield",
+			"shield_interval": 1.2f,
+			"shield_duration": 1.6f,
+			"shield_damage": 3			
+		},
+		{
+			"type": "daemon_big",
+			"life": 2,
+			"image": "creep2",
+			"score": 10,
+			"speed_waiting": 4f,
+			items: [
+				{
+					"type": "heart_small",
+					"chance": 2
+				},
+				{
+					"type": "coin_big",
+					"chance": 10
+				},
+				{
+					"type": "coin_small",
+					"chance": 50
+				}
+			],
+			"components": "shield",
+			"shield_interval": 1.2f,
+			"shield_duration": 1.6f,
+			"shield_damage": 3			
 		}		
 			
 	],

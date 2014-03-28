@@ -143,11 +143,12 @@ public class CreepSystem extends IteratingSystem {
 		int lifeLose = 0;
 		int moneyLose = 0;
 		
-		if (shield != null && str < entity.getComponent(CreepComponent.class).getHealth() * 3) {
+		if (shield != null && str < entity.getComponent(CreepComponent.class).getHealth() * 2) {
 			
 			if (shield.getState() == CreepShieldComponent.STATE_CLOSED) {
 				
 				canBeHit = false;
+				lifeLose += entity.getComponent(CreepComponent.class).getConfig().getShield_damage();
 				
 			}
 			
@@ -178,7 +179,7 @@ public class CreepSystem extends IteratingSystem {
 		
 		if (entity.getComponent(CreepComponent.class).getMinHit() > engine.getSystem(ScoreSystem.class).getStength()) {
 
-			lifeLose = 1;
+			lifeLose += entity.getComponent(CreepComponent.class).getConfig().getShield_damage();
 			
 		}
 			

@@ -114,12 +114,12 @@ public class ScoreSystem extends IteratingSystem {
 				
 				if (i < full) {
 					heart.getComponent(ColorComponent.class).setAlpha(255);
-					heart.add(EntityFactory.getBitmapComponent(engine, BitmapLibrary.getBitmap("heart_small")));
+					heart.add(EntityFactory.getReusableBitmapComponent(engine, "heart_small"));
 				}
 				
 				if (i == full && rest == 1) {
 					heart.getComponent(ColorComponent.class).setAlpha(255);
-					heart.add(EntityFactory.getBitmapComponent(engine, BitmapLibrary.getBitmap("heart_small_half")));
+					heart.add(EntityFactory.getReusableBitmapComponent(engine, "heart_small_half"));
 				}
 				
 			}
