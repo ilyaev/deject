@@ -359,6 +359,8 @@ public class EntityFactory {
 		
 		entity.add(getExpireComponent(engine, life + 0.05f));
 		
+		entity.setOrder(3);
+		
 		engine.addEntity(entity);
 		
 		return entity;
@@ -386,6 +388,8 @@ public class EntityFactory {
 		entity.add(getReusableBitmapComponent(engine, "hammer"));
 		
 		entity.add(getExpireComponent(engine, life + 0.05f));
+		
+		entity.setOrder(3);
 		
 		engine.addEntity(entity);
 		

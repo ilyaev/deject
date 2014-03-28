@@ -14,7 +14,7 @@
 			"items": [
 				{
 					"type": "trunk",
-					"chance": 2
+					"chance": 1
 				},
 				{
 					"type": "heart_small",
@@ -713,27 +713,27 @@
 		},
 		{
 			"type": "shop2",
-			"image": "shop1",
+			"image": "shop2",
 			"waitingTime": 30
 		},
 		{
 			"type": "shop3",
-			"image": "shop1",
+			"image": "shop3",
 			"waitingTime": 30
 		},
 		{
 			"type": "shop4",
-			"image": "shop1",
+			"image": "shop4",
 			"waitingTime": 30
 		},
 		{
 			"type": "shop5",
-			"image": "shop1",
+			"image": "shop5",
 			"waitingTime": 30
 		},
 		{
 			"type": "shop6",
-			"image": "shop1",
+			"image": "shop6",
 			"waitingTime": 30
 		},
 		{

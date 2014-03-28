@@ -168,7 +168,7 @@ public class AISystem extends IteratingSystem {
 	}
 	
 	public void pauseProgressBar() {
-		if (progressBar.hasComponent(RectInterpolationComponent.class)) {
+		if (progressBar.getComponent(RectInterpolationComponent.class) != null) {
 			levelTimeLeft = progressBar.getComponent(RectInterpolationComponent.class).getLeftTime();
 	 		progressBar.remove(RectInterpolationComponent.class);
 		} else {
@@ -363,13 +363,12 @@ public class AISystem extends IteratingSystem {
 			
 		}
 		
-		Entity entity = engine.createEntity();
-		entity.add(new TagComponent("exit_shop"));
-		entity.add(EntityFactory.getExpireComponent(engine, 1f));
+		Entity shopOutHandler = engine.createEntity();
+		shopOutHandler.add(new TagComponent("exit_shop"));
+		shopOutHandler.add(EntityFactory.getExpireComponent(engine, 30f));
+
 		
-		shopOutHandler = entity;
-		
-		engine.addEntity(entity);
+		engine.addEntity(shopOutHandler);
 		
 	}
 
@@ -393,7 +392,7 @@ public class AISystem extends IteratingSystem {
 		
 		Entity entity = engine.createEntity();
 		entity.add(new TagComponent("exit_shop"));
-		entity.add(EntityFactory.getExpireComponent(engine, 1f));
+		entity.add(EntityFactory.getExpireComponent(engine, 0.3f));
 		
 		engine.addEntity(entity);
 		

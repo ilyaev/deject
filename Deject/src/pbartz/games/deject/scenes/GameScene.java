@@ -222,7 +222,7 @@ public class GameScene extends BasicScene {
 
 	private void drawDebug(Canvas canvas) {
 		
-		canvas.drawText("FPS: " + Integer.toString(surface.fps), 0, surface.dp2px(EntityFactory.infoPanelHeight + 15), whitePaint);
+		//canvas.drawText("FPS: " + Integer.toString(surface.fps), 0, surface.dp2px(EntityFactory.infoPanelHeight + 15), whitePaint);
 		//canvas.drawText("Entities: " + Integer.toString(engine.getEntitiesCount()), 0, 80, whitePaint);
 		//canvas.drawText("Removed: " + Integer.toString(engine.getRemovedEntitiesCount()), 0, 120, whitePaint);
 		

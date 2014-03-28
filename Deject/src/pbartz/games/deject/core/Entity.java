@@ -109,8 +109,7 @@ public class Entity {
 			componentBits.clear(ComponentType.getIndexFor(componentType));
 			
 			componentRemoved.dispatch(this);
-			
-			components.remove(componentType);
+
 		}
 		
 		return removeComponent;
