@@ -43,12 +43,12 @@
 				
 				{
 					"type": "red",
-					"chance": 20
+					"chance": 30
 				},
 				
 				{
 					"type": "green",
-					"chance": 100
+					"chance": 70
 				}
 				
 			],
@@ -84,15 +84,15 @@
 				
 				{
 					"type": "red",
-					"chance": 20
+					"chance": 30
 				},
 				{
 					"type": "golden",
-					"chance": 40
+					"chance": 30
 				},
 				{
 					"type": "green",
-					"chance": 100
+					"chance": 40
 				}
 				
 			],
@@ -136,11 +136,11 @@
 				},
 				{
 					"type": "golden",
-					"chance": 40
+					"chance": 20
 				},
 				{
 					"type": "green",
-					"chance": 100
+					"chance": 30
 				}
 				
 			],
@@ -180,19 +180,19 @@
 				},
 				{
 					"type": "spike",
-					"chance": 30
+					"chance": 20
 				},
 				{
 					"type": "golden",
-					"chance": 30
+					"chance": 20
 				},
 				{
 					"type": "swap",
-					"chance": 40
+					"chance": 20
 				},
 				{
 					"type": "green",
-					"chance": 100
+					"chance": 20
 				}
 				
 			],
@@ -228,27 +228,27 @@
 				
 				{
 					"type": "red",
-					"chance": 20
+					"chance": 15
 				},
 				{
 					"type": "spike",
-					"chance": 30
+					"chance": 15
 				},
 				{
 					"type": "golden",
-					"chance": 30
+					"chance": 15
 				},
 				{
 					"type": "swap",
-					"chance": 40
+					"chance": 15
 				},
 				{
 					"type": "thief",
-					"chance": 50
+					"chance": 30
 				},
 				{
 					"type": "green",
-					"chance": 100
+					"chance": 15
 				}
 				
 			],
@@ -284,31 +284,31 @@
 				
 				{
 					"type": "red",
-					"chance": 20
+					"chance": 10
 				},
 				{
 					"type": "spike",
-					"chance": 30
+					"chance": 10
 				},
 				{
 					"type": "golden",
-					"chance": 30
+					"chance": 20
 				},
 				{
 					"type": "daemon_small",
-					"chance": 30
+					"chance": 20
 				},
 				{
 					"type": "swap",
-					"chance": 40
+					"chance": 10
 				},
 				{
 					"type": "thief",
-					"chance": 50
+					"chance": 20
 				},
 				{
 					"type": "green",
-					"chance": 100
+					"chance": 10
 				}
 				
 			],
@@ -344,35 +344,35 @@
 				
 				{
 					"type": "red",
-					"chance": 20
+					"chance": 10
 				},
 				{
 					"type": "spike",
-					"chance": 30
+					"chance": 10
 				},
 				{
 					"type": "golden",
-					"chance": 30
+					"chance": 15
 				},
 				{
 					"type": "daemon_small",
-					"chance": 30
+					"chance": 20
 				},
 				{
 					"type": "bomb",
-					"chance": 30
+					"chance": 20
 				},
 				{
 					"type": "swap",
-					"chance": 40
+					"chance": 10
 				},
 				{
 					"type": "thief",
-					"chance": 50
+					"chance": 10
 				},
 				{
 					"type": "green",
-					"chance": 100
+					"chance": 10
 				}
 				
 			],
@@ -408,39 +408,39 @@
 				
 				{
 					"type": "red",
-					"chance": 20
+					"chance": 10
 				},
 				{
 					"type": "spike",
-					"chance": 30
+					"chance": 10
 				},
 				{
 					"type": "golden",
-					"chance": 30
+					"chance": 10
 				},
 				{
 					"type": "daemon_small",
-					"chance": 30
+					"chance": 15
 				},
 				{
 					"type": "bomb",
-					"chance": 30
+					"chance": 10
 				},
 				{
 					"type": "daemon_big",
-					"chance": 30
+					"chance": 15
 				},
 				{
 					"type": "swap",
-					"chance": 40
+					"chance": 10
 				},
 				{
 					"type": "thief",
-					"chance": 50
+					"chance": 10
 				},
 				{
 					"type": "green",
-					"chance": 100
+					"chance": 10
 				}
 				
 			],
@@ -475,7 +475,8 @@
 		"speed_up": 0.5f,
 		"speed_waiting": 1.0,
 		"speed_down": 1.0,
-		"min_hit": 1
+		"min_hit": 1,
+		"miss_damage": 1
 	},
 	
 	"creeps": [
@@ -545,6 +546,7 @@
 			"min_hit": 2,
 			"speed_waiting": 3,
 			"shield_damage": 1,
+			"miss_damage": 0,
 			"items": [
 				{
 					"type": "heart_small",
@@ -579,8 +581,9 @@
 			"life": 5,
 			"image": "creep6",
 			"score": 10,
-			"speed_down": 0.3,
+			"speed_down": 0.5,
 			"speed_waiting": 3,
+			"miss_damage": 0,
 			items: [
 				{
 					"type": "heart_small",
@@ -605,6 +608,7 @@
 			"shield_damage": 6,
 			"speed_waiting": 4f,
 			"min_hit": 10,
+			"miss_damage": 0,
 			"items": [
 				{
 					"type": "coin_big",

@@ -11,6 +11,7 @@ import pbartz.games.deject.components.GalaxyEmitterComponent;
 import pbartz.games.deject.components.PositionComponent;
 import pbartz.games.deject.components.RadialPositionComponent;
 import pbartz.games.deject.components.RadialPositionInterpolationComponent;
+import pbartz.games.deject.components.ZoomComponent;
 import pbartz.games.deject.components.ZoomInterpolationComponent;
 import pbartz.games.deject.components.dimension.RectDimensionComponent;
 import pbartz.games.deject.core.Entity;
@@ -91,6 +92,8 @@ public class GalaxyEmitterSystem extends IteratingSystem {
 					star.add(EntityFactory.getRectComponent(engine, sSize, sSize));
 					
 					float startT = emitter.getBaseSpeed() / 1.2f - r.nextFloat() * emitter.getBaseSpeed() / 1.5f;
+					
+					star.add(new ZoomComponent(1f, 1f));
 					
 					star.add(new ZoomInterpolationComponent(
 						sSize,

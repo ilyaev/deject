@@ -142,7 +142,7 @@ public class DimensionRenderingSystem extends OrderedIteratingSystem {
 	private void renderText() {
 		
 		color.getPaint().setTextSize(text.getHeight() > 0 ? text.getHeight() : dimension.getHeight());
-		canvas.drawText(text.getText(), position.x - (dimension.getWidth() / 2), position.y + (dimension.getHeight() / 2), color.getPaint());		
+		canvas.drawText(text.getText(), position.x - (dimension.getWidth() / 2) + text.getShiftX(), position.y + (dimension.getHeight() / 2) + text.getShiftY(), color.getPaint());		
 	
 	}
 

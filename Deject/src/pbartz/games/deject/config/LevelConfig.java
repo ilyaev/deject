@@ -8,6 +8,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import pbartz.games.deject.utils.Array;
+
 public class LevelConfig {
 
 	int number = 0;
@@ -16,6 +18,8 @@ public class LevelConfig {
 	
 	List<LevelCreepConfig> creeps = new ArrayList<LevelCreepConfig>();
 	List<LevelItemConfig> items = new ArrayList<LevelItemConfig>();
+	
+	Array<String> pool = new Array<String>();
 	
 	public LevelConfig(int level) {
 		
@@ -46,11 +50,31 @@ public class LevelConfig {
 				}
 			}
 			
+			fillCreepsPool();
+			
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
+	}
+
+	private void fillCreepsPool() {
+		
+		for(int i = 0 ; i < creeps.size() ; i++) {
+			
+			int chance = creeps.get(i).getChance();
+			String name = creeps.get(i).getType();
+			
+			for(int j = 0 ; j < chance ; j++) {
+				
+				pool.add(name);
+				
+			}
+			
+		}
+		
+		pool.shuffle();
 	}
 
 	public int getNumber() {
@@ -96,19 +120,23 @@ public class LevelConfig {
 	public String getNextCreep() {
 		 
 		Random r = new Random();
+		return pool.get(r.nextInt(pool.size));
 		
-		for(int i = 0 ; i < creeps.size() ; i++) {
-			
-			LevelCreepConfig creep = creeps.get(i);
-			if (r.nextInt(101) <= creep.getChance()) {
-				
-				return creep.getType();
-				
-			}
-			
-		}
-		
-		return null;
+//		
+//		
+//		
+//		for(int i = 0 ; i < creeps.size() ; i++) {
+//			
+//			LevelCreepConfig creep = creeps.get(i);
+//			if (r.nextInt(101) <= creep.getChance()) {
+//				
+//				return creep.getType();
+//				
+//			}
+//			
+//		}
+//		
+//		return null;
 	}
 
 	public String getNextItem() {

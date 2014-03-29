@@ -17,6 +17,7 @@ import pbartz.games.deject.core.Entity;
 import pbartz.games.deject.signals.Listener;
 import pbartz.games.deject.signals.Signal;
 import pbartz.games.deject.systems.AISystem;
+import pbartz.games.deject.systems.BitmapAnimationSystem;
 import pbartz.games.deject.systems.ColorInterpolationSystem;
 import pbartz.games.deject.systems.CreepShieldSystem;
 import pbartz.games.deject.systems.CreepSystem;
@@ -27,6 +28,7 @@ import pbartz.games.deject.systems.ItemSystem;
 import pbartz.games.deject.systems.LevelInfoSystem;
 import pbartz.games.deject.systems.MovementSystem;
 import pbartz.games.deject.systems.GalaxyCoordinateTranslateSystem;
+import pbartz.games.deject.systems.PositionShakeSystem;
 import pbartz.games.deject.systems.RadialPositionInterpolationSystem;
 import pbartz.games.deject.systems.RectInterpolationSystem;
 import pbartz.games.deject.systems.RotateInterpolationSystem;
@@ -74,6 +76,8 @@ public class GameScene extends BasicScene {
 		engine.addSystem(new MovementSystem(surface.dp2px(surface.heightDp * 3.3f)));
 		engine.addSystem(new GalaxyCoordinateTranslateSystem());
 		engine.addSystem(new GalaxyEmitterSystem());
+		engine.addSystem(new PositionShakeSystem());
+		engine.addSystem(new BitmapAnimationSystem());
 		
 		// interpolation
 		engine.addSystem(new InterpolationSystem());
@@ -213,21 +217,13 @@ public class GameScene extends BasicScene {
 	
 	
 	public void update(Canvas canvas, float timeDiff) {
-		//canvas.drawARGB(255, 110, 74, 112);
-		//canvas.drawARGB(255, 212, 212, 212);
 		canvas.drawARGB(255, 0, 0, 0);
 		engine.update(timeDiff);
 		drawDebug(canvas);
 	}
 
-	private void drawDebug(Canvas canvas) {
-		
+	private void drawDebug(Canvas canvas) {		
 		//canvas.drawText("FPS: " + Integer.toString(surface.fps), 0, surface.dp2px(EntityFactory.infoPanelHeight + 15), whitePaint);
-		//canvas.drawText("Entities: " + Integer.toString(engine.getEntitiesCount()), 0, 80, whitePaint);
-		//canvas.drawText("Removed: " + Integer.toString(engine.getRemovedEntitiesCount()), 0, 120, whitePaint);
-		
-//		canvas.drawText("DIP_W: " + Float.toString(surface.widthDp), 0, 80, whitePaint);
-//		canvas.drawText("DIP_H: " + Float.toString(surface.heightDp), 0, 120, whitePaint);
 	}
 
 	@Override

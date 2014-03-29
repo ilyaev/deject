@@ -8,6 +8,7 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.util.Log;
 import pbartz.games.deject.components.AIComponent;
+import pbartz.games.deject.components.BitmapAnimationComponent;
 import pbartz.games.deject.components.BitmapComponent;
 import pbartz.games.deject.components.ColorComponent;
 import pbartz.games.deject.components.ColorInterpolationComponent;
@@ -23,6 +24,7 @@ import pbartz.games.deject.components.LevelInfoComponent;
 import pbartz.games.deject.components.MovementComponent;
 import pbartz.games.deject.components.PositionComponent;
 import pbartz.games.deject.components.PositionInterpolationComponent;
+import pbartz.games.deject.components.PositionShakeComponent;
 import pbartz.games.deject.components.RadialPositionComponent;
 import pbartz.games.deject.components.RadialPositionInterpolationComponent;
 import pbartz.games.deject.components.RectInterpolationComponent;
@@ -42,12 +44,15 @@ import pbartz.games.deject.config.ItemConfig;
 import pbartz.games.deject.core.Component;
 import pbartz.games.deject.core.Engine;
 import pbartz.games.deject.core.Entity;
+import pbartz.games.deject.core.Family;
 import pbartz.games.deject.core.Interpolation;
 import pbartz.games.deject.core.PooledEngine;
 import pbartz.games.deject.systems.AISystem;
 import pbartz.games.deject.systems.ScoreSystem;
 import pbartz.games.deject.utils.Array;
+import pbartz.games.deject.utils.IntMap;
 import pbartz.games.deject.utils.ObjectMap;
+import pbartz.games.deject.utils.IntMap.Keys;
 
 public class EntityFactory {
 
@@ -134,6 +139,10 @@ public class EntityFactory {
 		
 		
 		starBaseWidth = surface.widthPx / 10;
+		
+		Log.v("MET-LEV-W", Float.toString(levelPanelWidth));
+		Log.v("MET-LEV-H", Float.toString(levelPanelWidth));
+		Log.v("MET-CELL", Float.toString(creepWidth));
 	}
 	
 	
@@ -322,11 +331,18 @@ public class EntityFactory {
 				
 				ColorComponent color = getColorComponent(engine, 255, 0, 0, 0);
 				
-				Paint borderPaint = createPaint(255, 255, 255, 255);
+				Paint borderPaint = createPaint(255, 0, 0, 0);
 				borderPaint.setStyle(Paint.Style.STROKE);
 				color.setBorderPaint(borderPaint);
 				
 				entity.add(color);
+				
+				TextComponent text = new TextComponent(Integer.toString(tag), btnHeight / 2.5f); 
+				
+				text.setShiftX(surface.dp2px(btnWidth / 2.25f));
+				text.setShiftY( - surface.dp2px(btnHeight / 2.5f));
+				
+				entity.add(text);
 				
 				engine.addEntity(entity);
 				
@@ -363,6 +379,38 @@ public class EntityFactory {
 		
 		engine.addEntity(entity);
 		
+		spawnHammerBlowAnimation(engine, surface, position, 0.15f);
+		
+		return entity;
+		
+	}
+	
+	public static Entity spawnHammerBlowAnimation(PooledEngine engine, DejectSurface surface, int position, float delay) {
+
+		float keyDelay = 0.045f;
+		
+		float life = keyDelay * 6;		
+		
+		Entity entity = prepareCellEntity(engine, surface, position);
+		
+		ColorComponent color = getColorComponent(engine, 255, 255, 0, 0);
+		color.getPaint().setAntiAlias(false);
+		color.getPaint().setFilterBitmap(false);
+		
+		entity.add(color);
+		
+		entity.add(getReusableBitmapComponent(engine, "blow_f1"));
+		
+		entity.add(new BitmapAnimationComponent(
+			"blow_f",
+			5,
+			(int)(keyDelay * 1000)
+		));
+		
+		entity.add(getExpireComponent(engine, life));
+		entity.setOrder(4);
+		engine.addEntity(entity, delay);
+		
 		return entity;
 		
 	}
@@ -391,7 +439,21 @@ public class EntityFactory {
 		
 		entity.setOrder(3);
 		
+		entity.add(getPositionShakeComponent(engine, (float)surface.dp2px(EntityFactory.creepWidth / 6), (float)surface.dp2px(EntityFactory.creepWidth / 6), life / 2), life / 2);
+		
 		engine.addEntity(entity);
+		
+//		@SuppressWarnings("unchecked")
+//		IntMap<Entity> allpos = engine.getEntitiesFor(Family.getFamilyFor(PositionComponent.class));
+//		
+//		Keys keys = allpos.keys();
+//		
+//		while(keys.hasNext){
+//			
+//			Entity ent = allpos.get(keys.next());
+//			ent.add(getPositionShakeComponent(engine, (float)surface.dp2px(EntityFactory.creepWidth / 6), (float)surface.dp2px(EntityFactory.creepWidth / 6), life), life / 2);
+//			
+//		}
 		
 		return entity;
 		
@@ -439,7 +501,13 @@ public class EntityFactory {
 					CreepSwapComponent swap = new CreepSwapComponent(swapNumber);
 					
 					entity.add(swap);
-					entity.add(new TextComponent(Integer.toString(swapNumber), creepHeight / 3));
+					
+					TextComponent text = new TextComponent(Integer.toString(swapNumber), creepHeight / 3); 
+					
+					text.setShiftX(surface.dp2px(creepWidth / 2.25f));
+					text.setShiftY( - surface.dp2px(creepWidth / 1.75f));
+					
+					entity.add(text);
 					
 				}
 				
@@ -1217,6 +1285,18 @@ public class EntityFactory {
 		
 	}
 	
+	public static PositionShakeComponent getPositionShakeComponent(PooledEngine engine, float sX, float sY, float speed) {
+		
+//		PositionShakeComponent shake = new PositionShakeComponent();
+//		shake.init(sX, sY, speed);
+//		
+		PositionShakeComponent shake = engine.createComponent(PositionShakeComponent.class);
+		shake.init(sX, sY, speed);
+		
+		return shake;
+		
+		
+	}
 	
 	
 }

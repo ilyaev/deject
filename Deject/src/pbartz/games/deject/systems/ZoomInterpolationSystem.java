@@ -1,5 +1,6 @@
 package pbartz.games.deject.systems;
 
+import pbartz.games.deject.components.ZoomComponent;
 import pbartz.games.deject.components.ZoomInterpolationComponent;
 import pbartz.games.deject.components.dimension.RectDimensionComponent;
 import pbartz.games.deject.core.Entity;
@@ -12,7 +13,7 @@ public class ZoomInterpolationSystem extends IteratingSystem {
 
 	@SuppressWarnings("unchecked")
 	public ZoomInterpolationSystem() {
-		super(Family.getFamilyFor(RectDimensionComponent.class, ZoomInterpolationComponent.class));
+		super(Family.getFamilyFor(RectDimensionComponent.class, ZoomInterpolationComponent.class, ZoomComponent.class));
 	}
 
 	@Override

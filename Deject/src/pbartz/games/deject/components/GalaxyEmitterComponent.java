@@ -10,7 +10,7 @@ public class GalaxyEmitterComponent extends Component {
 	float height;
 	
 	float baseSpeed = 7f;
-	int newStarChance = 20;
+	int newStarChance = 25;
 	int burstChance = 5;
 	int burstStars = 10;
 	int colorStarChance = 5;

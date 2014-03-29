@@ -162,9 +162,8 @@ public class CreepSystem extends IteratingSystem {
 				
 				moneyLose = 3;
 
-				entity.getComponent(BitmapComponent.class).setBitmap(						
-					BitmapLibrary.getBitmap(entity.getComponent(CreepComponent.class).getConfig().getImage() + "_coin")						
-				);
+				entity.add(EntityFactory.getReusableBitmapComponent(engine, entity.getComponent(CreepComponent.class).getConfig().getImage() + "_coin"));
+
 				
 				if (entity.getComponent(CreepComponent.class).getState() == CreepComponent.WAITING) {
 					entity.getComponent(CreepComponent.class).setTimeToNextState(0);
@@ -220,7 +219,7 @@ public class CreepSystem extends IteratingSystem {
 
 	public void creepMissed(Entity entity) {
 		if (entity != null && entity.getComponent(CreepComponent.class).getMinHit() <= engine.getSystem(ScoreSystem.class).getStength()) {
-			engine.getSystem(ScoreSystem.class).increaseLife(-1);
+			engine.getSystem(ScoreSystem.class).increaseLife(-entity.getComponent(CreepComponent.class).getConfig().getMissDamage());
 		}
 	}
 

@@ -10,9 +10,6 @@ public class RectDimensionComponent extends Component implements Poolable {
 	int width = 0;
 	int height = 0;
 	
-	float oldX = 0;
-	float oldY = 0;
-	
 	Rect rect = null;
 	private Rect zero_rect;
 	

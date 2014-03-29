@@ -27,6 +27,8 @@ public class CreepConfig {
 	int life = 1;
 	int score = 0;
 	
+	int missDamage = 1;
+	
 	String type = "";
 	
 	List<CreepItemConfig> items = new ArrayList<CreepItemConfig>();
@@ -83,6 +85,16 @@ public class CreepConfig {
 					} catch (JSONException e) {
 						try {
 							minHit = Integer.valueOf(defObj.getString("min_hit"));
+						}catch (JSONException e1) {
+							e1.printStackTrace();
+						}
+					}
+					
+					try {
+						missDamage = Integer.valueOf(obj.getString("miss_damage"));
+					} catch (JSONException e) {
+						try {
+							missDamage = Integer.valueOf(defObj.getString("miss_damage"));
 						}catch (JSONException e1) {
 							e1.printStackTrace();
 						}
@@ -285,6 +297,17 @@ public class CreepConfig {
 	public void setShield_damage(int shield_damage) {
 		this.shield_damage = shield_damage;
 	}
+
+
+	public int getMissDamage() {
+		return missDamage;
+	}
+
+
+	public void setMissDamage(int missDamage) {
+		this.missDamage = missDamage;
+	}
+	
 	
 	
 	
