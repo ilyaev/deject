@@ -2,18 +2,22 @@ package pbartz.games.deject.scenes;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.util.Log;
 import android.view.MotionEvent;
 import pbartz.games.deject.BitmapLibrary;
 import pbartz.games.deject.DejectSurface;
 import pbartz.games.deject.EntityFactory;
 import pbartz.games.deject.components.AIComponent;
 import pbartz.games.deject.components.LevelInfoComponent;
+import pbartz.games.deject.components.MultiplierComponent;
+import pbartz.games.deject.components.MultiplierInterpolationComponent;
 import pbartz.games.deject.components.PositionInterpolationComponent;
 import pbartz.games.deject.components.ScoreComponent;
 import pbartz.games.deject.components.TagComponent;
 import pbartz.games.deject.config.GameConfig;
 import pbartz.games.deject.config.LevelConfig;
 import pbartz.games.deject.core.Entity;
+import pbartz.games.deject.core.Interpolation;
 import pbartz.games.deject.signals.Listener;
 import pbartz.games.deject.signals.Signal;
 import pbartz.games.deject.systems.AISystem;
@@ -28,6 +32,7 @@ import pbartz.games.deject.systems.ItemSystem;
 import pbartz.games.deject.systems.LevelInfoSystem;
 import pbartz.games.deject.systems.MovementSystem;
 import pbartz.games.deject.systems.GalaxyCoordinateTranslateSystem;
+import pbartz.games.deject.systems.MultiplierInterpolationSystem;
 import pbartz.games.deject.systems.PositionShakeSystem;
 import pbartz.games.deject.systems.RadialPositionInterpolationSystem;
 import pbartz.games.deject.systems.RectInterpolationSystem;
@@ -86,6 +91,7 @@ public class GameScene extends BasicScene {
 		engine.addSystem(new ZoomInterpolationSystem());
 		engine.addSystem(new RectInterpolationSystem());
 		engine.addSystem(new RadialPositionInterpolationSystem());
+		engine.addSystem(new MultiplierInterpolationSystem());
 		
 		// expiration
 		engine.addSystem(new ExpireSystem());
@@ -107,6 +113,8 @@ public class GameScene extends BasicScene {
 		EntityFactory.createScorePanel(engine, surface);
 		
 		EntityFactory.createAIEntity(engine);		
+		
+		EntityFactory.createMultiplierEntity(engine);
 		
 		EntityFactory.createGalaxy(engine, surface);
 		
@@ -212,13 +220,45 @@ public class GameScene extends BasicScene {
 				engine.removeEntity(EntityFactory.scoreValueEntity);
 				engine.removeEntity(EntityFactory.highScoreValueEntity);
 			}
+		} else if (tag == "playfield") {
+			
+			//if (!EntityFactory.timeScale.hasComponent(MultiplierInterpolationComponent.class)) {
+				
+				float timeFrom = 1f;
+				float timeTo = 0;
+				
+				if (EntityFactory.timeScale.getComponent(MultiplierComponent.class).getMultiplier() < 1) {
+					
+					timeFrom = 0;
+					timeTo = 1f;
+					
+					EntityFactory.hidePause(engine, surface);
+					
+				} else {
+					
+					EntityFactory.showPause(engine, surface);
+					
+				}
+				
+				MultiplierInterpolationComponent timeScale = engine.createComponent(MultiplierInterpolationComponent.class);
+				timeScale.init(timeFrom, timeTo, 0.5f, Interpolation.EASE_IN);
+				
+				EntityFactory.timeScale.add(timeScale);				
+				
+				
+			//}
+			
 		}
 	}
 	
 	
 	public void update(Canvas canvas, float timeDiff) {
 		canvas.drawARGB(255, 0, 0, 0);
-		engine.update(timeDiff);
+		
+		float timeScale = EntityFactory.timeScale.getComponent(MultiplierComponent.class).getMultiplier();
+		
+		engine.update(timeDiff * timeScale, timeDiff);
+		
 		drawDebug(canvas);
 	}
 

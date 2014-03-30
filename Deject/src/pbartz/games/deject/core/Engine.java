@@ -46,6 +46,7 @@ public class Engine {
 	private int removedEntities = 0;
 	
 	private Array<Entity> delayedEntities;
+	public float lastRealTimeDiff;
 	
 	public Engine(){
 		entities = new Array<Entity>();
@@ -202,6 +203,12 @@ public class Engine {
 				}
 			}
 		}
+	}
+	
+	public void update(float f, float timeDiff) {
+		// TODO Auto-generated method stub
+		this.lastRealTimeDiff = timeDiff;
+		update(f);
 	}
 	
 	/**

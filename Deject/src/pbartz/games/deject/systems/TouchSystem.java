@@ -6,7 +6,9 @@ import pbartz.games.deject.EntityFactory;
 import pbartz.games.deject.components.AIComponent;
 import pbartz.games.deject.components.CreepComponent;
 import pbartz.games.deject.components.CreepSwapComponent;
+import pbartz.games.deject.components.MultiplierComponent;
 import pbartz.games.deject.components.PositionComponent;
+import pbartz.games.deject.components.PositionInterpolationComponent;
 import pbartz.games.deject.components.TagComponent;
 import pbartz.games.deject.components.TouchComponent;
 import pbartz.games.deject.components.dimension.RectDimensionComponent;
@@ -52,21 +54,27 @@ public class TouchSystem extends IteratingSystem {
 			
 			entityTouchedDown.dispatch(entity);
 			
+			if (!entity.hasComponent(PositionInterpolationComponent.class) && !tag.getTag().equalsIgnoreCase("levelInfo")) {
+				
+				EntityFactory.spawnGenericTouchReaction(engine, surface, entity);
+				
+			}
+			
 			int position = 0;
 
 			try {
 				position = Integer.valueOf(tag.getTag());
 			} catch (java.lang.NumberFormatException e) {
 				position = 0;
-			}
+			}	
 			
-			if (position > 0) {
+			
+			if (position > 0 && EntityFactory.timeScale.getComponent(MultiplierComponent.class).getMultiplier() != 0) {
 				
 				if (engine.getSystem(AISystem.class).getAi().getState() != AIComponent.STATE_WORKING && engine.getSystem(AISystem.class).getAi().getState() != AIComponent.STATE_SHOP) {
 					return;
 				}
 				
-				EntityFactory.spawnTouchReaction(engine, surface, position);
 				
 				Entity swapCreep = engine.getSystem(AISystem.class).
 						getSwapCreep(position);

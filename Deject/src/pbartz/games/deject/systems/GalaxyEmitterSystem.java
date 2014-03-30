@@ -8,6 +8,7 @@ import pbartz.games.deject.components.BitmapComponent;
 import pbartz.games.deject.components.ColorComponent;
 import pbartz.games.deject.components.GalaxyComponent;
 import pbartz.games.deject.components.GalaxyEmitterComponent;
+import pbartz.games.deject.components.MultiplierComponent;
 import pbartz.games.deject.components.PositionComponent;
 import pbartz.games.deject.components.RadialPositionComponent;
 import pbartz.games.deject.components.RadialPositionInterpolationComponent;
@@ -30,6 +31,8 @@ public class GalaxyEmitterSystem extends IteratingSystem {
 
 	@Override
 	public void processEntity(Entity entity, float deltaTime) {
+		
+		if (EntityFactory.timeScale.getComponent(MultiplierComponent.class).getMultiplier() < 1) return;
 		
 		emitter = entity.getComponent(GalaxyEmitterComponent.class);		
 		

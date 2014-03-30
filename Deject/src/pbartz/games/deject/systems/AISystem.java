@@ -13,6 +13,7 @@ import pbartz.games.deject.components.LevelInfoComponent;
 import pbartz.games.deject.components.RectInterpolationComponent;
 import pbartz.games.deject.components.ScoreComponent;
 import pbartz.games.deject.components.TagComponent;
+import pbartz.games.deject.components.TouchComponent;
 import pbartz.games.deject.components.dimension.RectDimensionComponent;
 import pbartz.games.deject.config.GameConfig;
 import pbartz.games.deject.config.LevelConfig;
@@ -139,6 +140,22 @@ public class AISystem extends IteratingSystem {
 				
 			}
 			
+		}
+		
+		
+		if (EntityFactory.boardButton.hasComponent(TouchComponent.class)) {
+			
+			if (ai.getState() != AIComponent.STATE_WORKING) {
+				
+				EntityFactory.boardButton.remove(TouchComponent.class);
+				
+			}
+			
+		} else {
+			
+			if (ai.getState() == AIComponent.STATE_WORKING) {				
+				EntityFactory.boardButton.add(new TouchComponent());				
+			}
 		}
 		
 	}

@@ -22,6 +22,7 @@ import pbartz.games.deject.components.GalaxyEmitterComponent;
 import pbartz.games.deject.components.ItemComponent;
 import pbartz.games.deject.components.LevelInfoComponent;
 import pbartz.games.deject.components.MovementComponent;
+import pbartz.games.deject.components.MultiplierComponent;
 import pbartz.games.deject.components.PositionComponent;
 import pbartz.games.deject.components.PositionInterpolationComponent;
 import pbartz.games.deject.components.PositionShakeComponent;
@@ -101,6 +102,10 @@ public class EntityFactory {
 	
 	
 	static ObjectMap<String, Component> reusableComponents = new ObjectMap<String, Component>();
+	public static Entity gameOverTitleEntity;
+	public static Entity timeScale;
+	public static Entity boardButton;
+	private static Entity pausedEntity;
 	
 	public static void caculateMetrics(DejectSurface surface) {
 		
@@ -139,10 +144,7 @@ public class EntityFactory {
 		
 		
 		starBaseWidth = surface.widthPx / 10;
-		
-		Log.v("MET-LEV-W", Float.toString(levelPanelWidth));
-		Log.v("MET-LEV-H", Float.toString(levelPanelWidth));
-		Log.v("MET-CELL", Float.toString(creepWidth));
+
 	}
 	
 	
@@ -351,6 +353,27 @@ public class EntityFactory {
 				tag += 1;
 			}
 		}
+		
+		Entity board = engine.createEntity();
+		board.add(getRectComponent(engine,
+			surface.dp2px(surface.widthDp), 
+			surface.dp2px((surface.heightDp - controlPanelHeight - infoPanelHeight) * 0.8f)
+		));
+		
+		PositionComponent posComp = engine.createComponent(PositionComponent.class);
+
+		posComp.init(
+			surface.dp2px(surface.widthDp / 2), 
+			surface.dp2px(infoPanelHeight + (surface.heightDp - controlPanelHeight - infoPanelHeight) / 2)
+		);
+		
+		board.add(posComp);
+		board.add(new TouchComponent());
+		board.add(new TagComponent("playfield"));
+		
+		boardButton = board;
+		
+		engine.addEntity(board);
 	}
 	
 	public static Entity spawnHammerHit(PooledEngine engine, DejectSurface surface, int position) {
@@ -389,7 +412,7 @@ public class EntityFactory {
 
 		float keyDelay = 0.045f;
 		
-		float life = keyDelay * 6;		
+		float life = keyDelay * 7;		
 		
 		Entity entity = prepareCellEntity(engine, surface, position);
 		
@@ -403,7 +426,7 @@ public class EntityFactory {
 		
 		entity.add(new BitmapAnimationComponent(
 			"blow_f",
-			5,
+			6,
 			(int)(keyDelay * 1000)
 		));
 		
@@ -949,44 +972,80 @@ public class EntityFactory {
 	}
 
 
-
-	public static void spawnTouchReaction(PooledEngine engine, DejectSurface surface, int position) {
+	
+	public static void spawnGenericTouchReaction(PooledEngine engine, DejectSurface surface, Entity entity) {
+		
+		if (! entity.hasComponent(ColorComponent.class)) return;
 		
 		float lifeTime = 0.3f;
 		float zoomFactor = 1.5f;
 		
-		Entity entity = engine.createEntity();
+		PositionComponent position = entity.getComponent(PositionComponent.class);
+		RectDimensionComponent dimension = entity.getComponent(RectDimensionComponent.class);
 		
-		PositionComponent posComp = engine.createComponent(PositionComponent.class);
-		posComp.init(surface.dp2px(getButtonCenterX(position)), surface.dp2px(getButtonCenterY(position)));
+		Entity proxy = engine.createEntity();
 		
-		entity.add(posComp);
+		PositionComponent pPos = engine.createComponent(PositionComponent.class);
+		pPos.init(position.x, position.y);
 		
-		entity.add(getColorComponent(engine, 150, 255, 0, 0));
-		entity.add(getRectComponent(engine, surface.dp2px(btnWidth), surface.dp2px(btnHeight)));
+		proxy.add(pPos);
 		
-		entity.add(new ZoomComponent(1f, 1f));
+		proxy.add(getRectComponent(engine, dimension.getWidth(), dimension.getHeight()));
+		proxy.add(getColorComponent(engine, 150, 255, 0, 0));
 		
-		entity.add(new ZoomInterpolationComponent(
-				surface.dp2px(btnWidth), 
-				surface.dp2px(btnHeight), 
-				surface.dp2px(btnWidth) * zoomFactor, 
-				surface.dp2px(btnHeight) * zoomFactor, 
+		proxy.add(new ZoomComponent(1f, 1f));
+		
+		proxy.add(new ZoomInterpolationComponent(
+				dimension.getWidth(), 
+				dimension.getHeight(), 
+				dimension.getWidth() * zoomFactor, 
+				dimension.getHeight() * zoomFactor, 
 				lifeTime, 
 				Interpolation.EASE_IN
 		));
 		
-		entity.add(getColorInterpolationComponent(engine, 
-			entity.getComponent(ColorComponent.class).getPaint(), 
+		proxy.add(getColorInterpolationComponent(engine, 
+			proxy.getComponent(ColorComponent.class).getPaint(), 
 			createPaint(0, 255, 0, 0), 
 			lifeTime, 
 			Interpolation.EASE_IN
 		));
 		
-		entity.add(getExpireComponent(engine, lifeTime));
-		entity.setOrder(1);
+		proxy.add(getExpireComponent(engine, lifeTime));
+		proxy.setOrder(4);
 		
-		engine.addEntity(entity);
+		engine.addEntity(proxy);
+		
+	}
+	
+	public static void showPause(PooledEngine engine, DejectSurface surface) {
+		
+
+		Entity title = engine.createEntity();
+		
+		PositionComponent tposComp = engine.createComponent(PositionComponent.class);
+		tposComp.init(surface.dp2px(goPanelcX), surface.dp2px(goPanelcY - goPanelcY / 5f));
+		
+		title.add(tposComp);
+		title.add(getRectComponent(engine, surface.dp2px((goPanelWidth / 3) * 2), surface.dp2px(goPanelHeight / 3)));
+		
+		title.add(getColorComponent(engine, 255, 0, 0, 0));
+		
+		title.add(getReusableBitmapComponent(engine, "paused"));	
+		
+
+		title.setOrder(2);
+		
+		engine.addEntity(title);
+		
+		pausedEntity = title;
+	}
+	
+	public static void hidePause(PooledEngine engine, DejectSurface surface) {
+		
+		if (pausedEntity != null) {
+			engine.removeEntity(pausedEntity);
+		}
 		
 	}
 	
@@ -1077,6 +1136,45 @@ public class EntityFactory {
 		scoreValueEntity = scoreText;
 		highScoreValueEntity = hScoreText;
 		
+		
+		// spawn gameover title
+		
+		Entity title = engine.createEntity();
+		
+		PositionComponent tposComp = engine.createComponent(PositionComponent.class);
+		tposComp.init(surface.dp2px(goPanelcX), surface.dp2px(0));
+		
+		title.add(tposComp);
+		title.add(getRectComponent(engine, surface.dp2px(goPanelWidth), surface.dp2px(goPanelHeight / 3)));
+		
+		title.add(getColorComponent(engine, 0, 0, 0, 0));
+		
+		title.add(getReusableBitmapComponent(engine, "game_over_title"));
+		
+		title.add(getPositionInterpolationComponent(engine, 
+			
+				title.getComponent(PositionComponent.class),
+				surface.dp2px(goPanelcX),
+				surface.dp2px(goPanelcY - goPanelcY / 1.5f),
+				0.4f,
+				Interpolation.EASE_IN				
+				
+		));
+		
+		title.add(getColorInterpolationComponent(engine, 
+			title.getComponent(ColorComponent.class).getPaint(),
+			createPaint(255, 0, 0, 0),
+			0.4f,
+			Interpolation.EASE_IN
+		));
+
+		title.setOrder(2);
+		
+		gameOverTitleEntity = title;
+		
+		engine.addEntity(title);
+		
+		
 	}
 	
 	public static void hideGameOverPanel(PooledEngine engine, DejectSurface surface) {
@@ -1087,6 +1185,14 @@ public class EntityFactory {
 					gameOverEntity.getComponent(PositionComponent.class),
 					surface.dp2px(goPanelcX),
 					surface.dp2px(surface.heightDp + goPanelHeight / 2),
+					0.5f,
+					Interpolation.EASE_OUT					
+			));
+			
+			gameOverTitleEntity.add(getPositionInterpolationComponent(engine, 
+					gameOverTitleEntity.getComponent(PositionComponent.class),
+					surface.dp2px(goPanelcX),
+					surface.dp2px(-goPanelHeight / 2),
 					0.5f,
 					Interpolation.EASE_OUT					
 			));
@@ -1287,9 +1393,6 @@ public class EntityFactory {
 	
 	public static PositionShakeComponent getPositionShakeComponent(PooledEngine engine, float sX, float sY, float speed) {
 		
-//		PositionShakeComponent shake = new PositionShakeComponent();
-//		shake.init(sX, sY, speed);
-//		
 		PositionShakeComponent shake = engine.createComponent(PositionShakeComponent.class);
 		shake.init(sX, sY, speed);
 		
@@ -1297,6 +1400,18 @@ public class EntityFactory {
 		
 		
 	}
+
+
+
+	public static void createMultiplierEntity(PooledEngine engine) {
+		
+		timeScale = engine.createEntity();
+		timeScale.add(new MultiplierComponent(1f));
+		
+		engine.addEntity(timeScale);
+		
+	}
+	
 	
 	
 }
