@@ -39,6 +39,62 @@ public class ScoreSystem extends IteratingSystem {
 		}
 	}
 	
+	public String getHammerBitmapName() {
+		
+		String name = "hammer";
+		
+		if (this.score != null) {
+			
+			int hammer = this.score.getComponent(ScoreComponent.class).getHammer();
+			if (hammer > 1) {
+				name += Integer.toString(hammer);
+			}
+			
+		}
+		
+		return name;
+		
+	}
+	
+	public void setHammer(int hammer) {
+		
+		if (this.score != null) {
+			
+			if (hammer == 0) {
+				hammer = 1;
+			}
+			
+			this.score.getComponent(ScoreComponent.class).setHammer(hammer);
+			if (hammer > 0) {
+				
+				int newStr = 0;
+				
+				if (hammer == 1) {
+					newStr = 1;
+				}
+				
+				if (hammer == 2) {
+					newStr = 2;
+				}
+				
+				if (hammer == 3) {
+					newStr = 3;
+				}
+				
+				if (hammer == 4) {
+					newStr = 5;
+				}
+				
+				this.score.getComponent(ScoreComponent.class).setStrength(newStr);
+				
+				EntityFactory.wepEntity.add(EntityFactory.getReusableBitmapComponent(engine, "hammer" + (hammer > 1 ? Integer.toString(hammer) : "")));
+				
+			}
+			
+		}
+		
+	}
+	
 	public int getStength() {
 		if (this.score != null) {
 			

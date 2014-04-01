@@ -467,6 +467,74 @@
 					"chance": 4
 				}
 			]
+		},
+		{
+			"number": 10,
+			"duration": 3000.0,
+			"speed_multiplier": 1.1,
+			"creeps": [
+				
+				{
+					"type": "red",
+					"chance": 10
+				},
+				{
+					"type": "spike",
+					"chance": 10
+				},
+				{
+					"type": "golden",
+					"chance": 10
+				},
+				{
+					"type": "daemon_small",
+					"chance": 10
+				},
+				{
+					"type": "bomb",
+					"chance": 10
+				},
+				{
+					"type": "daemon_big",
+					"chance": 10
+				},
+				{
+					"type": "swap",
+					"chance": 10
+				},
+				{
+					"type": "thief",
+					"chance": 10
+				},
+				{
+					"type": "green",
+					"chance": 10
+				}
+				
+			],
+			
+			"items": [
+				{
+					"type": "trunk",
+					"chance": 1
+				},
+				{
+					"type": "heart_small",
+					"chance": 2
+				},
+				{
+					"type": "shop",
+					"chance": 2
+				},
+				{
+					"type": "coin_big",
+					"chance": 3
+				},
+				{
+					"type": "coin_small",
+					"chance": 4
+				}
+			]
 		}
 	],
 	
@@ -540,7 +608,7 @@
 		
 		{
 			"type": "spike",
-			"life": 2,
+			"life": 3,
 			"image": "creep4",
 			"score": 4,
 			"min_hit": 2,
@@ -674,6 +742,7 @@
 		gold: 0,
 		score: 0,
 		life: 0,
+		cost: 0,
 		waitingTime: 2
 	
 	}, 
@@ -707,47 +776,66 @@
 			"image": "golden_stone"
 		},
 		{
+			"type": "all_to_health",
+			"image": "heart_stone"
+		},
+		{
+			"type": "all_to_default",
+			"image": "scull_stone"
+		},
+		{
 			"type": "shop",
 			"image": "shop"
 		},
 		{
 			"type": "shop1",
 			"image": "shop1",
-			"waitingTime": 30
+			"waitingTime": 30,
+			"cost": 50
 		},
 		{
 			"type": "shop2",
 			"image": "shop2",
-			"waitingTime": 30
+			"waitingTime": 30,
+			"cost": 100
 		},
 		{
 			"type": "shop3",
 			"image": "shop3",
-			"waitingTime": 30
+			"waitingTime": 30,
+			"cost": 200
 		},
 		{
 			"type": "shop4",
 			"image": "shop4",
-			"waitingTime": 30
+			"waitingTime": 30,
+			"cost": 10,
+			"life": 1
 		},
 		{
 			"type": "shop5",
 			"image": "shop5",
-			"waitingTime": 30
+			"waitingTime": 30,
+			"cost": 25,
+			"life": 3
 		},
 		{
 			"type": "shop6",
 			"image": "shop6",
-			"waitingTime": 30
+			"waitingTime": 30,
+			"cost": 45,
+			"life": 6
 		},
 		{
 			"type": "shop7",
-			"image": "shop1",
+			"image": "shop7",
+			"cost": 50,
 			"waitingTime": 30
 		},
 		{
 			"type": "shop8",
-			"image": "shop1",
+			"image": "shop8",
+			"cost": 100,
 			"waitingTime": 30
 		},
 		{

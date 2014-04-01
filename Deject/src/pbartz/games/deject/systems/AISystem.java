@@ -325,6 +325,8 @@ public class AISystem extends IteratingSystem {
 		score.reset();
 		
 		engine.getSystem(ScoreSystem.class).increaseLife(ScoreComponent.INITIAL_LIFE);
+		engine.getSystem(ScoreSystem.class).increaseGold(0);
+		engine.getSystem(ScoreSystem.class).setHammer(1);
 
 	}
 
@@ -334,6 +336,48 @@ public class AISystem extends IteratingSystem {
 		score.setStrength(10);
 		
 		currentItemType = "coin_big";
+		
+		for(int i = 1 ; i <= 9 ; i++) {
+			
+			if (creeps.get(i) != null) {
+				
+				engine.getSystem(CreepSystem.class).creepTouched(creeps.get(i), surface);
+				
+			}
+			
+		}
+		
+		currentItemType = null;
+		score.setStrength(oldStr);
+		
+	}
+	
+	public void eliminateAll() {
+		
+		int oldStr = score.getStrength();
+		score.setStrength(10);
+		
+		for(int i = 1 ; i <= 9 ; i++) {
+			
+			if (creeps.get(i) != null) {
+				
+				engine.getSystem(CreepSystem.class).creepTouched(creeps.get(i), surface);
+				
+			}
+			
+		}
+		
+		score.setStrength(oldStr);
+		
+	}
+	
+	public void turnAllToHealth() {
+		
+
+		int oldStr = score.getStrength();
+		score.setStrength(10);
+		
+		currentItemType = "heart_small";
 		
 		for(int i = 1 ; i <= 9 ; i++) {
 			

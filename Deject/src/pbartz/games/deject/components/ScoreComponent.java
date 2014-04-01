@@ -11,6 +11,8 @@ public class ScoreComponent extends Component {
 	private int life = INITIAL_LIFE;
 	private int strength = 1;
 	private int gold = 0;
+	
+	private int hammer = 0;
 
 	public ScoreComponent() {
 		
@@ -76,9 +78,18 @@ public class ScoreComponent extends Component {
 		gold = 0;
 		strength = 1;
 		level = 1;
-		score = 0;
-		
+		score = 0;		
 	}
+
+	public int getHammer() {
+		return hammer;
+	}
+
+	public void setHammer(int hammer) {
+		this.hammer = hammer;
+	}
+	
+	
 	
 	
 	

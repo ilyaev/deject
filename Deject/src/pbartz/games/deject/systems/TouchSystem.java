@@ -108,8 +108,14 @@ public class TouchSystem extends IteratingSystem {
 					
 				} else if (item != null) {
 					
-					engine.getSystem(ItemSystem.class).itemTouched(item);
-					EntityFactory.spawnHammerHit(engine, surface, position);
+					if (engine.getSystem(ItemSystem.class).itemTouched(item)) {
+						
+						EntityFactory.spawnHammerHit(engine, surface, position);
+						
+					} else {
+						
+						EntityFactory.spawnHammerMiss(engine, surface, position);
+					}
 					
 				} else {					
 					

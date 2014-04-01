@@ -26,6 +26,7 @@ import pbartz.games.deject.systems.ColorInterpolationSystem;
 import pbartz.games.deject.systems.CreepShieldSystem;
 import pbartz.games.deject.systems.CreepSystem;
 import pbartz.games.deject.systems.ExpireSystem;
+import pbartz.games.deject.systems.FontSizeInterpolationSystem;
 import pbartz.games.deject.systems.GalaxyEmitterSystem;
 import pbartz.games.deject.systems.InterpolationSystem;
 import pbartz.games.deject.systems.ItemSystem;
@@ -39,6 +40,7 @@ import pbartz.games.deject.systems.RectInterpolationSystem;
 import pbartz.games.deject.systems.RotateInterpolationSystem;
 import pbartz.games.deject.systems.ScoreSystem;
 import pbartz.games.deject.systems.ScreenOverlaySystem;
+import pbartz.games.deject.systems.TextNumberInterpolationSystem;
 import pbartz.games.deject.systems.TouchSystem;
 import pbartz.games.deject.systems.ZoomInterpolationSystem;
 import pbartz.games.deject.systems.renderer.DimensionRenderingSystem;
@@ -92,6 +94,8 @@ public class GameScene extends BasicScene {
 		engine.addSystem(new RectInterpolationSystem());
 		engine.addSystem(new RadialPositionInterpolationSystem());
 		engine.addSystem(new MultiplierInterpolationSystem());
+		engine.addSystem(new FontSizeInterpolationSystem());
+		engine.addSystem(new TextNumberInterpolationSystem());
 		
 		// expiration
 		engine.addSystem(new ExpireSystem());
@@ -218,35 +222,38 @@ public class GameScene extends BasicScene {
 				
 				EntityFactory.hideGameOverPanel(engine, surface);
 				engine.removeEntity(EntityFactory.scoreValueEntity);
-				engine.removeEntity(EntityFactory.highScoreValueEntity);
+				
 			}
 		} else if (tag == "playfield") {
 			
-			//if (!EntityFactory.timeScale.hasComponent(MultiplierInterpolationComponent.class)) {
+			float timeFrom = 1f;
+			float timeTo = 0;
+			
+			if (EntityFactory.timeScale.getComponent(MultiplierComponent.class).getMultiplier() < 1) {
 				
-				float timeFrom = 1f;
-				float timeTo = 0;
+				timeFrom = 0;
+				timeTo = 1f;
 				
-				if (EntityFactory.timeScale.getComponent(MultiplierComponent.class).getMultiplier() < 1) {
-					
-					timeFrom = 0;
-					timeTo = 1f;
-					
-					EntityFactory.hidePause(engine, surface);
-					
-				} else {
-					
-					EntityFactory.showPause(engine, surface);
-					
-				}
+				EntityFactory.hidePause(engine, surface);
 				
+			} else {
+				
+				EntityFactory.showPause(engine, surface);
+				
+			}
+			
+			if (timeTo == 0) {
+			
+				EntityFactory.timeScale.getComponent(MultiplierComponent.class).setMultiplier(0);
+				
+			} else {
+			
 				MultiplierInterpolationComponent timeScale = engine.createComponent(MultiplierInterpolationComponent.class);
-				timeScale.init(timeFrom, timeTo, 0.5f, Interpolation.EASE_IN);
+				timeScale.init(timeFrom, timeTo, 1f, Interpolation.EASE_IN);
 				
 				EntityFactory.timeScale.add(timeScale);				
 				
-				
-			//}
+			}
 			
 		}
 	}

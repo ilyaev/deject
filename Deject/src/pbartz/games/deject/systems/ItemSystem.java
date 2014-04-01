@@ -1,5 +1,7 @@
 package pbartz.games.deject.systems;
 
+import java.util.Random;
+
 import android.graphics.Paint;
 import pbartz.games.deject.DejectSurface;
 import pbartz.games.deject.EntityFactory;
@@ -9,6 +11,7 @@ import pbartz.games.deject.components.ExpireComponent;
 import pbartz.games.deject.components.ItemComponent;
 import pbartz.games.deject.components.PositionComponent;
 import pbartz.games.deject.components.PositionInterpolationComponent;
+import pbartz.games.deject.components.ScoreComponent;
 import pbartz.games.deject.components.TagComponent;
 import pbartz.games.deject.components.dimension.RectDimensionComponent;
 import pbartz.games.deject.core.Entity;
@@ -21,6 +24,8 @@ public class ItemSystem extends IteratingSystem {
 	PositionComponent position;
 	RectDimensionComponent dimension;
 	ItemComponent item;
+	
+	Random r = new Random();
 	
 	DejectSurface surface;
 
@@ -146,11 +151,23 @@ public class ItemSystem extends IteratingSystem {
 		engine.removeEntity(entity);		
 	}
 
-	public void itemTouched(Entity entity) {		
+	public boolean itemTouched(Entity entity) {
+		
+		int goldChange = entity.getComponent(ItemComponent.class).getGold();
+		
+		if (engine.getSystem(ScoreSystem.class).score.getComponent(ScoreComponent.class).getGold() < entity.getComponent(ItemComponent.class).config.getCost()) {
+
+			return false;
+			
+		}
+		
+		goldChange -= entity.getComponent(ItemComponent.class).config.getCost();
+		
+		
 		entity.getComponent(ItemComponent.class).setState(ItemComponent.BLOW_UP);
 
 		engine.getSystem(ScoreSystem.class).
-			increaseGold(entity.getComponent(ItemComponent.class).getGold());
+			increaseGold(goldChange);
 		
 		engine.getSystem(ScoreSystem.class).
 			increaseLife(entity.getComponent(ItemComponent.class).getLife());
@@ -159,12 +176,30 @@ public class ItemSystem extends IteratingSystem {
 		
 		if (itemType.equalsIgnoreCase("trunk")) {
 		
-			Entity special = EntityFactory.spawnCellItem(engine, surface, entity.getComponent(ItemComponent.class).getPosition(), "all_to_coins", 0.2f);
+			String itemName = "all_to_coins";
+			
+			if (r.nextInt() < 30) {
+				itemName = "all_to_health";
+			} else if (r.nextInt() < 30) {
+				itemName = "all_to_default";
+			}
+			
+			
+			
+			Entity special = EntityFactory.spawnCellItem(engine, surface, entity.getComponent(ItemComponent.class).getPosition(), itemName, 0.2f);
 			engine.getSystem(AISystem.class).getItems().put(entity.getComponent(ItemComponent.class).getPosition(), special);
 		
 		} else if (itemType.equalsIgnoreCase("all_to_coins")) {
 			
 			engine.getSystem(AISystem.class).turnAllToGold();
+			
+		} else if (itemType.equalsIgnoreCase("all_to_health")) {
+			
+			engine.getSystem(AISystem.class).turnAllToHealth();
+			
+		} else if (itemType.equalsIgnoreCase("all_to_default")) {
+			
+			engine.getSystem(AISystem.class).eliminateAll();
 			
 		} else if (itemType.equalsIgnoreCase("shop")) {
 			
@@ -172,10 +207,23 @@ public class ItemSystem extends IteratingSystem {
 			
 		} else if (itemType.equalsIgnoreCase("shop9")) {
 			
-			engine.getSystem(AISystem.class).shopOut();
+			engine.getSystem(AISystem.class).shopOut();			
 			
+		} else if (itemType.equalsIgnoreCase("shop1")) {
+			
+			engine.getSystem(ScoreSystem.class).setHammer(2);
+			
+		} else if (itemType.equalsIgnoreCase("shop2")) {
+			
+			engine.getSystem(ScoreSystem.class).setHammer(3);
+			
+		} else if (itemType.equalsIgnoreCase("shop3")) {
+			
+			engine.getSystem(ScoreSystem.class).setHammer(4);
 			
 		}
+		
+		return true;
 		
 		
 	}

@@ -142,8 +142,34 @@ public class DimensionRenderingSystem extends OrderedIteratingSystem {
 	private void renderText() {
 		
 		color.getPaint().setTextSize(text.getHeight() > 0 ? text.getHeight() : dimension.getHeight());
-		canvas.drawText(text.getText(), position.x - (dimension.getWidth() / 2) + text.getShiftX(), position.y + (dimension.getHeight() / 2) + text.getShiftY(), color.getPaint());		
+		
+		if (text.getAlign().equalsIgnoreCase("center")) {
+			
+			Rect rect = dimension.getRect(position);
+			
+			if (text.getBounds() == null) {
+				
+				Rect bounds = new Rect();
+				
+				color.getPaint().getTextBounds(text.getText(), 0, text.getText().length(), bounds);
+				
+				text.setBounds(bounds);
+				
+			}
+			
+			float shiftX = (rect.width() - text.getBounds().width()) / 2;
+			float shiftY = text.getHeight() - (rect.height() - text.getBounds().height()) / 2;
+			
+			canvas.drawText(text.getText(), rect.left + shiftX, rect.top + shiftY, color.getPaint());
+			
+		} else {
+		
+			canvas.drawText(text.getText(), position.x - (dimension.getWidth() / 2) + text.getShiftX(), position.y + (dimension.getHeight() / 2) + text.getShiftY(), color.getPaint());
+			
+		}
 	
+		
+		
 	}
 
 	private void renderRect() {

@@ -19,7 +19,7 @@ public class ItemComponent extends Component {
 	public static final int TYPE_COIN = 0;
 	
 	
-	ItemConfig config = null;
+	public ItemConfig config = null;
 
 	int gold = 1;
 	int life = 0;

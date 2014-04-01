@@ -12,6 +12,8 @@ public class ItemConfig {
 	int score = 0;
 	int gold = 0;
 	
+	int cost = 0;
+	
 	float waitingTime = 2f;
 	
 	
@@ -65,6 +67,17 @@ public class ItemConfig {
 					} catch (JSONException e) {
 						try {
 							gold = Integer.valueOf(defObj.getString("gold"));
+						}catch (JSONException e1) {
+							e1.printStackTrace();
+						}
+					}
+					
+					
+					try {
+						cost = Integer.valueOf(obj.getString("cost"));
+					} catch (JSONException e) {
+						try {
+							cost = Integer.valueOf(defObj.getString("cost"));
 						}catch (JSONException e1) {
 							e1.printStackTrace();
 						}
@@ -124,6 +137,14 @@ public class ItemConfig {
 
 	public void setWaitingTime(float waitingTime) {
 		this.waitingTime = waitingTime;
+	}
+
+	public int getCost() {
+		return cost;
+	}
+
+	public void setCost(int cost) {
+		this.cost = cost;
 	}
 	
 	

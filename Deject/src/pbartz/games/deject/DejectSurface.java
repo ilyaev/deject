@@ -53,10 +53,12 @@ public class DejectSurface extends SurfaceView implements Runnable {
 		super(context);
 		sHolder = getHolder();
 		
+		mFace = Typeface.createFromAsset(getContext().getAssets(),"fonts/pixelate.ttf");
+		
 		this.context = context;
 		
 		scene = new StartScene(this);
-		//scene = new TestScene(this);
+
 		scene.initScene();		
 		
 	}
