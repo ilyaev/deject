@@ -554,7 +554,7 @@
 			"life": 1,
 			"image": "creep1",
 			"speed_waiting": 2.0,
-			"score": 1,			
+			"score": 5,			
 			"items": [
 				{
 					"type": "heart_small",
@@ -572,7 +572,8 @@
 			"life": 2,
 			"speed_waiting": 3.0,
 			"image": "creep2",
-			"score": 2,
+			"score": 10,
+			"miss_damage": 2,
 			"items": [
 				{
 					"type": "heart_small",
@@ -590,7 +591,8 @@
 			"life": 1,
 			"image": "creep3",
 			"speed_waiting": 4f,
-			"score": 3,
+			"score": 10,
+			"miss_damage": 2,
 			"items": [
 				{
 					"type": "heart_small",
@@ -610,7 +612,7 @@
 			"type": "spike",
 			"life": 3,
 			"image": "creep4",
-			"score": 4,
+			"score": 5,
 			"min_hit": 2,
 			"speed_waiting": 3,
 			"shield_damage": 1,
@@ -627,7 +629,7 @@
 			"life": 1,
 			"image": "creep5",
 			"speed_waiting": 2,
-			"score": 10,
+			"score": 20,
 			items: [
 				{
 					"type": "heart_small",
@@ -648,7 +650,7 @@
 			"type": "thief",
 			"life": 5,
 			"image": "creep6",
-			"score": 10,
+			"score": 20,
 			"speed_down": 0.5,
 			"speed_waiting": 3,
 			"miss_damage": 0,
@@ -672,7 +674,7 @@
 			"type": "bomb",
 			"life": 10,
 			"image": "creep8",
-			"score": 0,
+			"score": 50,
 			"shield_damage": 6,
 			"speed_waiting": 4f,
 			"min_hit": 10,
@@ -688,7 +690,7 @@
 			"type": "daemon_small",
 			"life": 1,
 			"image": "creep1",
-			"score": 10,
+			"score": 25,
 			"speed_waiting": 4f,
 			items: [
 				{
@@ -713,8 +715,9 @@
 			"type": "daemon_big",
 			"life": 2,
 			"image": "creep2",
-			"score": 10,
+			"score": 32,
 			"speed_waiting": 4f,
+			"miss_damage": 3,			
 			items: [
 				{
 					"type": "heart_small",
@@ -784,6 +787,10 @@
 			"image": "scull_stone"
 		},
 		{
+			"type": "timefreeze",
+			"image": "sandclock_stone"
+		},
+		{
 			"type": "shop",
 			"image": "shop"
 		},
@@ -791,19 +798,19 @@
 			"type": "shop1",
 			"image": "shop1",
 			"waitingTime": 30,
-			"cost": 50
+			"cost": 100
 		},
 		{
 			"type": "shop2",
 			"image": "shop2",
 			"waitingTime": 30,
-			"cost": 100
+			"cost": 200
 		},
 		{
 			"type": "shop3",
 			"image": "shop3",
 			"waitingTime": 30,
-			"cost": 200
+			"cost": 300
 		},
 		{
 			"type": "shop4",

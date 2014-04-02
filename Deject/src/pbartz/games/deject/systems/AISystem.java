@@ -41,11 +41,15 @@ public class AISystem extends IteratingSystem {
 	
 	public Signal<LevelConfig> levelCompletedSignal = new Signal<LevelConfig>();
 
-	private String currentItemType = null;
+	public String currentItemType = null;
 	
 	float levelTimeLeft = 0;
 
 	private Entity shopOutHandler = null;
+
+	private float rollbackHammerSpeed = 0;
+
+	private int rollbackHammerTime = 0;
 	
 	@SuppressWarnings("unchecked")
 	public AISystem(DejectSurface surface) {
@@ -58,6 +62,18 @@ public class AISystem extends IteratingSystem {
 		
 		if (ai == null) {
 			ai = entity.getComponent(AIComponent.class);
+		}
+		
+		if (rollbackHammerSpeed != 0) {
+			rollbackHammerTime += deltaTime;
+			if (rollbackHammerTime >= rollbackHammerSpeed) {
+				
+				rollbackHammerTime = 0;
+				rollbackHammerSpeed = 0;
+				score.setStrength(score.getOldStrength());
+				currentItemType = null;
+				
+			}
 		}
 		
 		if (ai.getState() == AIComponent.STATE_NOT_INITED && levelInfo == null) {
@@ -335,6 +351,8 @@ public class AISystem extends IteratingSystem {
 		int oldStr = score.getStrength();
 		score.setStrength(10);
 		
+		String oldCurrentItemType = currentItemType;
+		
 		currentItemType = "coin_big";
 		
 		for(int i = 1 ; i <= 9 ; i++) {
@@ -347,7 +365,7 @@ public class AISystem extends IteratingSystem {
 			
 		}
 		
-		currentItemType = null;
+		currentItemType = oldCurrentItemType;
 		score.setStrength(oldStr);
 		
 	}
@@ -377,6 +395,7 @@ public class AISystem extends IteratingSystem {
 		int oldStr = score.getStrength();
 		score.setStrength(10);
 		
+		String oldCurrentItemType = currentItemType;
 		currentItemType = "heart_small";
 		
 		for(int i = 1 ; i <= 9 ; i++) {
@@ -389,7 +408,7 @@ public class AISystem extends IteratingSystem {
 			
 		}
 		
-		currentItemType = null;
+		currentItemType = oldCurrentItemType;
 		score.setStrength(oldStr);
 		
 	}
@@ -458,6 +477,11 @@ public class AISystem extends IteratingSystem {
 		engine.addEntity(entity);
 		
 		
+	}
+
+	public void rollbackHammerAfterSeconds(float f) {
+		this.rollbackHammerSpeed = f * 1000;
+		this.rollbackHammerTime = 0;		
 	}
 	
 

@@ -12,6 +12,8 @@ public class ScoreComponent extends Component {
 	private int strength = 1;
 	private int gold = 0;
 	
+	private int oldStrength = 0;
+	
 	private int hammer = 0;
 
 	public ScoreComponent() {
@@ -89,7 +91,13 @@ public class ScoreComponent extends Component {
 		this.hammer = hammer;
 	}
 	
+	public void setOldStrength(int str) {
+		oldStrength = str;
+	}
 	
+	public int getOldStrength() {
+		return this.oldStrength;
+	}
 	
 	
 	

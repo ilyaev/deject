@@ -222,6 +222,8 @@ public class GameScene extends BasicScene {
 				
 				EntityFactory.hideGameOverPanel(engine, surface);
 				engine.removeEntity(EntityFactory.scoreValueEntity);
+//				engine.removeEntity(EntityFactory.snakeBtnEntity);
+//				engine.removeEntity(EntityFactory.rateBtnEntity);
 				
 			}
 		} else if (tag == "playfield") {

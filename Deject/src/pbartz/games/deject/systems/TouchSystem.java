@@ -56,7 +56,7 @@ public class TouchSystem extends IteratingSystem {
 			
 			if (!entity.hasComponent(PositionInterpolationComponent.class) && !tag.getTag().equalsIgnoreCase("levelInfo")) {
 				
-				EntityFactory.spawnGenericTouchReaction(engine, surface, entity);
+				EntityFactory.spawnGenericTouchReaction(engine, surface, entity, "red");
 				
 			}
 			

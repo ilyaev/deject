@@ -91,7 +91,7 @@ public class EntityFactory {
 	public static float goPanelHeight;
 	public static float goPanelcX;
 	public static float goPanelcY;
-	private static Entity gameOverEntity;
+	private static Entity gameOverEntity = null;
 	public static Entity btnPlay = null;
 	private static Entity btnScore = null;
 	public static float starBaseWidth;
@@ -104,12 +104,13 @@ public class EntityFactory {
 	
 	
 	static ObjectMap<String, Component> reusableComponents = new ObjectMap<String, Component>();
-	public static Entity gameOverTitleEntity;
+	public static Entity gameOverTitleEntity = null;
 	public static Entity timeScale;
 	public static Entity boardButton;
 	private static Entity pausedEntity;
 	public static Entity wepEntity;
 	public static Entity rateBtnEntity = null;
+	public static Entity snakeBtnEntity = null;
 	
 	public static void caculateMetrics(DejectSurface surface) {
 		
@@ -552,7 +553,34 @@ public class EntityFactory {
 		
 		engine.addEntity(entity);
 		
+		Entity button = getPositionButton(position);
+		if (button != null) {
+			
+			spawnGenericTouchReaction(engine, surface, button, "green");
+			
+		}
+		
+		
 		return entity;
+	}
+	
+	public static Entity getPositionButton(int position) {
+		
+		for(int i = 0 ; i < buttons.size ; i++) {
+			
+			Entity button = buttons.get(i);
+			String tag = button.getComponent(TagComponent.class).getTag();
+			
+			if (tag.equals(Integer.toString(position))) {
+				
+				return button;
+				
+			}
+			
+		}
+		
+		return null;
+		
 	}
 	
 	public static Entity prepareCellEntity(PooledEngine engine, DejectSurface surface, int position) {
@@ -978,7 +1006,7 @@ public class EntityFactory {
 
 
 	
-	public static void spawnGenericTouchReaction(PooledEngine engine, DejectSurface surface, Entity entity) {
+	public static void spawnGenericTouchReaction(PooledEngine engine, DejectSurface surface, Entity entity, String colorTxt) {
 		
 		if (! entity.hasComponent(ColorComponent.class)) return;
 		
@@ -996,7 +1024,13 @@ public class EntityFactory {
 		proxy.add(pPos);
 		
 		proxy.add(getRectComponent(engine, dimension.getWidth(), dimension.getHeight()));
-		proxy.add(getColorComponent(engine, 150, 255, 0, 0));
+		
+		
+		if (colorTxt.equalsIgnoreCase("red")) {
+			proxy.add(getColorComponent(engine, 150, 255, 0, 0));
+		} else {
+			proxy.add(getColorComponent(engine, 150, 0, 255, 0));
+		}
 		
 		proxy.add(new ZoomComponent(1f, 1f));
 		
@@ -1011,7 +1045,7 @@ public class EntityFactory {
 		
 		proxy.add(getColorInterpolationComponent(engine, 
 			proxy.getComponent(ColorComponent.class).getPaint(), 
-			createPaint(0, 255, 0, 0), 
+			(colorTxt.equalsIgnoreCase("red") ? createPaint(0, 255, 0, 0) : createPaint(0, 0, 255, 0)), 
 			lifeTime, 
 			Interpolation.EASE_IN
 		));
@@ -1089,6 +1123,12 @@ public class EntityFactory {
 
 		entity.setOrder(2);
 		
+		if (gameOverEntity != null) {
+			
+			engine.removeEntity(gameOverEntity);
+			
+		}
+		
 		gameOverEntity = entity;
 		
 		engine.addEntity(entity);
@@ -1133,6 +1173,12 @@ public class EntityFactory {
 		
 		engine.addEntity(scoreText, 0.5f);
 		
+		if (scoreValueEntity != null) {
+			
+			engine.removeEntity(scoreValueEntity);
+			
+		}
+		
 		scoreValueEntity = scoreText;
 		
 		
@@ -1169,6 +1215,10 @@ public class EntityFactory {
 
 		title.setOrder(2);
 		
+		if (gameOverTitleEntity != null) {
+			engine.removeEntity(gameOverTitleEntity);
+		}
+		
 		gameOverTitleEntity = title;
 		
 		engine.addEntity(title);
@@ -1177,12 +1227,9 @@ public class EntityFactory {
 		
 		Entity rate = engine.createEntity();
 		
-		PositionComponent rposComp = engine.createComponent(PositionComponent.class);
-		rposComp.init(surface.dp2px(goPanelcX), surface.dp2px(surface.heightDp + creepHeight));
+		rate.add(getPositionComponent(engine, surface.dp2px(goPanelcX), surface.dp2px(surface.heightDp + creepHeight)));
 		
-		rate.add(rposComp);
-		
-		rate.add(getRectComponent(engine, surface.dp2px(creepWidth * 2), surface.dp2px(creepHeight)));
+		rate.add(getRectComponent(engine, surface.dp2px(creepWidth), surface.dp2px(creepHeight)));
 		rate.add(getColorComponent(engine, 0, 255, 0, 0));
 		
 		rate.add(new TouchComponent());
@@ -1199,16 +1246,75 @@ public class EntityFactory {
 			rate.getComponent(PositionComponent.class),
 			surface.dp2px(goPanelcX),
 			surface.dp2px(surface.heightDp - creepHeight),
-			1f,
+			0.5f,
 			Interpolation.EASE_OUT
 		));
 		
-		rate.add(getReusableBitmapComponent(engine, "btn_rate"));
+		rate.add(getPositionInterpolationComponent(engine, 
+			getPositionComponent(engine, surface.dp2px(goPanelcX), surface.dp2px(surface.heightDp - creepHeight)),
+			surface.dp2px(goPanelcX - surface.widthDp / 4),
+			surface.dp2px(surface.heightDp - creepHeight),
+			0.5f,
+			Interpolation.EASE_IN
+		), 0.5f);
 		
+		rate.add(getReusableBitmapComponent(engine, "btn_rate_2"));
+		
+		
+		if (rateBtnEntity != null) {
+			
+			engine.removeEntity(rateBtnEntity);
+			
+		}
 		
 		rateBtnEntity = rate;
 		
-		engine.addEntity(rate, 3f);
+		engine.addEntity(rate);
+		
+		/// snake buttom
+		
+		Entity snake = engine.createEntity();
+		
+		snake.add(getPositionComponent(engine, surface.dp2px(goPanelcX), surface.dp2px(surface.heightDp + creepHeight)));
+		
+		snake.add(getRectComponent(engine, surface.dp2px(creepWidth), surface.dp2px(creepHeight)));
+		snake.add(getColorComponent(engine, 0, 255, 0, 0));
+		
+		snake.add(new TouchComponent());
+		snake.add(new TagComponent("btn_snake"));
+		
+		snake.add(getColorInterpolationComponent(engine, 
+			snake.getComponent(ColorComponent.class).getPaint(),
+			createPaint(255, 255, 0, 0),
+			0.4f,
+			Interpolation.EASE_IN
+		), 0.5f);
+		
+		snake.add(getPositionInterpolationComponent(engine, 
+			snake.getComponent(PositionComponent.class),
+			surface.dp2px(goPanelcX),
+			surface.dp2px(surface.heightDp - creepHeight),
+			0.5f,
+			Interpolation.EASE_OUT
+		), 0.5f);
+		
+		snake.add(getPositionInterpolationComponent(engine, 
+			getPositionComponent(engine, surface.dp2px(goPanelcX), surface.dp2px(surface.heightDp - creepHeight)),
+			surface.dp2px(goPanelcX + surface.widthDp / 4),
+			surface.dp2px(surface.heightDp - creepHeight),
+			0.5f,
+			Interpolation.EASE_IN
+		), 1f);
+		
+		snake.add(getReusableBitmapComponent(engine, "btn_snake"));
+		
+		if (snakeBtnEntity != null) {
+			engine.removeEntity(snakeBtnEntity);
+		}
+		
+		snakeBtnEntity = snake;
+		
+		engine.addEntity(snake);
 		
 	}
 	
@@ -1243,6 +1349,14 @@ public class EntityFactory {
 			rateBtnEntity.add(getPositionInterpolationComponent(engine, 
 					rateBtnEntity.getComponent(PositionComponent.class),
 					rateBtnEntity.getComponent(PositionComponent.class).x,
+					surface.dp2px(surface.heightDp + creepHeight),
+					0.5f,
+					Interpolation.EASE_IN				
+			));
+			
+			snakeBtnEntity.add(getPositionInterpolationComponent(engine, 
+					snakeBtnEntity.getComponent(PositionComponent.class),
+					snakeBtnEntity.getComponent(PositionComponent.class).x,
 					surface.dp2px(surface.heightDp + creepHeight),
 					0.5f,
 					Interpolation.EASE_IN				
@@ -1441,6 +1555,15 @@ public class EntityFactory {
 		
 		return shake;
 		
+		
+	}
+	
+	public static PositionComponent getPositionComponent(PooledEngine engine, int pX, int pY) {
+		
+		PositionComponent position = engine.createComponent(PositionComponent.class);
+		position.init(pX, pY);
+		
+		return position;
 		
 	}
 

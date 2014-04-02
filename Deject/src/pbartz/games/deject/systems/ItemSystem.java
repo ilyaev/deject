@@ -176,12 +176,14 @@ public class ItemSystem extends IteratingSystem {
 		
 		if (itemType.equalsIgnoreCase("trunk")) {
 		
-			String itemName = "all_to_coins";
+			String itemName = "all_to_default";
 			
 			if (r.nextInt() < 30) {
-				itemName = "all_to_health";
+				itemName = "timefreeze";
 			} else if (r.nextInt() < 30) {
-				itemName = "all_to_default";
+				itemName = "all_to_coins";
+			} else if (r.nextInt() < 30) {
+				itemName = "all_to_health";
 			}
 			
 			
@@ -220,6 +222,20 @@ public class ItemSystem extends IteratingSystem {
 		} else if (itemType.equalsIgnoreCase("shop3")) {
 			
 			engine.getSystem(ScoreSystem.class).setHammer(4);
+			
+		} else if (itemType.equalsIgnoreCase("shop7")) {
+			
+			engine.getSystem(AISystem.class).score.setOldStrength(engine.getSystem(AISystem.class).score.getStrength());
+			engine.getSystem(AISystem.class).score.setStrength(10);
+			engine.getSystem(AISystem.class).currentItemType = "coin_big";
+			engine.getSystem(AISystem.class).rollbackHammerAfterSeconds(10f);
+			
+		} else if (itemType.equalsIgnoreCase("shop8")) {
+			
+			engine.getSystem(AISystem.class).score.setOldStrength(engine.getSystem(AISystem.class).score.getStrength());
+			engine.getSystem(AISystem.class).score.setStrength(10);
+			engine.getSystem(AISystem.class).currentItemType = "heart_small";
+			engine.getSystem(AISystem.class).rollbackHammerAfterSeconds(10f);
 			
 		}
 		
