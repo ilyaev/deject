@@ -203,7 +203,11 @@ public class ItemSystem extends IteratingSystem {
 			
 			engine.getSystem(AISystem.class).eliminateAll();
 			
-		} else if (itemType.equalsIgnoreCase("shop")) {
+		} else if (itemType.equalsIgnoreCase("timefreeze")) {
+			
+			EntityFactory.startSlowMo(engine);
+			
+		}  else if (itemType.equalsIgnoreCase("shop")) {
 			
 			engine.getSystem(AISystem.class).switchToShop();
 			

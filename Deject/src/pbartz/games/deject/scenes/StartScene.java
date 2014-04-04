@@ -58,6 +58,15 @@ public class StartScene extends BasicScene {
 		EntityFactory.caculateMetrics(surface);
 		EntityFactory.createStartScreen(engine, surface, 0);
 		
+		Entity bg = engine.createEntity();
+		bg.add(EntityFactory.getReusableBitmapComponent(engine, "bg_pixel_city"));
+		bg.add(EntityFactory.getColorComponent(engine, 255, 255, 0, 0));
+		bg.add(EntityFactory.getPositionComponent(engine, surface.dp2px(surface.widthDp / 2), surface.dp2px(surface.heightDp / 2)));
+		bg.add(EntityFactory.getRectComponent(engine, surface.dp2px(surface.widthDp), surface.dp2px(surface.heightDp)));
+		bg.setOrder(-3);
+		
+		engine.addEntity(bg);
+		
 		initListeners();
 		
 		setInited(true);

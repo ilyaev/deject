@@ -24,6 +24,7 @@ import pbartz.games.deject.components.ItemComponent;
 import pbartz.games.deject.components.LevelInfoComponent;
 import pbartz.games.deject.components.MovementComponent;
 import pbartz.games.deject.components.MultiplierComponent;
+import pbartz.games.deject.components.MultiplierInterpolationComponent;
 import pbartz.games.deject.components.PositionComponent;
 import pbartz.games.deject.components.PositionInterpolationComponent;
 import pbartz.games.deject.components.PositionShakeComponent;
@@ -1053,7 +1054,15 @@ public class EntityFactory {
 		proxy.add(getExpireComponent(engine, lifeTime));
 		proxy.setOrder(4);
 		
-		engine.addEntity(proxy);
+		if (colorTxt.equalsIgnoreCase("green")) {
+			
+			engine.addEntity(proxy, 0.5f);
+			
+		} else {
+		
+			engine.addEntity(proxy);
+			
+		}
 		
 	}
 	
@@ -1089,7 +1098,6 @@ public class EntityFactory {
 	}
 	
 	public static void spawnGameOver(PooledEngine engine, DejectSurface surface) {
-
 		Entity entity = engine.createEntity();
 		
 		PositionComponent posComp = engine.createComponent(PositionComponent.class);
@@ -1123,11 +1131,7 @@ public class EntityFactory {
 
 		entity.setOrder(2);
 		
-		if (gameOverEntity != null) {
-			
-			engine.removeEntity(gameOverEntity);
-			
-		}
+		
 		
 		gameOverEntity = entity;
 		
@@ -1173,11 +1177,7 @@ public class EntityFactory {
 		
 		engine.addEntity(scoreText, 0.5f);
 		
-		if (scoreValueEntity != null) {
-			
-			engine.removeEntity(scoreValueEntity);
-			
-		}
+		
 		
 		scoreValueEntity = scoreText;
 		
@@ -1215,9 +1215,7 @@ public class EntityFactory {
 
 		title.setOrder(2);
 		
-		if (gameOverTitleEntity != null) {
-			engine.removeEntity(gameOverTitleEntity);
-		}
+		
 		
 		gameOverTitleEntity = title;
 		
@@ -1258,14 +1256,8 @@ public class EntityFactory {
 			Interpolation.EASE_IN
 		), 0.5f);
 		
-		rate.add(getReusableBitmapComponent(engine, "btn_rate_2"));
+		rate.add(getReusableBitmapComponent(engine, "btn_rate_2"));		
 		
-		
-		if (rateBtnEntity != null) {
-			
-			engine.removeEntity(rateBtnEntity);
-			
-		}
 		
 		rateBtnEntity = rate;
 		
@@ -1308,9 +1300,7 @@ public class EntityFactory {
 		
 		snake.add(getReusableBitmapComponent(engine, "btn_snake"));
 		
-		if (snakeBtnEntity != null) {
-			engine.removeEntity(snakeBtnEntity);
-		}
+		
 		
 		snakeBtnEntity = snake;
 		
@@ -1330,6 +1320,8 @@ public class EntityFactory {
 					Interpolation.EASE_OUT					
 			));
 			
+			gameOverEntity.add(getExpireComponent(engine, 0.5f));
+			
 			gameOverTitleEntity.add(getPositionInterpolationComponent(engine, 
 					gameOverTitleEntity.getComponent(PositionComponent.class),
 					surface.dp2px(goPanelcX),
@@ -1337,6 +1329,8 @@ public class EntityFactory {
 					0.5f,
 					Interpolation.EASE_OUT					
 			));
+			
+			gameOverTitleEntity.add(getExpireComponent(engine, 0.5f));
 			
 			btnPlay.add(getPositionInterpolationComponent(engine, 
 					btnPlay.getComponent(PositionComponent.class),
@@ -1346,6 +1340,8 @@ public class EntityFactory {
 					Interpolation.EASE_OUT					
 			));
 			
+			btnPlay.add(getExpireComponent(engine, 0.5f));
+			
 			rateBtnEntity.add(getPositionInterpolationComponent(engine, 
 					rateBtnEntity.getComponent(PositionComponent.class),
 					rateBtnEntity.getComponent(PositionComponent.class).x,
@@ -1353,6 +1349,8 @@ public class EntityFactory {
 					0.5f,
 					Interpolation.EASE_IN				
 			));
+			
+			rateBtnEntity.add(getExpireComponent(engine, 0.5f));
 			
 			snakeBtnEntity.add(getPositionInterpolationComponent(engine, 
 					snakeBtnEntity.getComponent(PositionComponent.class),
@@ -1362,6 +1360,8 @@ public class EntityFactory {
 					Interpolation.EASE_IN				
 			));
 			
+			snakeBtnEntity.add(getExpireComponent(engine, 0.5f));
+			
 			btnScore.add(getPositionInterpolationComponent(engine, 
 					btnScore.getComponent(PositionComponent.class),
 					btnScore.getComponent(PositionComponent.class).x,
@@ -1369,6 +1369,8 @@ public class EntityFactory {
 					0.5f,
 					Interpolation.EASE_OUT					
 			));
+			
+			btnScore.add(getExpireComponent(engine, 0.5f));
 
 		}
 		
@@ -1578,6 +1580,39 @@ public class EntityFactory {
 		
 	}
 	
+	public static MultiplierInterpolationComponent getMultiplierInterpolationComponent(PooledEngine engine, float start, float end, float speed, int easing) {
+		
+		MultiplierInterpolationComponent interpolation = engine.createComponent(MultiplierInterpolationComponent.class);
+		
+		interpolation.init(start, end, speed, easing);
+		
+		return interpolation;
+		
+	}
 	
+	public static void clearSlowMo() {
+		
+		timeScale.delayedComponents.clear();
+		timeScale.getComponent(MultiplierComponent.class).setMultiplier(1f);
+		
+	}
+	
+	public static void startSlowMo(PooledEngine engine) {
+		
+		timeScale.delayedComponents.clear();
+		
+		timeScale.add(getMultiplierInterpolationComponent(engine, 1f, 0.1f, 0.1f, Interpolation.EASE_IN));
+		timeScale.add(getMultiplierInterpolationComponent(engine, 0.1f, 0.3f, 0.3f, Interpolation.EASE_IN), 0.5f);
+		timeScale.add(getMultiplierInterpolationComponent(engine, 0.3f, 0.1f, 0.1f, Interpolation.EASE_IN), 2f);
+		
+		timeScale.add(getMultiplierInterpolationComponent(engine, 0.1f, 0.5f, 0.3f, Interpolation.EASE_IN), 2.5f);
+		timeScale.add(getMultiplierInterpolationComponent(engine, 0.5f, 0.1f, 0.1f, Interpolation.EASE_IN), 3f);
+		
+		timeScale.add(getMultiplierInterpolationComponent(engine, 0.2f, 1f, 0.5f, Interpolation.EASE_IN), 6.5f);
+		
+		
+
+		
+	}
 	
 }

@@ -127,6 +127,15 @@ public class GameScene extends BasicScene {
 		setInited(true);
 		
 		EntityFactory.createFadeIn(engine, surface);
+		
+		Entity bg = engine.createEntity();
+		bg.add(EntityFactory.getReusableBitmapComponent(engine, "bg_pixel_city"));
+		bg.add(EntityFactory.getColorComponent(engine, 255, 255, 0, 0));
+		bg.add(EntityFactory.getPositionComponent(engine, surface.dp2px(surface.widthDp / 2), surface.dp2px(surface.heightDp / 2)));
+		bg.add(EntityFactory.getRectComponent(engine, surface.dp2px(surface.widthDp), surface.dp2px(surface.heightDp)));
+		bg.setOrder(-3);
+		
+		engine.addEntity(bg);
 
 	}
 	
@@ -173,7 +182,7 @@ public class GameScene extends BasicScene {
 	
 	private void levelCompletedSignal(LevelConfig level) {
 		// ToDo: Level completed
-		
+		EntityFactory.clearSlowMo();
 		engine.getSystem(AISystem.class).getAi().setState(AIComponent.STATE_LEVEL_COMPLETED);
 		EntityFactory.animateButtonsDown(engine);
 		
@@ -182,7 +191,7 @@ public class GameScene extends BasicScene {
 	private void gameOverSignal(Entity score) {
 		
 		if (engine.getSystem(AISystem.class).getAi().getState() != AIComponent.STATE_GAMEOVER) {
-		
+			EntityFactory.clearSlowMo();
 			engine.getSystem(AISystem.class).getAi().setState(AIComponent.STATE_GAMEOVER);
 			EntityFactory.spawnGameOver(engine, surface);
 			EntityFactory.animateButtonsDown(engine);
@@ -262,7 +271,7 @@ public class GameScene extends BasicScene {
 	
 	
 	public void update(Canvas canvas, float timeDiff) {
-		canvas.drawARGB(255, 0, 0, 0);
+	//	canvas.drawARGB(255, 0, 0, 0);
 		
 		float timeScale = EntityFactory.timeScale.getComponent(MultiplierComponent.class).getMultiplier();
 		
@@ -280,5 +289,6 @@ public class GameScene extends BasicScene {
 		// TODO Auto-generated method stub
 		
 	}
+	
 	
 }

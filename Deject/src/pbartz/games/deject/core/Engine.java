@@ -4,6 +4,7 @@ import java.util.Comparator;
 
 import android.util.Log;
 
+import pbartz.games.deject.components.MultiplierInterpolationComponent;
 import pbartz.games.deject.signals.Listener;
 import pbartz.games.deject.signals.Signal;
 import pbartz.games.deject.utils.Array;
@@ -100,6 +101,10 @@ public class Engine {
 	 * @param entity The Entity to remove
 	 */
 	public void removeEntity(Entity entity){
+		
+		entity.delayedComponents.clear();
+		delayedEntities.removeValue(entity, false);
+		
 		entities.removeValue(entity, true);
 		
 		if(!entity.getFamilyBits().isEmpty()){
@@ -232,7 +237,14 @@ public class Engine {
 			Entity entity = entities.get(i);
 			for(int j = 0 ; j < entity.delayedComponents.size ; j++) {
 				
-				if (entity.delayedComponents.get(j).isTimeToAppear((int)deltaTime)) {
+				int delta = (int)deltaTime;
+				
+				
+				if (entity.delayedComponents.get(j).getClass() == MultiplierInterpolationComponent.class) {
+					delta = (int)lastRealTimeDiff;
+				}
+				
+				if (entity.delayedComponents.get(j).isTimeToAppear(delta)) {
 					entity.add(entity.delayedComponents.get(j));
 					entity.delayedComponents.removeIndex(j);
 				}

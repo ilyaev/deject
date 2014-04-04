@@ -557,6 +557,10 @@
 			"score": 5,			
 			"items": [
 				{
+					"type": "timefreeze",
+					"chance": 1
+				},
+				{
 					"type": "heart_small",
 					"chance": 5
 				},
@@ -576,6 +580,10 @@
 			"miss_damage": 2,
 			"items": [
 				{
+					"type": "timefreeze",
+					"chance": 1
+				},
+				{
 					"type": "heart_small",
 					"chance": 5
 				},
@@ -594,6 +602,10 @@
 			"score": 10,
 			"miss_damage": 2,
 			"items": [
+				{
+					"type": "timefreeze",
+					"chance": 1
+				},
 				{
 					"type": "heart_small",
 					"chance": 5
@@ -618,6 +630,10 @@
 			"shield_damage": 1,
 			"miss_damage": 0,
 			"items": [
+				{
+					"type": "timefreeze",
+					"chance": 10
+				},
 				{
 					"type": "heart_small",
 					"chance": 100
