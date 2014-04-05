@@ -4,12 +4,14 @@ import java.util.Random;
 
 import pbartz.games.deject.DejectSurface;
 import pbartz.games.deject.EntityFactory;
+import pbartz.games.deject.Storage;
 import pbartz.games.deject.components.AIComponent;
 import pbartz.games.deject.components.CreepComponent;
 import pbartz.games.deject.components.CreepSwapComponent;
 import pbartz.games.deject.components.ExpireComponent;
 import pbartz.games.deject.components.ItemComponent;
 import pbartz.games.deject.components.LevelInfoComponent;
+import pbartz.games.deject.components.PositionComponent;
 import pbartz.games.deject.components.RectInterpolationComponent;
 import pbartz.games.deject.components.ScoreComponent;
 import pbartz.games.deject.components.TagComponent;
@@ -42,6 +44,8 @@ public class AISystem extends IteratingSystem {
 	public Signal<LevelConfig> levelCompletedSignal = new Signal<LevelConfig>();
 
 	public String currentItemType = null;
+	
+	private Random r = new Random();
 	
 	float levelTimeLeft = 0;
 
@@ -93,22 +97,33 @@ public class AISystem extends IteratingSystem {
 			
 			releaseProgressBar();
 			
+			ai.setTimer(1.2f);
+			
 		} else if (ai.getState() == AIComponent.STATE_WORKING) {
 		
 			if (ai.isNextEvent(deltaTime) && progressBar.hasComponent(RectInterpolationComponent.class)) {
 				
+				int numCreeps = 1;
+				int chanceForDouble = Math.min(25, (int) Math.floor(score.getLevel() * 4));
 				
+				if (r.nextInt(100) <= chanceForDouble) {
+					numCreeps = 2;
+				}
 				
-				if (!isBoardFilled()) {
-					int position = getNextFreeCell();
-					
-					if (position > 0) {
-						String creepType = level.getNextCreep();
+				for(int creepNum = 0 ; creepNum < numCreeps ; creepNum++) {
+				
+					if (!isBoardFilled()) {
+						int position = getNextFreeCell();
 						
-						if (creepType != null) {
-							Entity newCreep = EntityFactory.spawnCellCreep(engine, surface, position, creepType);
-							creeps.put(position, newCreep);
+						if (position > 0) {
+							String creepType = level.getNextCreep();
+							
+							if (creepType != null) {
+								Entity newCreep = EntityFactory.spawnCellCreep(engine, surface, position, creepType);
+								creeps.put(position, newCreep);
+							}
 						}
+						
 					}
 					
 				}
@@ -129,7 +144,6 @@ public class AISystem extends IteratingSystem {
 					}
 				}
 				
-				Random r = new Random();
 				ai.setTimer(0.5f + r.nextFloat());
 				
 			}
@@ -296,6 +310,10 @@ public class AISystem extends IteratingSystem {
 		score = scoreComponent;	
 	}
 	
+	public ScoreComponent getScore() {
+		return score;
+	}
+	
 	public void setProgressBarEntity(Entity pbar) {
 		this.progressBar = pbar;
 	}
@@ -311,6 +329,22 @@ public class AISystem extends IteratingSystem {
 		if (EntityFactory.galaxyEmitter != null) {
 			EntityFactory.galaxyEmitter.setArms(r.nextInt(10));
 		}
+		
+		EntityFactory.btnPlayLevelUp(engine, surface);
+
+		if (levelInfo.getComponent(LevelInfoComponent.class).getLevel() > 1) {
+			
+			if (!Storage.getValue("tutorial", "on").equalsIgnoreCase("off")) {
+				
+				Storage.setValue("tutorial",  "off");
+				
+			}
+			
+		}
+		
+		EntityFactory.isTutorial = Storage.getValue("tutorial", "on").equalsIgnoreCase("on") ? true : false;
+		
+		
 	}
 
 	public Entity getSwapCreep(int position) {

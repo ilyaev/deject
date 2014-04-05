@@ -2,10 +2,13 @@ package pbartz.games.deject;
 
 import java.util.Random;
 
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.util.Log;
 import pbartz.games.deject.components.AIComponent;
 import pbartz.games.deject.components.BitmapAnimationComponent;
@@ -52,6 +55,7 @@ import pbartz.games.deject.core.Family;
 import pbartz.games.deject.core.Interpolation;
 import pbartz.games.deject.core.PooledEngine;
 import pbartz.games.deject.systems.AISystem;
+import pbartz.games.deject.systems.LevelInfoSystem;
 import pbartz.games.deject.systems.ScoreSystem;
 import pbartz.games.deject.utils.Array;
 import pbartz.games.deject.utils.IntMap;
@@ -105,6 +109,10 @@ public class EntityFactory {
 	
 	
 	static ObjectMap<String, Component> reusableComponents = new ObjectMap<String, Component>();
+	
+	static ObjectMap<String, String> adButtonsConfig = new ObjectMap<String, String>();
+	
+	
 	public static Entity gameOverTitleEntity = null;
 	public static Entity timeScale;
 	public static Entity boardButton;
@@ -112,6 +120,8 @@ public class EntityFactory {
 	public static Entity wepEntity;
 	public static Entity rateBtnEntity = null;
 	public static Entity snakeBtnEntity = null;
+	public static Entity btnLevelPlay = null;
+	public static boolean isTutorial = true;
 	
 	public static void caculateMetrics(DejectSurface surface) {
 		
@@ -129,7 +139,7 @@ public class EntityFactory {
 		lifeWidth = lifeHeight;
 		
 		levelPanelX = surface.widthDp / 2;
-		levelPanelY = surface.heightDp / 2 + surface.heightDp / 4;
+		levelPanelY = surface.heightDp / 2 - surface.heightDp / 6;
 		
 		levelPanelWidth = (surface.widthDp / 100) * 90;
 		levelPanelHeight = levelPanelWidth / 1.5f;
@@ -150,6 +160,9 @@ public class EntityFactory {
 		
 		
 		starBaseWidth = surface.widthPx / 10;
+		
+//		adButtonsConfig.put("btn_snake", Storage.getValue("adbutton_btn_snake", "show"));
+//		adButtonsConfig.put("btn_rate", Storage.getValue("adbutton_btn_rate", "show"));
 
 	}
 	
@@ -198,7 +211,7 @@ public class EntityFactory {
 		goldValue.add(posComp2);
 		goldValue.add(getRectComponent(engine, surface.dp2px(valuePanelWidth), surface.dp2px(lifeHeight)));
 		goldValue.add(getColorComponent(engine, 255, 255, 255, 255));
-		goldValue.add(new TextComponent("0", lifeHeight * 1.5f));
+		goldValue.add(new TextComponent("x0", surface.dp2px(lifeHeight)));
 		goldValue.getComponent(ColorComponent.class).getPaint().setTypeface(surface.mFace);
 		
 		engine.getSystem(ScoreSystem.class).setLabelGoldEntity(goldValue);
@@ -499,11 +512,13 @@ public class EntityFactory {
 		
 		CreepConfig creepConfig = GameConfig.getCreepConfig(creepType); 
 		
+		
 		entity.add(getReusableBitmapComponent(engine, creepConfig.getImage()));
 		
 		CreepComponent creep = new CreepComponent(position);
-		
+				
 		creep.setConfig(creepConfig);		
+		creep.applyMultiplier(getCurrentCreepSpeedMultiplier(engine));
 				
 		entity.add(creep);		
 		
@@ -515,7 +530,7 @@ public class EntityFactory {
 				
 				if (component.equalsIgnoreCase("shield")) {
 					
-					CreepShieldComponent creepShield = new CreepShieldComponent(creepConfig.getShield_interval(), creepConfig.getShield_duration());
+					CreepShieldComponent creepShield = new CreepShieldComponent(creep.getShieldInterval(), creep.getShieldDuration());
 					
 					entity.add(creepShield);
 				}
@@ -555,9 +570,11 @@ public class EntityFactory {
 		engine.addEntity(entity);
 		
 		Entity button = getPositionButton(position);
-		if (button != null) {
+		
+		if (button != null && isTutorial) {
 			
 			spawnGenericTouchReaction(engine, surface, button, "green");
+			spawnArrowAnimation(engine, surface, position);
 			
 		}
 		
@@ -565,6 +582,15 @@ public class EntityFactory {
 		return entity;
 	}
 	
+	private static float getCurrentCreepSpeedMultiplier(PooledEngine engine) {
+		float multi = GameConfig.getLevelConfig(
+			engine.getSystem(AISystem.class).getScore().getLevel()
+		).getSpeedMultiplier();
+
+		return multi;
+	}
+
+
 	public static Entity getPositionButton(int position) {
 		
 		for(int i = 0 ; i < buttons.size ; i++) {
@@ -882,8 +908,51 @@ public class EntityFactory {
 	}
 
 
+	public static void btnPlayLevelUp(PooledEngine engine, DejectSurface surface) {
+		
+		btnLevelPlay.add(getPositionInterpolationComponent(engine, 
+				
+				btnLevelPlay.getComponent(PositionComponent.class),
+				btnLevelPlay.getComponent(PositionComponent.class).x,
+				surface.dp2px(-creepHeight * 2.5f),
+				0.5f,
+				Interpolation.EASE_IN
+				
+		));
+		
+		btnLevelPlay.add(getExpireComponent(engine, 0.6f));
+	}
 
 	public static Entity spawnLevelInfoPanel(PooledEngine engine,	DejectSurface surface, int level) {
+		btnLevelPlay = engine.createEntity();
+		
+		btnLevelPlay.add(getRectComponent(engine, surface.dp2px(creepWidth), surface.dp2px(creepHeight)));
+		
+		btnLevelPlay.add(getColorComponent(engine, 255, 255, 0, 0));
+		
+		btnLevelPlay.add(getPositionComponent(engine, surface.dp2px(surface.widthDp / 2), surface.dp2px(-creepHeight * 2)));
+		
+		btnLevelPlay.add(getReusableBitmapComponent(engine, "btn_play"));
+		
+		btnLevelPlay.add(new TagComponent("levelInfo"));
+		
+		btnLevelPlay.add(new TouchComponent());
+		
+		btnLevelPlay.setOrder(5);
+		
+		engine.addEntity(btnLevelPlay);		
+		
+		btnLevelPlay.add(getPositionInterpolationComponent(engine, 
+			
+				btnLevelPlay.getComponent(PositionComponent.class),
+				btnLevelPlay.getComponent(PositionComponent.class).x,
+				surface.dp2px(surface.heightDp / 2 + surface.heightDp / 4),
+				0.5f,
+				Interpolation.EASE_OUT
+				
+		));
+		
+		
 		Entity entity = engine.createEntity();
 		
 		
@@ -1227,11 +1296,18 @@ public class EntityFactory {
 		
 		rate.add(getPositionComponent(engine, surface.dp2px(goPanelcX), surface.dp2px(surface.heightDp + creepHeight)));
 		
-		rate.add(getRectComponent(engine, surface.dp2px(creepWidth), surface.dp2px(creepHeight)));
 		rate.add(getColorComponent(engine, 0, 255, 0, 0));
 		
-		rate.add(new TouchComponent());
+		
 		rate.add(new TagComponent("btn_rate"));
+		
+		
+		
+		if (adButtonsConfig.get("btn_rate", "show").equalsIgnoreCase("show")) {		
+			rate.add(getRectComponent(engine, surface.dp2px(creepWidth), surface.dp2px(creepHeight)));
+			
+			rate.add(new TouchComponent());
+		}
 		
 		rate.add(getColorInterpolationComponent(engine, 
 			rate.getComponent(ColorComponent.class).getPaint(),
@@ -1269,11 +1345,16 @@ public class EntityFactory {
 		
 		snake.add(getPositionComponent(engine, surface.dp2px(goPanelcX), surface.dp2px(surface.heightDp + creepHeight)));
 		
-		snake.add(getRectComponent(engine, surface.dp2px(creepWidth), surface.dp2px(creepHeight)));
 		snake.add(getColorComponent(engine, 0, 255, 0, 0));
 		
-		snake.add(new TouchComponent());
+		
 		snake.add(new TagComponent("btn_snake"));
+		
+		
+		if (adButtonsConfig.get("btn_snake", "show").equalsIgnoreCase("show")) {
+			snake.add(getRectComponent(engine, surface.dp2px(creepWidth), surface.dp2px(creepHeight)));
+			snake.add(new TouchComponent());
+		}
 		
 		snake.add(getColorInterpolationComponent(engine, 
 			snake.getComponent(ColorComponent.class).getPaint(),
@@ -1597,6 +1678,48 @@ public class EntityFactory {
 		
 	}
 	
+	public static void spawnArrowAnimation(PooledEngine engine, DejectSurface surface, int pos) {
+		
+		float keyDelay = 0.045f;
+		
+		float life = keyDelay * 5;
+		
+		Entity button = getPositionButton(pos);
+		
+		PositionComponent position = button.getComponent(PositionComponent.class);
+		
+		Entity proxy = engine.createEntity();
+		
+		PositionComponent pPos = engine.createComponent(PositionComponent.class);
+		pPos.init(position.getOriginalX(), position.getOriginalY() - surface.dp2px(btnHeight / 1.3f) );
+		
+		proxy.add(pPos);
+		
+		proxy.add(getRectComponent(engine, surface.dp2px(creepWidth), surface.dp2px(creepHeight)));
+		
+		
+		ColorComponent color = getColorComponent(engine, 255, 255, 0, 0);
+		color.getPaint().setAntiAlias(false);
+		color.getPaint().setFilterBitmap(false);
+		
+		proxy.add(color);
+		
+		proxy.add(getReusableBitmapComponent(engine, "arrow_f1"));
+		
+		proxy.add(new BitmapAnimationComponent(
+			"arrow_f",
+			4,
+			(int)(keyDelay * 1000)
+		));
+		
+		proxy.getComponent(BitmapAnimationComponent.class).setLoop(true);
+		
+		proxy.add(getExpireComponent(engine, life * 3));
+		proxy.setOrder(4);
+		engine.addEntity(proxy);
+		
+	}
+	
 	public static void startSlowMo(PooledEngine engine) {
 		
 		timeScale.delayedComponents.clear();
@@ -1608,11 +1731,44 @@ public class EntityFactory {
 		timeScale.add(getMultiplierInterpolationComponent(engine, 0.1f, 0.5f, 0.3f, Interpolation.EASE_IN), 2.5f);
 		timeScale.add(getMultiplierInterpolationComponent(engine, 0.5f, 0.1f, 0.1f, Interpolation.EASE_IN), 3f);
 		
-		timeScale.add(getMultiplierInterpolationComponent(engine, 0.2f, 1f, 0.5f, Interpolation.EASE_IN), 6.5f);
+		timeScale.add(getMultiplierInterpolationComponent(engine, 0.2f, 1f, 0.5f, Interpolation.EASE_IN), 5f);
 		
 		
 
 		
 	}
+
+
+
+	public static void processAdButton(PooledEngine engine,	DejectSurface surface, Entity entity) {
+		
+		entity.add(getPositionInterpolationComponent(engine,
+			
+			entity.getComponent(PositionComponent.class),
+			entity.getComponent(PositionComponent.class).x,
+			surface.dp2px(surface.heightDp + creepHeight),
+			0.8f,
+			Interpolation.EASE_OUT
+				
+		));
+		
+		Storage.setValue("adbutton_" + entity.getComponent(TagComponent.class).getTag(), "hidden");
+		adButtonsConfig.put(entity.getComponent(TagComponent.class).getTag(), "hidden");
+		
+		String packageName = surface.context.getPackageName();
+		
+		if (entity.getComponent(TagComponent.class).getTag().equalsIgnoreCase("btn_snake")) {
+			packageName = "pbartz.games.snake";
+		}
+		
+		Uri uri = Uri.parse("market://details?id=" + packageName);
+	    Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+	    try {
+	    	surface.context.startActivity(goToMarket);
+	    } catch (ActivityNotFoundException e) {
+	       
+	    }
+		
+	}	
 	
 }

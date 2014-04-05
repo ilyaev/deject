@@ -21,6 +21,8 @@ public class CreepComponent extends Component {
 	float speedUp = 0;
 	float speedDown = 0;
 	float waitingTime = 0;
+	float shieldInterval = 0;
+	float shieldDuration = 0;
 	
 	float timeToNextState = 0;
 	
@@ -129,6 +131,8 @@ public class CreepComponent extends Component {
 		score = config.getScore();
 		minHit = config.getMinHit();
 		type = config.getType();
+		shieldInterval = config.getShield_interval();
+		shieldDuration = config.getShield_duration();
 	}
 	
 	public CreepConfig getConfig() {
@@ -154,6 +158,33 @@ public class CreepComponent extends Component {
 	public String getNextItem() {
 		return config.findNextItem();
 	}
+
+		
+	public float getShieldInterval() {
+		return shieldInterval;
+	}
+
+	public void setShieldInterval(float shieldInterval) {
+		this.shieldInterval = shieldInterval;
+	}
+
+	public float getShieldDuration() {
+		return shieldDuration;
+	}
+
+	public void setShieldDuration(float shieldDuration) {
+		this.shieldDuration = shieldDuration;
+	}
+
+	public void applyMultiplier(float m) {
+			speedUp *= m;
+			speedDown *= m;
+			waitingTime *= m;
+			shieldInterval *= m;
+			shieldDuration  *= m;
+	}
+	
+	
 
 	
 }

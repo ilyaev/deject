@@ -4,6 +4,7 @@ import android.graphics.Paint;
 import pbartz.games.deject.BitmapLibrary;
 import pbartz.games.deject.DejectSurface;
 import pbartz.games.deject.EntityFactory;
+import pbartz.games.deject.Sound;
 import pbartz.games.deject.components.BitmapComponent;
 import pbartz.games.deject.components.ColorComponent;
 import pbartz.games.deject.components.ColorInterpolationComponent;
@@ -202,8 +203,11 @@ public class CreepSystem extends IteratingSystem {
 				engine.getSystem(ScoreSystem.class).increaseScore(entity.getComponent(CreepComponent.class).getScore());
 			}
 			
+			Sound.playSound(surface.context, Sound.HIT);
+			
 		} else {
 			
+			Sound.playSound(surface.context, Sound.HIT_MISS);
 			EntityFactory.spawnHammerMiss(engine, surface, entity.getComponent(CreepComponent.class).getPosition());
 			
 		}

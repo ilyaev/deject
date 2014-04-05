@@ -5,6 +5,7 @@ import java.util.Random;
 import android.graphics.Paint;
 import pbartz.games.deject.DejectSurface;
 import pbartz.games.deject.EntityFactory;
+import pbartz.games.deject.Sound;
 import pbartz.games.deject.components.ColorComponent;
 import pbartz.games.deject.components.ColorInterpolationComponent;
 import pbartz.games.deject.components.ExpireComponent;
@@ -169,6 +170,18 @@ public class ItemSystem extends IteratingSystem {
 		engine.getSystem(ScoreSystem.class).
 			increaseGold(goldChange);
 		
+		if (goldChange > 0) {
+			
+			Sound.playSound(surface.context, Sound.PICKUP_COIN);
+			
+		}
+		
+		if (entity.getComponent(ItemComponent.class).getLife() > 0) {
+		
+			Sound.playSound(surface.context, Sound.HEAL);
+		
+		}
+		
 		engine.getSystem(ScoreSystem.class).
 			increaseLife(entity.getComponent(ItemComponent.class).getLife());
 		
@@ -186,6 +199,7 @@ public class ItemSystem extends IteratingSystem {
 				itemName = "all_to_health";
 			}
 			
+			Sound.playSound(surface.context, Sound.HIT);
 			
 			
 			Entity special = EntityFactory.spawnCellItem(engine, surface, entity.getComponent(ItemComponent.class).getPosition(), itemName, 0.2f);
@@ -194,26 +208,32 @@ public class ItemSystem extends IteratingSystem {
 		} else if (itemType.equalsIgnoreCase("all_to_coins")) {
 			
 			engine.getSystem(AISystem.class).turnAllToGold();
+			Sound.playSound(surface.context, Sound.EXPLOSION);
 			
 		} else if (itemType.equalsIgnoreCase("all_to_health")) {
 			
 			engine.getSystem(AISystem.class).turnAllToHealth();
+			Sound.playSound(surface.context, Sound.EXPLOSION);
 			
 		} else if (itemType.equalsIgnoreCase("all_to_default")) {
 			
 			engine.getSystem(AISystem.class).eliminateAll();
+			Sound.playSound(surface.context, Sound.EXPLOSION);
 			
 		} else if (itemType.equalsIgnoreCase("timefreeze")) {
 			
+			Sound.playSound(surface.context, Sound.TIMEFREEZE);
 			EntityFactory.startSlowMo(engine);
 			
 		}  else if (itemType.equalsIgnoreCase("shop")) {
 			
 			engine.getSystem(AISystem.class).switchToShop();
+			Sound.playSound(surface.context, Sound.HIT);
 			
 		} else if (itemType.equalsIgnoreCase("shop9")) {
 			
-			engine.getSystem(AISystem.class).shopOut();			
+			engine.getSystem(AISystem.class).shopOut();		
+			Sound.playSound(surface.context, Sound.HIT);
 			
 		} else if (itemType.equalsIgnoreCase("shop1")) {
 			

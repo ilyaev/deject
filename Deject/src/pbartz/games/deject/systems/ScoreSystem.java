@@ -124,7 +124,7 @@ public class ScoreSystem extends IteratingSystem {
 			
 			int curGold = this.score.getComponent(ScoreComponent.class).getGold();
 			
-			this.labelGold.getComponent(TextComponent.class).setText(Integer.toString(curGold));
+			this.labelGold.getComponent(TextComponent.class).setText("x" + Integer.toString(curGold));
 			
 		}
 	}

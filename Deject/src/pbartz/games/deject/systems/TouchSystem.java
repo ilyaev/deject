@@ -3,6 +3,7 @@ package pbartz.games.deject.systems;
 import android.view.MotionEvent;
 import pbartz.games.deject.DejectSurface;
 import pbartz.games.deject.EntityFactory;
+import pbartz.games.deject.Sound;
 import pbartz.games.deject.components.AIComponent;
 import pbartz.games.deject.components.CreepComponent;
 import pbartz.games.deject.components.CreepSwapComponent;
@@ -69,6 +70,10 @@ public class TouchSystem extends IteratingSystem {
 			}	
 			
 			
+			if (position == 0) {
+				Sound.playSound(surface.context, Sound.CLICK1);
+			}
+			
 			if (position > 0 && EntityFactory.timeScale.getComponent(MultiplierComponent.class).getMultiplier() != 0) {
 				
 				if (engine.getSystem(AISystem.class).getAi().getState() != AIComponent.STATE_WORKING && engine.getSystem(AISystem.class).getAi().getState() != AIComponent.STATE_SHOP) {
@@ -115,12 +120,14 @@ public class TouchSystem extends IteratingSystem {
 					} else {
 						
 						EntityFactory.spawnHammerMiss(engine, surface, position);
+						Sound.playSound(surface.context, Sound.HIT_MISS);
 					}
 					
 				} else {					
 					
 					engine.getSystem(ScoreSystem.class).increaseLife(-1);
 					EntityFactory.spawnHammerMiss(engine, surface, position);
+					Sound.playSound(surface.context, Sound.HIT_MISS);
 					
 				}			
 				

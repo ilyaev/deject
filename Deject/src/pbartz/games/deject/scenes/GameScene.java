@@ -132,7 +132,7 @@ public class GameScene extends BasicScene {
 		bg.add(EntityFactory.getReusableBitmapComponent(engine, "bg_pixel_city"));
 		bg.add(EntityFactory.getColorComponent(engine, 255, 255, 0, 0));
 		bg.add(EntityFactory.getPositionComponent(engine, surface.dp2px(surface.widthDp / 2), surface.dp2px(surface.heightDp / 2)));
-		bg.add(EntityFactory.getRectComponent(engine, surface.dp2px(surface.widthDp), surface.dp2px(surface.heightDp)));
+		bg.add(EntityFactory.getRectComponent(engine, surface.dp2px(surface.widthDp + 2), surface.dp2px(surface.heightDp + 2)));
 		bg.setOrder(-3);
 		
 		engine.addEntity(bg);
@@ -221,7 +221,7 @@ public class GameScene extends BasicScene {
 		
 		if (tag == "levelInfo") {
 			
-			if (entity.getComponent(LevelInfoComponent.class).getState() == LevelInfoComponent.STATE_WAITING) {
+			if (engine.getSystem(LevelInfoSystem.class).getLevelInfo().getState() == LevelInfoComponent.STATE_WAITING) {
 				engine.getSystem(AISystem.class).startLevel();
 			}
 			
@@ -231,8 +231,6 @@ public class GameScene extends BasicScene {
 				
 				EntityFactory.hideGameOverPanel(engine, surface);
 				engine.removeEntity(EntityFactory.scoreValueEntity);
-//				engine.removeEntity(EntityFactory.snakeBtnEntity);
-//				engine.removeEntity(EntityFactory.rateBtnEntity);
 				
 			}
 		} else if (tag == "playfield") {
@@ -265,6 +263,10 @@ public class GameScene extends BasicScene {
 				EntityFactory.timeScale.add(timeScale);				
 				
 			}
+			
+		} else if (tag == "btn_snake" || tag == "btn_rate") {
+			
+			EntityFactory.processAdButton(engine, surface, entity);
 			
 		}
 	}

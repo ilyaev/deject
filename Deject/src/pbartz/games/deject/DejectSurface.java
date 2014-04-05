@@ -6,6 +6,7 @@ import pbartz.games.deject.scenes.GameScene;
 import pbartz.games.deject.scenes.StartScene;
 import pbartz.games.deject.scenes.TestScene;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Typeface;
 import android.util.DisplayMetrics;
@@ -54,6 +55,11 @@ public class DejectSurface extends SurfaceView implements Runnable {
 		sHolder = getHolder();
 		
 		mFace = Typeface.createFromAsset(getContext().getAssets(),"fonts/pixelate.ttf");
+		
+		SharedPreferences prefs = context.getSharedPreferences("pbartz.games.deject", 0);
+		Storage.setSource(prefs);
+		
+		Sound.initSounds(context);
 		
 		this.context = context;
 		
