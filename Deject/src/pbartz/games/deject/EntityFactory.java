@@ -161,8 +161,8 @@ public class EntityFactory {
 		
 		starBaseWidth = surface.widthPx / 10;
 		
-//		adButtonsConfig.put("btn_snake", Storage.getValue("adbutton_btn_snake", "show"));
-//		adButtonsConfig.put("btn_rate", Storage.getValue("adbutton_btn_rate", "show"));
+		adButtonsConfig.put("btn_snake", Storage.getValue("adbutton_btn_snake", "show"));
+		adButtonsConfig.put("btn_rate", Storage.getValue("adbutton_btn_rate", "show"));
 
 	}
 	
@@ -1239,7 +1239,7 @@ public class EntityFactory {
 		
 		float scoreLife = Math.max(1f, scoreNum / 500);
 		
-		scoreText.add(new FontSizeInterpolationComponent(textComp.getHeight() / 5, textComp.getHeight(), scoreLife, Interpolation.EASE_IN));
+		scoreText.add(new FontSizeInterpolationComponent(textComp.getHeight() / 5, textComp.getHeight(), 1f, Interpolation.EASE_IN));
 		scoreText.add(new TextNumberInterpolationComponent(0, scoreNum, scoreLife, Interpolation.EASE_IN));
 				
 		scoreText.add(getPositionShakeComponent(engine, goPanelHeight / 40, goPanelHeight / 40, 0.3f), scoreLife);

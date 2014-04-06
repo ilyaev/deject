@@ -3,9 +3,11 @@ package pbartz.games.deject.scenes;
 import pbartz.games.deject.BitmapLibrary;
 import pbartz.games.deject.DejectSurface;
 import pbartz.games.deject.EntityFactory;
+import pbartz.games.deject.components.ColorComponent;
 import pbartz.games.deject.components.PositionComponent;
 import pbartz.games.deject.components.TagComponent;
 import pbartz.games.deject.core.Entity;
+import pbartz.games.deject.core.Interpolation;
 import pbartz.games.deject.signals.Listener;
 import pbartz.games.deject.signals.Signal;
 import pbartz.games.deject.systems.ColorInterpolationSystem;
@@ -57,6 +59,38 @@ public class StartScene extends BasicScene {
 		
 		EntityFactory.caculateMetrics(surface);
 		EntityFactory.createStartScreen(engine, surface, 0);
+		
+		// Title
+		
+		Entity title = engine.createEntity();
+		
+		PositionComponent tposComp = engine.createComponent(PositionComponent.class);
+		tposComp.init(surface.dp2px(EntityFactory.goPanelcX), surface.dp2px(0));
+		
+		title.add(tposComp);
+		title.add(EntityFactory.getRectComponent(engine, surface.dp2px(EntityFactory.goPanelWidth), surface.dp2px(EntityFactory.goPanelHeight / 3 * 2)));
+		
+		title.add(EntityFactory.getColorComponent(engine, 255, 0, 0, 0));
+		
+		title.add(EntityFactory.getReusableBitmapComponent(engine, "game_title2"));
+		
+		title.add(EntityFactory.getPositionInterpolationComponent(engine, 
+			
+				title.getComponent(PositionComponent.class),
+				surface.dp2px(EntityFactory.goPanelcX),
+				surface.dp2px(EntityFactory.goPanelcY - EntityFactory.goPanelcY / 1.5f),
+				0.4f,
+				Interpolation.EASE_IN				
+				
+		));
+
+		title.setOrder(5);
+		
+		engine.addEntity(title, 0.4f);
+		
+		
+		// background
+		
 		
 		Entity bg = engine.createEntity();
 		bg.add(EntityFactory.getReusableBitmapComponent(engine, "bg_pixel_city"));

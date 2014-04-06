@@ -144,7 +144,13 @@ public class AISystem extends IteratingSystem {
 					}
 				}
 				
-				ai.setTimer(0.5f + r.nextFloat());
+				float basePause = 0.5f;
+				
+				if (EntityFactory.isTutorial) {
+					basePause = 2f;
+				}
+				
+				ai.setTimer(basePause + r.nextFloat());
 				
 			}
 			
