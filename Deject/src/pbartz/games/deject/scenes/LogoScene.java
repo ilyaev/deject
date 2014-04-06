@@ -21,9 +21,9 @@ import pbartz.games.deject.systems.ZoomInterpolationSystem;
 import pbartz.games.deject.systems.renderer.DimensionRenderingSystem;
 import android.graphics.Canvas;
 
-public class StartScene extends BasicScene {
+public class LogoScene extends BasicScene {
 
-	public StartScene(DejectSurface surface) {
+	public LogoScene(DejectSurface surface) {
 		super(surface);
 		
 	}
@@ -59,48 +59,34 @@ public class StartScene extends BasicScene {
 		BitmapLibrary.loadAssets(surface);
 		
 		EntityFactory.caculateMetrics(surface);
-		EntityFactory.createStartScreen(engine, surface, 0);
 		
-		// Title
+		// Logo
 		
-		Entity title = engine.createEntity();
+		Entity logo = engine.createEntity();
 		
-		PositionComponent tposComp = engine.createComponent(PositionComponent.class);
-		tposComp.init(surface.dp2px(EntityFactory.goPanelcX), surface.dp2px(0));
-		
-		title.add(tposComp);
-		title.add(EntityFactory.getRectComponent(engine, surface.dp2px(EntityFactory.goPanelWidth), surface.dp2px(EntityFactory.goPanelHeight / 3 * 2)));
-		
-		title.add(EntityFactory.getColorComponent(engine, 255, 0, 0, 0));
-		
-		title.add(EntityFactory.getReusableBitmapComponent(engine, "game_title2"));
-		
-		title.add(EntityFactory.getPositionInterpolationComponent(engine, 
-			
-				title.getComponent(PositionComponent.class),
-				surface.dp2px(EntityFactory.goPanelcX),
-				surface.dp2px(EntityFactory.goPanelcY - EntityFactory.goPanelcY / 1.5f),
-				0.4f,
-				Interpolation.EASE_IN				
-				
+		logo.add(EntityFactory.getPositionComponent(engine, 
+			surface.dp2px(surface.widthDp / 2),
+			surface.dp2px(surface.heightDp / 2)
 		));
+		
 
-		title.setOrder(5);
+		logo.add(EntityFactory.getRectComponent(engine, surface.dp2px(EntityFactory.creepWidth * 2), surface.dp2px(EntityFactory.creepWidth * 2)));
 		
-		engine.addEntity(title, 0.4f);
+		logo.add(EntityFactory.getColorComponent(engine, 255, 255, 0, 0));
+		
+		logo.add(EntityFactory.getReusableBitmapComponent(engine, "pbartz_logo"));
+		
+		logo.setOrder(5);
+		
+		engine.addEntity(logo);
+		
+		Entity trigger = engine.createEntity();
+		trigger.add(EntityFactory.getExpireComponent(engine, 2f));
+		trigger.add(new TagComponent("trg_start"));
+		
+		engine.addEntity(trigger);
 		
 		
-		// background
-		
-		
-		Entity bg = engine.createEntity();
-		bg.add(EntityFactory.getReusableBitmapComponent(engine, "bg_pixel_city"));
-		bg.add(EntityFactory.getColorComponent(engine, 255, 255, 0, 0));
-		bg.add(EntityFactory.getPositionComponent(engine, surface.dp2px(surface.widthDp / 2), surface.dp2px(surface.heightDp / 2)));
-		bg.add(EntityFactory.getRectComponent(engine, surface.dp2px(surface.widthDp + 2), surface.dp2px(surface.heightDp + 2)));
-		bg.setOrder(-3);
-		
-		engine.addEntity(bg);
 		
 		initListeners();
 		
@@ -150,6 +136,12 @@ public class StartScene extends BasicScene {
 				
 			}
 			
+			if (tag == "trg_start") {
+				
+				surface.goToStartScreen();
+				
+			}
+			
 		}
 	}
 
@@ -171,7 +163,7 @@ public class StartScene extends BasicScene {
 
 	@Override
 	public void update(Canvas canvas, float timeDiff) {
-		canvas.drawARGB(255, 212, 212, 212);
+		canvas.drawARGB(255, 0, 0, 0);
 		engine.update(timeDiff);
 	}
 	

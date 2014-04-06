@@ -150,7 +150,7 @@ public class AISystem extends IteratingSystem {
 					basePause = 2f;
 				}
 				
-				ai.setTimer(basePause + r.nextFloat());
+				ai.setTimer(basePause + r.nextFloat() * Math.max(0.2f, 1 - score.getLevel() * 0.07f ));
 				
 			}
 			

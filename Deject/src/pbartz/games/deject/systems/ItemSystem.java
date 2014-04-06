@@ -245,7 +245,7 @@ public class ItemSystem extends IteratingSystem {
 			
 		} else if (itemType.equalsIgnoreCase("shop3")) {
 			
-			engine.getSystem(ScoreSystem.class).setHammer(4);
+			engine.getSystem(ScoreSystem.class).setHammer(6);
 			
 		} else if (itemType.equalsIgnoreCase("shop7")) {
 			

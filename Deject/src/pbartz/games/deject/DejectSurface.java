@@ -3,6 +3,7 @@ package pbartz.games.deject;
 import pbartz.games.deject.core.Engine;
 import pbartz.games.deject.scenes.BasicScene;
 import pbartz.games.deject.scenes.GameScene;
+import pbartz.games.deject.scenes.LogoScene;
 import pbartz.games.deject.scenes.StartScene;
 import pbartz.games.deject.scenes.TestScene;
 import android.content.Context;
@@ -32,6 +33,7 @@ public class DejectSurface extends SurfaceView implements Runnable {
 	
 	BasicScene gameScene = null;
 	BasicScene startScene = null; 
+	BasicScene logoScene = null;
 	
 	
 	public Canvas surfaceCanvas = null;
@@ -63,7 +65,7 @@ public class DejectSurface extends SurfaceView implements Runnable {
 		
 		this.context = context;
 		
-		scene = new StartScene(this);
+		scene = new LogoScene(this);
 
 		scene.initScene();		
 		
@@ -197,6 +199,16 @@ public class DejectSurface extends SurfaceView implements Runnable {
 	
 	public int dp2px(float dp) {
 		return (int) (dp * displayMetrics.density + 0.5f);
+	}
+	
+	public void goToStartScreen() {
+		
+		if (startScene == null) {
+			startScene = new StartScene(this);
+		}
+		
+		transitScene(startScene);
+		
 	}
 
 	public void startGame() {

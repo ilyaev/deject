@@ -68,8 +68,8 @@ public class EntityFactory {
 	static float infoPanelHeightPart = 10f;
 	static float controlPanelHeight = 0f;
 	public static float infoPanelHeight = 0f;
-	static float creepHeight = 0f;
-	static float creepWidth = 0f;
+	public static float creepHeight = 0f;
+	public static float creepWidth = 0f;
 	static float creepRealHeight;
 	static float creepRealWidth;
 	
