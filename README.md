@@ -1,4 +1,4 @@
 deject
 ======
 
-Space Dejection - Android game
+Smashing Spacing - Android game

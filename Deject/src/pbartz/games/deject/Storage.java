@@ -12,6 +12,14 @@ public class Storage {
 		
 	}
 	
+	public static int getIntValue(String key, int defValue) {
+		
+		if (src == null) return defValue;
+		
+		return src.getInt(key, defValue);
+		
+	}
+	
 	public static String getValue(String key, String defValue) {
 		
 		if (src == null) return defValue;
@@ -29,6 +37,16 @@ public class Storage {
 		editor.commit();
 		
 	}	
+	
+	public static void setIntValue(String key, int value) {
+		
+		if (src == null) return;
+		
+		SharedPreferences.Editor editor = src.edit();
+		editor.putInt(key, value);
+		editor.commit();
+		
+	}
 	
 	
 

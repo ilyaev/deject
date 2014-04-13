@@ -1237,9 +1237,9 @@ public class EntityFactory {
 		
 		scoreText.setOrder(3);
 		
-		float scoreLife = Math.max(1f, scoreNum / 500);
+		float scoreLife = Math.max(1f, scoreNum / 1000);
 		
-		scoreText.add(new FontSizeInterpolationComponent(textComp.getHeight() / 5, textComp.getHeight(), 1f, Interpolation.EASE_IN));
+		scoreText.add(new FontSizeInterpolationComponent(textComp.getHeight() / 5, textComp.getHeight(), scoreLife, Interpolation.EASE_IN));
 		scoreText.add(new TextNumberInterpolationComponent(0, scoreNum, scoreLife, Interpolation.EASE_IN));
 				
 		scoreText.add(getPositionShakeComponent(engine, goPanelHeight / 40, goPanelHeight / 40, 0.3f), scoreLife);

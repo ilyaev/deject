@@ -7,6 +7,8 @@ import android.view.MotionEvent;
 import pbartz.games.deject.BitmapLibrary;
 import pbartz.games.deject.DejectSurface;
 import pbartz.games.deject.EntityFactory;
+import pbartz.games.deject.MainActivity;
+import pbartz.games.deject.Storage;
 import pbartz.games.deject.components.AIComponent;
 import pbartz.games.deject.components.LevelInfoComponent;
 import pbartz.games.deject.components.MultiplierComponent;
@@ -196,6 +198,17 @@ public class GameScene extends BasicScene {
 			EntityFactory.spawnGameOver(engine, surface);
 			EntityFactory.animateButtonsDown(engine);
 			
+			int scoreValue = score.getComponent(ScoreComponent.class).getScore();
+			
+			if (Storage.getIntValue("high_score", 0) < scoreValue) {
+				
+				Storage.setIntValue("high_score", scoreValue);
+				((MainActivity) surface.context).uploadScore();
+				
+				// upyachka!
+				
+			}
+			
 		}
 	}
 	
@@ -233,6 +246,10 @@ public class GameScene extends BasicScene {
 				engine.removeEntity(EntityFactory.scoreValueEntity);
 				
 			}
+		} else if (tag == "btn_leaderboard") {
+			
+			((MainActivity) surface.context).showLeaderBoard();
+			
 		} else if (tag == "playfield") {
 			
 			float timeFrom = 1f;

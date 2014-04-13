@@ -3,6 +3,7 @@ package pbartz.games.deject.scenes;
 import pbartz.games.deject.BitmapLibrary;
 import pbartz.games.deject.DejectSurface;
 import pbartz.games.deject.EntityFactory;
+import pbartz.games.deject.MainActivity;
 import pbartz.games.deject.components.ColorComponent;
 import pbartz.games.deject.components.PositionComponent;
 import pbartz.games.deject.components.TagComponent;
@@ -20,12 +21,12 @@ import pbartz.games.deject.systems.TouchSystem;
 import pbartz.games.deject.systems.ZoomInterpolationSystem;
 import pbartz.games.deject.systems.renderer.DimensionRenderingSystem;
 import android.graphics.Canvas;
+import android.util.Log;
 
 public class StartScene extends BasicScene {
 
 	public StartScene(DejectSurface surface) {
-		super(surface);
-		
+		super(surface);		
 	}
 
 	@Override
@@ -161,10 +162,14 @@ public class StartScene extends BasicScene {
 		entity.getComponent(PositionComponent.class).y -= surface.dp2px(1);
 		
 		String tag = entity.getComponent(TagComponent.class).getTag();
-		
+
 		if (tag == "btn_play") {
 			
 			surface.startGame();
+			
+		} else if (tag == "btn_leaderboard") {
+			
+			((MainActivity) surface.context).showLeaderBoard();
 			
 		}
 	}

@@ -1,5 +1,6 @@
 package pbartz.games.deject;
 
+import pbartz.games.deject.R;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.MotionEvent;
@@ -8,9 +9,10 @@ import android.view.View.OnTouchListener;
 import android.view.Window;
 import android.view.WindowManager;
 
-public class MainActivity extends Activity implements OnTouchListener {
+public class MainActivity extends BaseGameActivity implements OnTouchListener {
 
 	private DejectSurface aSurfaceView;
+	private String nextAction = "";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +48,59 @@ public class MainActivity extends Activity implements OnTouchListener {
 	public boolean onTouch(View v, MotionEvent event) {
 		aSurfaceView.processTouch(event.getAction(), event);
 		return true;
+	}
+
+	@Override
+	public void onSignInFailed() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onSignInSucceeded() {
+		
+		if (nextAction == "leaderboard") {
+			nextAction = "";
+			showLeaderBoard();
+		}
+		
+	}
+
+	public void showLeaderBoard() {
+		if (this.isSignedIn()) {			
+			
+			runOnUiThread(new Runnable() {
+	    	    public void run() 
+	    	    {
+	    	    	if (Storage.getIntValue("high_score", 0) > 0) {
+	    				getGamesClient().submitScore(getString(R.string.leaderboard_id), Storage.getIntValue("high_score", 0));
+	    			}
+	    			startActivityForResult(getGamesClient().getLeaderboardIntent(getString(R.string.leaderboard_id)), 1); 
+	    	    }
+	    	});
+			
+			
+		} else {
+			nextAction = "leaderboard";
+			beginUserInitiatedSignIn();
+		}
+		
+	}
+
+	public void uploadScore() {
+		if (this.isSignedIn()) {
+			
+			runOnUiThread(new Runnable() {
+	    	    public void run() 
+	    	    {
+	    	    	if (Storage.getIntValue("high_score", 0) > 0) {
+	    				getGamesClient().submitScore(getString(R.string.leaderboard_id), Storage.getIntValue("high_score", 0));
+	    			} 
+	    	    }
+	    	});		
+			
+		}
+		
 	}
 
 }

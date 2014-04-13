@@ -7,5 +7,13 @@
     <string name="dummy_string">Dummy String</string>
     <string name="dummy_string2">Dummy String2</string>
     <string name="tet">test</string>
+    <string name="gamehelper_app_misconfigured">Application misconfigured</string>
+    <string name="gamehelper_sign_in_failed">Sign in failed. Try Again</string>
+    <string name="gamehelper_license_failed">Licence broken? strange</string>
+    <string name="gamehelper_unknown_error">Unknow error. Try again</string>
 
+    
+    <string name="app_id">75374233708</string>
+    <string name="leaderboard_id">CgkI7JCe5ZgCEAIQAQ</string>
+    
 </resources>
